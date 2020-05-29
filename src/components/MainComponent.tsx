@@ -10,9 +10,12 @@ import { MyActions } from "../shared/ActionTypes";
 import { Dispatch, bindActionCreators } from 'redux';
 import { SigninReducer } from "../reducers/signinReducer";
 import { rootState } from "../App";
+import { HeaderComponent } from "./HeaderComponent";
+import { withNamespaces } from 'react-i18next';
 
 interface StateProps {
     name?: string,
+    translate: any,
 }
 
 const mapStateToProps = (state: rootState, myProps: MyProps) => {
@@ -22,7 +25,8 @@ const mapStateToProps = (state: rootState, myProps: MyProps) => {
 };
 
 interface DispatchProps {
-    postSigninForm: (values: signinState) => void
+    postSigninForm: (values: signinState) => void,
+
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<MyActions>, myProps: MyProps): DispatchProps => ({
@@ -35,16 +39,19 @@ type MyProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
 class MainComponent extends Component<MyProps> {
 
+
+
     constructor(props: MyProps) {
         super(props);
+
     }
 
 
     render() {
         return (
             <div>
-                This is the main component
-                <Button color="danger">Bootstrap Test</Button>
+                <HeaderComponent />
+                <div>{this.props.translate("t2")}</div>
                 <Route path="/signin" component={() =>
                     <SigninComponent postSignin={this.props.postSigninForm}
                         username={this.props.name} />} />

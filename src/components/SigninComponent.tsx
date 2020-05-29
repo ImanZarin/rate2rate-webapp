@@ -4,6 +4,7 @@ import React from "react";
 import { Formik, Field } from 'formik';
 import { signinState } from '../shared/StateTypes';
 import * as yup from "yup";
+import "../styles/signin.scss";
 
 type myProps = {
     postSignin: (f: signinState) => void,
