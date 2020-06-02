@@ -11,7 +11,6 @@ import { Dispatch, bindActionCreators } from 'redux';
 import { SigninReducer } from "../reducers/signinReducer";
 import { rootState } from "../App";
 import { HeaderComponent } from "./HeaderComponent";
-import { withNamespaces } from 'react-i18next';
 
 interface StateProps {
     name?: string,

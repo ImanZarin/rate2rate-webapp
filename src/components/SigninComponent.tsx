@@ -38,7 +38,7 @@ class SigninComponent extends Component<myProps> {
     render() {
         return (
             <div className="container">
-                <h1>{this.props.translate("signup-tilte")}</h1>
+                <h1>{this.props.translate("signin-title")}</h1>
                 <Formik initialValues={this.init} onSubmit={values => {
                     console.log("we get 0 with", values);
                     this.handleSubmit(values);

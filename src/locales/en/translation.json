@@ -1,5 +1,5 @@
 {
     "t1": "first string translated",
     "t2": "second string translated from child component",
-    "signup-title": "Sign Up"
+    "signin-title": "Sign Up"
 }
