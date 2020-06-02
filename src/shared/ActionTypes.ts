@@ -11,4 +11,5 @@ interface PostSigninAction {
     payload: StateTypes.signinState
 }
 
-export type MyActions = PostSigninAction;
+
+export type MyActions = PostSigninAction ;

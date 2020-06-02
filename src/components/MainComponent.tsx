@@ -54,7 +54,7 @@ class MainComponent extends Component<MyProps> {
                 <div>{this.props.translate("t2")}</div>
                 <Route path="/signin" component={() =>
                     <SigninComponent postSignin={this.props.postSigninForm}
-                        username={this.props.name} />} />
+                        username={this.props.name} translate={this.props.translate}/>} />
             </div>
         );
     }

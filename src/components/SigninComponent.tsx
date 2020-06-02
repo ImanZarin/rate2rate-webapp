@@ -5,10 +5,13 @@ import { Formik, Field } from 'formik';
 import { signinState } from '../shared/StateTypes';
 import * as yup from "yup";
 import "../styles/signin.scss";
+import { translate } from "react-i18next";
+import { postSignin } from "../actions/signinAction";
 
 type myProps = {
     postSignin: (f: signinState) => void,
-    username?: string
+    username?: string,
+    translate: any,
 }
 
 
@@ -27,14 +30,15 @@ class SigninComponent extends Component<myProps> {
     });
 
     handleSubmit(values: signinState) {
-        console.log("we get 1 with", values);
-        this.props.postSignin(values);
+        //this.props.postSignin(values);
+        postSignin(values);
     }
 
 
     render() {
         return (
             <div className="container">
+                <h1>{this.props.translate("signup-tilte")}</h1>
                 <Formik initialValues={this.init} onSubmit={values => {
                     console.log("we get 0 with", values);
                     this.handleSubmit(values);
@@ -46,7 +50,7 @@ class SigninComponent extends Component<myProps> {
                                 <Field type="text" className="form-control"
                                     placeholder="choose a username" id="username"
                                     name="username" />
-                                <div style={{ visibility: errors.username && touched.username ? 'visible' : 'hidden', height: 40 }}
+                                <div style={{ visibility: errors.username && touched.username ? 'visible' : 'hidden'}}
                                     className="error-msg"> {errors.username}
                                 </div>
                             </Row>
@@ -54,7 +58,7 @@ class SigninComponent extends Component<myProps> {
                                 <Label htmlFor="email">Email</Label>
                                 <Field type="text" className="form-control"
                                     placeholder="enter your email" name="email" id="email" />
-                                <div style={{ visibility: errors.email && touched.email ? 'visible' : 'hidden', height: 40 }}
+                                <div style={{ visibility: errors.email && touched.email ? 'visible' : 'hidden' }}
                                     className="error-msg"> {errors.email}
                                 </div>
                             </Row>
@@ -62,7 +66,7 @@ class SigninComponent extends Component<myProps> {
                                 <Label htmlFor="password">Password</Label>
                                 <Field type="password" className="form-control" name="password"
                                     placeholder="choose a password" id="password" />
-                                <div style={{ visibility: errors.password && touched.password ? 'visible' : 'hidden', height: 40 }}
+                                <div style={{ visibility: errors.password && touched.password ? 'visible' : 'hidden'}}
                                     className="error-msg"> {errors.password}
                                 </div>
                             </Row>
