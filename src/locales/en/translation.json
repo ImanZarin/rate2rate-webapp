@@ -1,5 +1,13 @@
 {
     "t1": "first string translated",
     "t2": "second string translated from child component",
-    "signin-title": "Sign Up"
+    "signin-title": "Sign Up",
+    "loading-text": "Loading",
+    "signin-username-title": "User Name",
+    "signin-username-placeholder": "choose a username",
+    "signin-email-title": "Email",
+    "signin-email-placeholder": "enter your email",
+    "signin-password-title": "Password",
+    "signin-password-placeholder": "choose a password",
+    "siginin-form-submit": "Submit"
 }

@@ -4,32 +4,29 @@ import { Button } from 'reactstrap';
 import { connect } from 'react-redux';
 import { withRouter, RouteComponentProps, Route } from "react-router-dom";
 import SigninComponent from "./SigninComponent";
-import { postSigninForm } from '../actions/signinAction';
-import { signinState } from "../shared/StateTypes";
+import { postSignin, signinLoading } from '../actions/signinAction';
+import { signinForm } from "../shared/StateTypes";
 import { MyActions } from "../shared/ActionTypes";
-import { Dispatch, bindActionCreators } from 'redux';
-import { SigninReducer } from "../reducers/signinReducer";
-import { rootState } from "../App";
+import { Dispatch } from 'redux';
 import { HeaderComponent } from "./HeaderComponent";
+import { rootState } from "../App";
+import { ThunkDispatch } from 'redux-thunk';
 
-interface StateProps {
-    name?: string,
+interface StateProps extends rootState {
     translate: any,
 }
 
-const mapStateToProps = (state: rootState, myProps: MyProps) => {
-    return {
-        name: state.Signin.username
-    }
-};
+const mapStateToProps = (state: StateProps) => ({
+    signin: state.signin,
+});
 
 interface DispatchProps {
-    postSigninForm: (values: signinState) => void,
+    postSignin: (values: signinForm) => void,
 
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<MyActions>, myProps: MyProps): DispatchProps => ({
-    postSigninForm: (values: signinState) => dispatch(postSigninForm(values))
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, MyActions>): DispatchProps => ({
+    postSignin: (values: signinForm) => dispatch(postSignin(values)),
 });
 
 
@@ -42,18 +39,23 @@ class MainComponent extends Component<MyProps> {
 
     constructor(props: MyProps) {
         super(props);
-
     }
 
 
     render() {
+        console.log(this.props.signin);
         return (
             <div>
                 <HeaderComponent />
                 <div>{this.props.translate("t2")}</div>
                 <Route path="/signin" component={() =>
-                    <SigninComponent postSignin={this.props.postSigninForm}
-                        username={this.props.name} translate={this.props.translate}/>} />
+                    <SigninComponent
+                        isloading={this.props.signin.isLoading}
+                        errMsg={this.props.signin.errMsg}
+                        form={this.props.signin.form}
+                        translate={this.props.translate}
+                        postSignin={this.props.postSignin}
+                    />} />
             </div>
         );
     }

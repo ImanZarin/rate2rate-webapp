@@ -3,6 +3,7 @@ import React from "react";
 import { Nav, Navbar, NavbarToggler, NavbarBrand, Collapse, NavItem, NavLink, Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
 import { Languages } from "../shared/Enums";
 import i18n from "../i18n";
+import '../styles/header.scss';
 
 type myProps = {
 
@@ -65,17 +66,17 @@ export class HeaderComponent extends Component<myProps, myState> {
                             <Nav navbar>
                                 <NavItem>
                                     <NavLink className="nav-link" to="/home">
-                                        <span className="fa fa-home fa-lg">Home</span>
+                                        <span className="fa fa-home fa-lg title">Home</span>
                                     </NavLink>
                                 </NavItem>
                                 <NavItem>
                                     <NavLink className="nav-link" to="/">
-                                        <span className="fa fa-info fa-lg">About Us</span>
+                                        <span className="fa fa-info fa-lg title">About Us</span>
                                     </NavLink>
                                 </NavItem>
                                 <NavItem>
                                     <NavLink className="nav-link" to="/">
-                                        <span className="fa fa-list fa-lg">Menu</span>
+                                        <span className="fa fa-list fa-lg title">Menu</span>
                                     </NavLink>
                                 </NavItem>
                             </Nav>

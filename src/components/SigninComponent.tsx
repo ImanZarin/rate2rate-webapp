@@ -2,15 +2,16 @@ import { Component } from "react";
 import { Row, Label, Button, Form } from "reactstrap";
 import React from "react";
 import { Formik, Field } from 'formik';
-import { signinState } from '../shared/StateTypes';
+import { signinForm } from '../shared/StateTypes';
 import * as yup from "yup";
 import "../styles/signin.scss";
-import { translate } from "react-i18next";
-import { postSignin } from "../actions/signinAction";
+import { Loading } from './LoadingComponent';
 
 type myProps = {
-    postSignin: (f: signinState) => void,
-    username?: string,
+    postSignin: (f: signinForm) => void,
+    isloading: boolean,
+    errMsg: string,
+    form: signinForm,
     translate: any,
 }
 
@@ -23,15 +24,10 @@ class SigninComponent extends Component<myProps> {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    init: signinState = ({
-        email: "",
-        password: "",
-        username: ""
-    });
-
-    handleSubmit(values: signinState) {
-        //this.props.postSignin(values);
-        postSignin(values);
+   
+    handleSubmit(values: signinForm) {
+        if (!this.props.isloading)
+            this.props.postSignin(values);
     }
 
 
@@ -39,42 +35,48 @@ class SigninComponent extends Component<myProps> {
         return (
             <div className="container">
                 <h1>{this.props.translate("signin-title")}</h1>
-                <Formik initialValues={this.init} onSubmit={values => {
-                    console.log("we get 0 with", values);
-                    this.handleSubmit(values);
-                }} validationSchema={mySchema}>
-                    {({ values, handleSubmit, errors, touched }) => (
-                        <Form onSubmit={handleSubmit}>
-                            <Row className="form-group">
-                                <Label htmlFor="username">User Name</Label>
-                                <Field type="text" className="form-control"
-                                    placeholder="choose a username" id="username"
-                                    name="username" />
-                                <div style={{ visibility: errors.username && touched.username ? 'visible' : 'hidden'}}
-                                    className="error-msg"> {errors.username}
-                                </div>
-                            </Row>
-                            <Row className="form-group" >
-                                <Label htmlFor="email">Email</Label>
-                                <Field type="text" className="form-control"
-                                    placeholder="enter your email" name="email" id="email" />
-                                <div style={{ visibility: errors.email && touched.email ? 'visible' : 'hidden' }}
-                                    className="error-msg"> {errors.email}
-                                </div>
-                            </Row>
-                            <Row className="form-group" name="password">
-                                <Label htmlFor="password">Password</Label>
-                                <Field type="password" className="form-control" name="password"
-                                    placeholder="choose a password" id="password" />
-                                <div style={{ visibility: errors.password && touched.password ? 'visible' : 'hidden'}}
-                                    className="error-msg"> {errors.password}
-                                </div>
-                            </Row>
-                            <Button type="submit" className="btn">Submit</Button>
-                        </Form>
-                    )}
-                </Formik>
-                <h1 >{this.props.username}</h1>
+                <div>
+                    <Formik initialValues={this.props.form} onSubmit={values => {
+                        console.log("we get 0 with", values);
+                        this.handleSubmit(values);
+                    }} validationSchema={mySchema}>
+                        {({ values, handleSubmit, errors, touched }) => (
+                            <Form onSubmit={handleSubmit}>
+                                <Row className="form-group">
+                                    <Label htmlFor="username">{this.props.translate("signin-username-title")}</Label>
+                                    <Field type="text" className="form-control"
+                                        placeholder={this.props.translate("signin-username-placeholder")}
+                                        id="username"
+                                        name="username" />
+                                    <div style={{ visibility: errors.username && touched.username ? 'visible' : 'hidden' }}
+                                        className="error-msg"> {errors.username}
+                                    </div>
+                                </Row>
+                                <Row className="form-group" >
+                                    <Label htmlFor="email">{this.props.translate("signin-email-title")}</Label>
+                                    <Field type="text" className="form-control"
+                                        placeholder={this.props.translate("signin-email-placeholder")}
+                                        name="email" id="email" />
+                                    <div style={{ visibility: errors.email && touched.email ? 'visible' : 'hidden' }}
+                                        className="error-msg"> {errors.email}
+                                    </div>
+                                </Row>
+                                <Row className="form-group" name="password">
+                                    <Label htmlFor="password">{this.props.translate("signin-password-title")}</Label>
+                                    <Field type="password" className="form-control" name="password"
+                                        placeholder={this.props.translate("signin-password-placeholder")} id="password" />
+                                    <div style={{ visibility: errors.password && touched.password ? 'visible' : 'hidden' }}
+                                        className="error-msg"> {errors.password}
+                                    </div>
+                                </Row>
+                        <Button type="submit" className="btn">{this.props.translate("siginin-form-submit")}</Button>
+                            </Form>
+                        )}
+                    </Formik>
+                </div>
+                <div style={{ visibility: this.props.isloading ? 'visible' : 'hidden' }}>
+                    <Loading tr={this.props.translate} />
+                </div>
             </div>
         );
     }

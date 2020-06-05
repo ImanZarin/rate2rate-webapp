@@ -1,15 +1,30 @@
 import * as StateTypes from './StateTypes';
-import { postSigninForm } from '../actions/signinAction';
-import { type } from 'os';
+
 
 export enum ActionTypes {
-    "ADD-SIGNIN",
+    "SIGNIN_UPDATE_FORM",
+    "SIGNIN_LOADING",
+    "SIGNIN_SUCCESS",
+    "SIGNIN_FAILED",
 }
 
-interface PostSigninAction {
+ export type UpdateSigninAction = {
     type: ActionTypes,
-    payload: StateTypes.signinState
+    payload: StateTypes.signinForm
 }
 
+ export type LoadingSigninAction = {
+    type: ActionTypes,
+}
 
-export type MyActions = PostSigninAction ;
+export type SuccessAction = {
+    type: ActionTypes,
+    payload: Response
+}
+
+export type FailedAction = {
+    type: ActionTypes,
+    payload: Error
+}
+
+export type MyActions = UpdateSigninAction | LoadingSigninAction | SuccessAction | FailedAction;
