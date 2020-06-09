@@ -1,11 +1,15 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React from 'react';
 import './App.scss';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import MainComponent from './components/MainComponent';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { BrowserRouter, Route } from 'react-router-dom';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Provider } from 'react-redux';
-import { SigninReducer, initialSigninReducerState } from './reducers/signinReducer';
-import { withNamespaces, WithNamespaces } from 'react-i18next';
+import { SigninReducer } from './reducers/signinReducer';
+import { withNamespaces } from 'react-i18next';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 
@@ -16,12 +20,12 @@ const rootReducer = combineReducers({
 export type rootState = ReturnType<typeof rootReducer>;
 
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function App({ t }: any) {
 
-  let store = createStore(
-    rootReducer,
-    applyMiddleware(thunk, logger)
-  );
+  const store = createStore(
+    rootReducer)
+  applyMiddleware(thunk, logger);
 
   return (
     <Provider store={store}>

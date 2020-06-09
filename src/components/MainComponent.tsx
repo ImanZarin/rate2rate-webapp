@@ -1,18 +1,21 @@
 import { Component } from "react";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React from "react";
-import { Button } from 'reactstrap';
 import { connect } from 'react-redux';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { withRouter, RouteComponentProps, Route } from "react-router-dom";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import SigninComponent from "./SigninComponent";
-import { postSignin, signinLoading } from '../actions/signinAction';
+import { postSignin } from '../actions/signinAction';
 import { signinForm } from "../shared/StateTypes";
 import { MyActions } from "../shared/ActionTypes";
-import { Dispatch } from 'redux';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { HeaderComponent } from "./HeaderComponent";
 import { rootState } from "../App";
 import { ThunkDispatch } from 'redux-thunk';
 
 interface StateProps extends rootState {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     translate: any,
 }
 
@@ -25,25 +28,20 @@ interface DispatchProps {
 
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, MyActions>): DispatchProps => ({
     postSignin: (values: signinForm) => dispatch(postSignin(values)),
 });
 
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 type MyProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
 
 class MainComponent extends Component<MyProps> {
 
 
-
-    constructor(props: MyProps) {
-        super(props);
-    }
-
-
-    render() {
-        console.log(this.props.signin);
+    render(): JSX.Element {
         return (
             <div>
                 <HeaderComponent />

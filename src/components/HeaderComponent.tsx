@@ -1,6 +1,8 @@
 import { Component } from "react";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React from "react";
-import { Nav, Navbar, NavbarToggler, NavbarBrand, Collapse, NavItem, NavLink, Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Nav, Navbar, NavbarToggler, NavbarBrand, Collapse, NavItem, NavLink, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
 import { Languages } from "../shared/Enums";
 import i18n from "../i18n";
 import '../styles/header.scss';
@@ -27,13 +29,13 @@ export class HeaderComponent extends Component<myProps, myState> {
         this.toggleDrop = this.toggleDrop.bind(this);
     }
 
-    toggleNav = () => {
+    toggleNav = (): void => {
         this.setState({
             isNavOpen: !this.state.isNavOpen,
         });
     }
 
-    toggleDrop = () => {
+    toggleDrop = (): void => {
         this.setState({
             isDropdownOpen: !this.state.isDropdownOpen,
         });
@@ -53,14 +55,14 @@ export class HeaderComponent extends Component<myProps, myState> {
         }
     }
 
-    render() {
+    render(): JSX.Element {
         return (
             <React.Fragment>
                 <Navbar dark expand="md">
                     <div className="container">
                         <NavbarToggler onClick={this.toggleNav} />
                         <NavbarBrand className="mr-auto " href="/">
-                            <img src='assets/images/logo.png' height="30" width="41" />
+                            <img src='assets/images/logo.png' alt="logo" height="30" width="41" />
                         </NavbarBrand>
                         <Collapse isOpen={this.state.isNavOpen} navbar>
                             <Nav navbar>

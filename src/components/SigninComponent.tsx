@@ -1,10 +1,14 @@
 import { Component } from "react";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Row, Label, Button, Form } from "reactstrap";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React from "react";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Formik, Field } from 'formik';
 import { signinForm } from '../shared/StateTypes';
 import * as yup from "yup";
 import "../styles/signin.scss";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Loading } from './LoadingComponent';
 
 type myProps = {
@@ -12,6 +16,7 @@ type myProps = {
     isloading: boolean,
     errMsg: string,
     form: signinForm,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     translate: any,
 }
 
@@ -25,22 +30,21 @@ class SigninComponent extends Component<myProps> {
     }
 
    
-    handleSubmit(values: signinForm) {
+    handleSubmit(values: signinForm): void {
         if (!this.props.isloading)
             this.props.postSignin(values);
     }
 
 
-    render() {
+    render(): JSX.Element {
         return (
             <div className="container">
                 <h1>{this.props.translate("signin-title")}</h1>
                 <div>
                     <Formik initialValues={this.props.form} onSubmit={values => {
-                        console.log("we get 0 with", values);
                         this.handleSubmit(values);
                     }} validationSchema={mySchema}>
-                        {({ values, handleSubmit, errors, touched }) => (
+                        {({ handleSubmit, errors, touched }) => (
                             <Form onSubmit={handleSubmit}>
                                 <Row className="form-group">
                                     <Label htmlFor="username">{this.props.translate("signin-username-title")}</Label>
@@ -84,6 +88,7 @@ class SigninComponent extends Component<myProps> {
 }
 
 const mySchema = yup.object().shape({
+    // eslint-disable-next-line no-useless-escape
     email: yup.string().matches(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1, 3}\.[0-9]{1, 3}\.[0-9]{1, 3}\.[0-9]{1, 3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, "invalid email")
         .required(),
     username: yup.string().min(4, "min 4 char").max(50, "too long").required("required"),

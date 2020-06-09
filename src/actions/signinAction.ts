@@ -1,9 +1,7 @@
 import { ActionTypes, MyActions } from '../shared/ActionTypes';
 import { signinForm } from '../shared/StateTypes';
 import { Constants } from '../shared/Constants';
-import { Dispatch, Action } from 'redux';
-import { ThunkAction } from 'redux-thunk';
-import { rootState } from '../App';
+import { Dispatch } from 'redux';
 
 
 export const updateSigninForm = (values: signinForm): MyActions => {
@@ -14,8 +12,7 @@ export const updateSigninForm = (values: signinForm): MyActions => {
 }
 
 export const postSignin = (values: signinForm) =>
-    (dispatch: Dispatch<MyActions>) => {
-        console.log("loading first action is on");
+    (dispatch: Dispatch<MyActions>): Promise<MyActions> => {
         dispatch(updateSigninForm(values));
         dispatch(signinLoading());
         return fetch(Constants.baseUrl + 'users/signup', {
@@ -28,11 +25,9 @@ export const postSignin = (values: signinForm) =>
         })
             .then(response => {
                 if (response.ok) {
-                    console.log("successfully got ok", response);
                     return dispatch(signedin(response));
                 } else {
-                    let error: Error = new Error('Error ' + response.status + ': ' + response.statusText);
-                    //error.response = response;
+                    const error: Error = new Error('Error ' + response.status + ': ' + response.statusText);
                     return dispatch(signinFailed(error));
                 }
             },
