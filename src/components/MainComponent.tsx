@@ -5,12 +5,12 @@ import { connect } from 'react-redux';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { withRouter, RouteComponentProps, Route } from "react-router-dom";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import SigninComponent from "./SigninComponent";
-import { postSignin } from '../actions/signinAction';
+import SigninComponent from "./Signin/SigninComponent";
+import { postSignin } from './Signin/signinAction';
 import { SigninForm } from "../shared/StateTypes";
 import { MyActions } from "../shared/ActionTypes";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { HeaderComponent } from "./HeaderComponent";
+import { HeaderComponent } from "./Header/HeaderComponent";
 import { RootState } from "../App";
 import { ThunkDispatch } from 'redux-thunk';
 

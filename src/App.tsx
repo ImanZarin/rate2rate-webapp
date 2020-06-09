@@ -8,7 +8,7 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Provider } from 'react-redux';
-import { SIGNIN_REDUCER } from './reducers/signinReducer';
+import { SIGNIN_REDUCER } from './components/Signin/signinReducer';
 import { withNamespaces } from 'react-i18next';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';

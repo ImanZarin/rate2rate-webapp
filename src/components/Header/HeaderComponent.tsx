@@ -3,9 +3,9 @@ import { Component } from "react";
 import React from "react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Nav, Navbar, NavbarToggler, NavbarBrand, Collapse, NavItem, NavLink, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
-import { Languages } from "../shared/Enums";
-import i18n from "../i18n";
-import '../styles/header.scss';
+import { Languages } from "../../shared/Enums";
+import i18n from "../../i18n";
+import './header.scss';
 
 type MyProps = {
 

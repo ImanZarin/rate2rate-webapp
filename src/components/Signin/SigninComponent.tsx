@@ -5,11 +5,11 @@ import { Row, Label, Button, Form } from "reactstrap";
 import React from "react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Formik, Field } from 'formik';
-import { SigninForm } from '../shared/StateTypes';
+import { SigninForm } from '../../shared/StateTypes';
 import * as yup from "yup";
-import "../styles/signin.scss";
+import "./signin.scss";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { LOADING } from './LoadingComponent';
+import { LOADING } from '../LoadingComponent';
 
 type MyProps = {
     postSignin: (f: SigninForm) => void;

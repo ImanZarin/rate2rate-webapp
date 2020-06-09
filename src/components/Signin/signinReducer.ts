@@ -1,5 +1,5 @@
-import { ActionTypes, MyActions, UpdateSigninAction, FailedAction } from "../shared/ActionTypes";
-import { SigninForm, SigninReducerState } from '../shared/StateTypes';
+import { ActionTypes, MyActions, UpdateSigninAction, FailedAction } from "../../shared/ActionTypes";
+import { SigninForm, SigninReducerState } from '../../shared/StateTypes';
 
 
 const initForm: SigninForm = {

@@ -1,6 +1,6 @@
-import { ActionTypes, MyActions } from '../shared/ActionTypes';
-import { SigninForm } from '../shared/StateTypes';
-import { Constants } from '../shared/Constants';
+import { ActionTypes, MyActions } from '../../shared/ActionTypes';
+import { SigninForm } from '../../shared/StateTypes';
+import { Constants } from '../../shared/Constants';
 import { Dispatch } from 'redux';
 
 
