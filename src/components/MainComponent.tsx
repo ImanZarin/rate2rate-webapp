@@ -7,30 +7,30 @@ import { withRouter, RouteComponentProps, Route } from "react-router-dom";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import SigninComponent from "./SigninComponent";
 import { postSignin } from '../actions/signinAction';
-import { signinForm } from "../shared/StateTypes";
+import { SigninForm } from "../shared/StateTypes";
 import { MyActions } from "../shared/ActionTypes";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { HeaderComponent } from "./HeaderComponent";
-import { rootState } from "../App";
+import { RootState } from "../App";
 import { ThunkDispatch } from 'redux-thunk';
 
-interface StateProps extends rootState {
+interface StateProps extends RootState {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    translate: any,
+    translate: any;
 }
-
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const mapStateToProps = (state: StateProps) => ({
     signin: state.signin,
 });
 
 interface DispatchProps {
-    postSignin: (values: signinForm) => void,
+    postSignin: (values: SigninForm) => void;
 
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, MyActions>): DispatchProps => ({
-    postSignin: (values: signinForm) => dispatch(postSignin(values)),
+    postSignin: (values: SigninForm): Promise<MyActions> => dispatch(postSignin(values)),
 });
 
 
@@ -46,7 +46,7 @@ class MainComponent extends Component<MyProps> {
             <div>
                 <HeaderComponent />
                 <div>{this.props.translate("t2")}</div>
-                <Route path="/signin" component={() =>
+                <Route path="/signin" component={(): JSX.Element =>
                     <SigninComponent
                         isloading={this.props.signin.isLoading}
                         errMsg={this.props.signin.errMsg}

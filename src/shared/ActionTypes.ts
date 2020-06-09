@@ -2,29 +2,29 @@ import * as StateTypes from './StateTypes';
 
 
 export enum ActionTypes {
-    "SIGNIN_UPDATE_FORM",
-    "SIGNIN_LOADING",
-    "SIGNIN_SUCCESS",
-    "SIGNIN_FAILED",
+    signinUpdateForm = "SIGNIN_UPDATE_FORM",
+    signinLoading = "SIGNIN_LOADING",
+    signinSuccess = "SIGNIN_SUCCESS",
+    signinFailed = "SIGNIN_FAILED",
 }
 
  export type UpdateSigninAction = {
-    type: ActionTypes,
-    payload: StateTypes.signinForm
+    type: ActionTypes;
+    payload: StateTypes.SigninForm;
 }
 
  export type LoadingSigninAction = {
-    type: ActionTypes,
+    type: ActionTypes;
 }
 
 export type SuccessAction = {
-    type: ActionTypes,
-    payload: Response
+    type: ActionTypes;
+    payload: Response;
 }
 
 export type FailedAction = {
-    type: ActionTypes,
-    payload: Error
+    type: ActionTypes;
+    payload: Error;
 }
 
 export type MyActions = UpdateSigninAction | LoadingSigninAction | SuccessAction | FailedAction;

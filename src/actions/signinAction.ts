@@ -1,17 +1,38 @@
 import { ActionTypes, MyActions } from '../shared/ActionTypes';
-import { signinForm } from '../shared/StateTypes';
+import { SigninForm } from '../shared/StateTypes';
 import { Constants } from '../shared/Constants';
 import { Dispatch } from 'redux';
 
 
-export const updateSigninForm = (values: signinForm): MyActions => {
+export const updateSigninForm = (values: SigninForm): MyActions => {
     return {
-        type: ActionTypes.SIGNIN_UPDATE_FORM,
+        type: ActionTypes.signinUpdateForm,
         payload: values
     }
 }
 
-export const postSignin = (values: signinForm) =>
+export const signinLoading = (): MyActions => {
+    return {
+        type: ActionTypes.signinLoading,
+    }
+}
+
+export const signedin = (r: Response): MyActions => {
+    return {
+        type: ActionTypes.signinSuccess,
+        payload: r
+    }
+}
+
+export const signinFailed = (e: Error): MyActions => {
+    return {
+        type: ActionTypes.signinFailed,
+        payload: e,
+    }
+}
+
+
+export const postSignin = (values: SigninForm) =>
     (dispatch: Dispatch<MyActions>): Promise<MyActions> => {
         dispatch(updateSigninForm(values));
         dispatch(signinLoading());
@@ -19,6 +40,7 @@ export const postSignin = (values: signinForm) =>
             method: "PUT",
             body: JSON.stringify(values),
             headers: {
+                // eslint-disable-next-line @typescript-eslint/naming-convention
                 "Content-Type": "application/json"
             },
             credentials: "same-origin"
@@ -39,22 +61,3 @@ export const postSignin = (values: signinForm) =>
             });
     }
 
-export const signinLoading = (): MyActions => {
-    return {
-        type: ActionTypes.SIGNIN_LOADING,
-    }
-}
-
-export const signedin = (r: Response): MyActions => {
-    return {
-        type: ActionTypes.SIGNIN_SUCCESS,
-        payload: r
-    }
-}
-
-export const signinFailed = (e: Error): MyActions => {
-    return {
-        type: ActionTypes.SIGNIN_FAILED,
-        payload: e,
-    }
-}

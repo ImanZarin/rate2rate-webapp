@@ -7,18 +7,18 @@ import { Languages } from "../shared/Enums";
 import i18n from "../i18n";
 import '../styles/header.scss';
 
-type myProps = {
+type MyProps = {
 
 }
 
-type myState = {
-    isNavOpen: boolean,
-    isDropdownOpen: boolean,
+type MyState = {
+    isNavOpen: boolean;
+    isDropdownOpen: boolean;
 }
 
-export class HeaderComponent extends Component<myProps, myState> {
+export class HeaderComponent extends Component<MyProps, MyState> {
 
-    constructor(props: myProps) {
+    constructor(props: MyProps) {
         super(props);
 
         this.state = {
@@ -89,9 +89,9 @@ export class HeaderComponent extends Component<myProps, myState> {
                                             <span className="fa fa-globe fa-lg">Language</span>
                                         </DropdownToggle>
                                         <DropdownMenu>
-                                            <DropdownItem onClick={() => this.changeLanguage(Languages.en)}>
+                                            <DropdownItem onClick={(): void => this.changeLanguage(Languages.en)}>
                                                 {Languages.en}</DropdownItem>
-                                            <DropdownItem onClick={() => this.changeLanguage(Languages.fi)}>
+                                            <DropdownItem onClick={(): void => this.changeLanguage(Languages.fi)}>
                                                 {Languages.fi}</DropdownItem>
                                         </DropdownMenu>
                                     </Dropdown>

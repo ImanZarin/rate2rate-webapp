@@ -1,12 +1,12 @@
 
-export interface signinForm {
+export interface SigninForm {
     username: string,
     password: string,
     email: string
 }
 
-export interface signinReducerState {
+export interface SigninReducerState {
     errMsg: string,
     isLoading: boolean,
-    form: signinForm
+    form: SigninForm
 }

@@ -5,32 +5,40 @@ import { Row, Label, Button, Form } from "reactstrap";
 import React from "react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Formik, Field } from 'formik';
-import { signinForm } from '../shared/StateTypes';
+import { SigninForm } from '../shared/StateTypes';
 import * as yup from "yup";
 import "../styles/signin.scss";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Loading } from './LoadingComponent';
+import { LOADING } from './LoadingComponent';
 
-type myProps = {
-    postSignin: (f: signinForm) => void,
-    isloading: boolean,
-    errMsg: string,
-    form: signinForm,
+type MyProps = {
+    postSignin: (f: SigninForm) => void;
+    isloading: boolean;
+    errMsg: string;
+    form: SigninForm;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    translate: any,
+    translate: any;
 }
 
+const mySchema = yup.object().shape({
+    // eslint-disable-next-line no-useless-escape
+    email: yup.string().matches(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1, 3}\.[0-9]{1, 3}\.[0-9]{1, 3}\.[0-9]{1, 3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, "invalid email")
+        .required(),
+    username: yup.string().min(4, "min 4 char").max(50, "too long").required("required"),
+    password: yup.string().min(4, "min 4 char").max(50, "too long").required("required"),
+});
 
-class SigninComponent extends Component<myProps> {
 
-    constructor(props: myProps) {
+class SigninComponent extends Component<MyProps> {
+
+    constructor(props: MyProps) {
         super(props);
 
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-   
-    handleSubmit(values: signinForm): void {
+
+    handleSubmit(values: SigninForm): void {
         if (!this.props.isloading)
             this.props.postSignin(values);
     }
@@ -41,10 +49,10 @@ class SigninComponent extends Component<myProps> {
             <div className="container">
                 <h1>{this.props.translate("signin-title")}</h1>
                 <div>
-                    <Formik initialValues={this.props.form} onSubmit={values => {
+                    <Formik initialValues={this.props.form} onSubmit={(values): void => {
                         this.handleSubmit(values);
                     }} validationSchema={mySchema}>
-                        {({ handleSubmit, errors, touched }) => (
+                        {({ handleSubmit, errors, touched }): JSX.Element => (
                             <Form onSubmit={handleSubmit}>
                                 <Row className="form-group">
                                     <Label htmlFor="username">{this.props.translate("signin-username-title")}</Label>
@@ -73,26 +81,18 @@ class SigninComponent extends Component<myProps> {
                                         className="error-msg"> {errors.password}
                                     </div>
                                 </Row>
-                        <Button type="submit" className="btn">{this.props.translate("siginin-form-submit")}</Button>
+                                <Button type="submit" className="btn">{this.props.translate("siginin-form-submit")}</Button>
                             </Form>
                         )}
                     </Formik>
                 </div>
                 <div style={{ visibility: this.props.isloading ? 'visible' : 'hidden' }}>
-                    <Loading tr={this.props.translate} />
+                    <LOADING tr={this.props.translate} />
                 </div>
             </div>
         );
     }
 
 }
-
-const mySchema = yup.object().shape({
-    // eslint-disable-next-line no-useless-escape
-    email: yup.string().matches(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1, 3}\.[0-9]{1, 3}\.[0-9]{1, 3}\.[0-9]{1, 3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, "invalid email")
-        .required(),
-    username: yup.string().min(4, "min 4 char").max(50, "too long").required("required"),
-    password: yup.string().min(4, "min 4 char").max(50, "too long").required("required"),
-});
 
 export default SigninComponent;

@@ -1,31 +1,31 @@
 import { ActionTypes, MyActions, UpdateSigninAction, FailedAction } from "../shared/ActionTypes";
-import { signinForm, signinReducerState } from '../shared/StateTypes';
+import { SigninForm, SigninReducerState } from '../shared/StateTypes';
 
 
-const initForm: signinForm = {
+const initForm: SigninForm = {
     username: "",
     email: "",
     password: ""
 }
-export const initialSigninReducerState: signinReducerState = {
+export const initialSigninReducerState: SigninReducerState = {
     errMsg: "",
     isLoading: false,
     form: initForm
 }
 
-export const SigninReducer = (state = initialSigninReducerState, action: MyActions): signinReducerState => {
+export const SIGNIN_REDUCER = (state = initialSigninReducerState, action: MyActions): SigninReducerState => {
     switch (action.type) {
-        case ActionTypes.SIGNIN_UPDATE_FORM: {
+        case ActionTypes.signinUpdateForm: {
             const a = action as UpdateSigninAction;
             return {
                 ...state, form: a.payload, errMsg: "", isLoading: false
             };
         }
-        case ActionTypes.SIGNIN_LOADING:
+        case ActionTypes.signinLoading:
             return {
                 ...state, isLoading: true, errMsg: ""
             };
-        case ActionTypes.SIGNIN_FAILED: {
+        case ActionTypes.signinFailed: {
             const a = action as FailedAction;
             return {
                 ...state, isLoading: false, errMsg: a.payload.message, form: {
@@ -35,7 +35,7 @@ export const SigninReducer = (state = initialSigninReducerState, action: MyActio
                 }
             }
         }
-        case ActionTypes.SIGNIN_SUCCESS:
+        case ActionTypes.signinSuccess:
             return {
                 ...state, isLoading: false, errMsg: "", form: initForm
             }
