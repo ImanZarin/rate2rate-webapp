@@ -1,16 +1,16 @@
 import { ActionTypes, MyActions, UpdateSigninAction, FailedAction } from "../../shared/ActionTypes";
-import { SigninForm, SigninReducerState } from '../../shared/StateTypes';
+import { SigninReducerState } from '../../shared/StateTypes';
 
 
-const initForm: SigninForm = {
-    username: "",
-    email: "",
-    password: ""
-}
+
 export const initialSigninReducerState: SigninReducerState = {
     errMsg: "",
     isLoading: false,
-    form: initForm
+    form: {
+        email: "",
+        password: "",
+        username: ""
+    }
 }
 
 export const SIGNIN_REDUCER = (state = initialSigninReducerState, action: MyActions): SigninReducerState => {
@@ -37,7 +37,12 @@ export const SIGNIN_REDUCER = (state = initialSigninReducerState, action: MyActi
         }
         case ActionTypes.signinSuccess:
             return {
-                ...state, isLoading: false, errMsg: "", form: initForm
+                ...state, isLoading: false, errMsg: "",
+                form: {
+                    email: "",
+                    password: "",
+                    username: ""
+                }
             }
         default:
             return state;

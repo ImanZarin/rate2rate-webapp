@@ -1,4 +1,5 @@
 import * as StateTypes from './StateTypes';
+import { Languages } from './Enums';
 
 
 export enum ActionTypes {
@@ -6,14 +7,15 @@ export enum ActionTypes {
     signinLoading = "SIGNIN_LOADING",
     signinSuccess = "SIGNIN_SUCCESS",
     signinFailed = "SIGNIN_FAILED",
+    languageChange = "LANGUAGE_CHANGE"
 }
 
- export type UpdateSigninAction = {
+export type UpdateSigninAction = {
     type: ActionTypes;
     payload: StateTypes.SigninForm;
 }
 
- export type LoadingSigninAction = {
+export type LoadingSigninAction = {
     type: ActionTypes;
 }
 
@@ -27,4 +29,10 @@ export type FailedAction = {
     payload: Error;
 }
 
-export type MyActions = UpdateSigninAction | LoadingSigninAction | SuccessAction | FailedAction;
+export type ChangeLanguageAction = {
+    type: ActionTypes;
+    payload: Languages;
+}
+
+export type MyActions = UpdateSigninAction | LoadingSigninAction | SuccessAction |
+    FailedAction | ChangeLanguageAction;

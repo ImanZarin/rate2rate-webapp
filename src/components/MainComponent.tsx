@@ -13,6 +13,8 @@ import { MyActions } from "../shared/ActionTypes";
 import { HeaderComponent } from "./Header/HeaderComponent";
 import { RootState } from "../App";
 import { ThunkDispatch } from 'redux-thunk';
+import { Languages } from "../shared/Enums";
+import { languageChange } from "./Header/headerActions";
 
 interface StateProps extends RootState {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -21,16 +23,19 @@ interface StateProps extends RootState {
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const mapStateToProps = (state: StateProps) => ({
     signin: state.signin,
+    header: state.header
 });
 
 interface DispatchProps {
     postSignin: (values: SigninForm) => void;
+    changeLanguage: (l: Languages) => void;
 
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, MyActions>): DispatchProps => ({
+const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, any, MyActions>): DispatchProps => ({
     postSignin: (values: SigninForm): Promise<MyActions> => dispatch(postSignin(values)),
+    changeLanguage: (l: Languages): MyActions => dispatch(languageChange(l))
 });
 
 
@@ -44,16 +49,23 @@ class MainComponent extends Component<MyProps> {
     render(): JSX.Element {
         return (
             <div>
-                <HeaderComponent />
+                <HeaderComponent lan={this.props.header.lan}
+                    changeLan={this.props.changeLanguage} />
                 <div>{this.props.translate("t2")}</div>
                 <Route path="/signin" component={(): JSX.Element =>
                     <SigninComponent
                         isloading={this.props.signin.isLoading}
                         errMsg={this.props.signin.errMsg}
-                        form={this.props.signin.form}
+                        //form={this.props.signin.form}
                         translate={this.props.translate}
                         postSignin={this.props.postSignin}
                     />} />
+                <Route path="/home" component={(): JSX.Element => {
+                    return (<div>
+                        This is the test to make sure navigation works as expected!
+                    </div>);
+                }
+                } />
             </div>
         );
     }

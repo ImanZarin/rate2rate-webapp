@@ -2,19 +2,24 @@ import { Component } from "react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React from "react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Nav, Navbar, NavbarToggler, NavbarBrand, Collapse, NavItem, NavLink, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
+import { Nav, Navbar, NavbarToggler, NavbarBrand, Collapse, NavItem, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { NavLink } from 'react-router-dom';
 import { Languages } from "../../shared/Enums";
 import i18n from "../../i18n";
 import './header.scss';
 
 type MyProps = {
-
+    lan: Languages;
+    changeLan: (l: Languages) => void;
 }
 
 type MyState = {
     isNavOpen: boolean;
     isDropdownOpen: boolean;
 }
+
+
 
 export class HeaderComponent extends Component<MyProps, MyState> {
 
@@ -45,12 +50,15 @@ export class HeaderComponent extends Component<MyProps, MyState> {
         switch (l) {
             case Languages.en:
                 i18n.changeLanguage("en");
+                this.props.changeLan(Languages.en);
                 break;
             case Languages.fi:
                 i18n.changeLanguage("fi");
+                this.props.changeLan(Languages.fi);
                 break;
             default:
                 i18n.changeLanguage("en");
+                this.props.changeLan(Languages.en);
                 break;
         }
     }
@@ -72,7 +80,7 @@ export class HeaderComponent extends Component<MyProps, MyState> {
                                     </NavLink>
                                 </NavItem>
                                 <NavItem>
-                                    <NavLink className="nav-link" to="/">
+                                    <NavLink className="nav-link" to="/signin">
                                         <span className="fa fa-info fa-lg title">About Us</span>
                                     </NavLink>
                                 </NavItem>

@@ -15,9 +15,13 @@ type MyProps = {
     postSignin: (f: SigninForm) => void;
     isloading: boolean;
     errMsg: string;
-    form: SigninForm;
+    //form: SigninForm;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     translate: any;
+}
+
+type MyState = {
+    form: SigninForm;
 }
 
 const mySchema = yup.object().shape({
@@ -28,28 +32,48 @@ const mySchema = yup.object().shape({
     password: yup.string().min(4, "min 4 char").max(50, "too long").required("required"),
 });
 
+const initForm: SigninForm = {
+    username: "",
+    email: "",
+    password: ""
+}
 
-class SigninComponent extends Component<MyProps> {
+class SigninComponent extends Component<MyProps, MyState> {
 
     constructor(props: MyProps) {
         super(props);
-
+        if (!this.state) {
+            this.state = {
+                form: initForm
+            };
+        }
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleFormChange = this.handleFormChange.bind(this);
     }
-
 
     handleSubmit(values: SigninForm): void {
-        if (!this.props.isloading)
+        this.handleFormChange(values);
+        if (!this.props.isloading) {
             this.props.postSignin(values);
+        }
     }
 
+    handleFormChange(values: SigninForm): void {
+        this.setState({
+            form: {
+                email: values.email,
+                password: "",
+                username: values.username
+            }
+        });
+    }
 
     render(): JSX.Element {
         return (
             <div className="container">
                 <h1>{this.props.translate("signin-title")}</h1>
                 <div>
-                    <Formik initialValues={this.props.form} onSubmit={(values): void => {
+                    <Formik initialValues={this.state.form} onSubmit={(values): void => {
                         this.handleSubmit(values);
                     }} validationSchema={mySchema}>
                         {({ handleSubmit, errors, touched }): JSX.Element => (
@@ -59,7 +83,8 @@ class SigninComponent extends Component<MyProps> {
                                     <Field type="text" className="form-control"
                                         placeholder={this.props.translate("signin-username-placeholder")}
                                         id="username"
-                                        name="username" />
+                                        name="username"
+                                        touched={this.handleFormChange} />
                                     <div style={{ visibility: errors.username && touched.username ? 'visible' : 'hidden' }}
                                         className="error-msg"> {errors.username}
                                     </div>
