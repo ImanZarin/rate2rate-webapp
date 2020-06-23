@@ -39,23 +39,7 @@ const initForm: SigninForm = {
     password: ""
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-//const ref = React.createRef() as React.RefObject<Alert<{ [key: string]: any }>>;
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-// eslint-disable-next-line @typescript-eslint/naming-convention
-// const MyAlert = React.forwardRef((props, ref) => {
-//     return <Alert childRef={ref} isOpen={props.alertIsOpen} toggle={props.closeAlert}
-//     color="danger">
-//     test text for forward ref
-//   </Alert>;
-// });
-
-
-
-
 class SigninComponent extends Component<MyProps, MyState> {
-    myRef: any;
 
     constructor(props: MyProps) {
         super(props);
@@ -65,7 +49,6 @@ class SigninComponent extends Component<MyProps, MyState> {
             error: new Error,
             alertIsOpen: false
         };
-        this.myRef = React.createRef();
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleFormChange = this.handleFormChange.bind(this);
         this.closeAlert = this.closeAlert.bind(this);
@@ -186,7 +169,6 @@ class SigninComponent extends Component<MyProps, MyState> {
                 </div>
                 <Alert isOpen={this.state.alertIsOpen} toggle={this.closeAlert}
                     color="danger">{this.state.error?.message}</Alert>
-                {/* <MyAlert ref={ref} isOpen={this.state.alertIsOpen} toggle={this.closeAlert}></MyAlert> */}
             </div>
         );
     }
