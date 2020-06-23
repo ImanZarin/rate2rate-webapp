@@ -7,9 +7,7 @@ export interface SigninForm {
 }
 
 export interface SigninReducerState {
-    errMsg: string,
-    isLoading: boolean,
-    form: SigninForm
+    username: string
 }
 
 export interface HeaderReducerState {

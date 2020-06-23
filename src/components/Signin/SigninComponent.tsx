@@ -1,8 +1,6 @@
-import { Component } from "react";
+import React, { Component } from "react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Row, Label, Button, Form } from "reactstrap";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import React from "react";
+import { Row, Label, Button, Form, Alert, Fade } from "reactstrap";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Formik, Field } from 'formik';
 import { SigninForm } from '../../shared/StateTypes';
@@ -10,18 +8,21 @@ import * as yup from "yup";
 import "./signin.scss";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { LOADING } from '../LoadingComponent';
+import { Constants } from '../../shared/Constants';
+import 'bootstrap/dist/css/bootstrap.css';
+import PropTypes from 'prop-types';
 
 type MyProps = {
-    postSignin: (f: SigninForm) => void;
-    isloading: boolean;
-    errMsg: string;
-    //form: SigninForm;
+    signinSuccess: (u: string) => void;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     translate: any;
 }
 
 type MyState = {
     form: SigninForm;
+    isLoading: boolean;
+    error: Error;
+    alertIsOpen: boolean;
 }
 
 const mySchema = yup.object().shape({
@@ -38,24 +39,64 @@ const initForm: SigninForm = {
     password: ""
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+//const ref = React.createRef() as React.RefObject<Alert<{ [key: string]: any }>>;
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// eslint-disable-next-line @typescript-eslint/naming-convention
+// const MyAlert = React.forwardRef((props, ref) => {
+//     return <Alert childRef={ref} isOpen={props.alertIsOpen} toggle={props.closeAlert}
+//     color="danger">
+//     test text for forward ref
+//   </Alert>;
+// });
+
+
+
+
 class SigninComponent extends Component<MyProps, MyState> {
+    myRef: any;
 
     constructor(props: MyProps) {
         super(props);
-        if (!this.state) {
-            this.state = {
-                form: initForm
-            };
-        }
+        this.state = {
+            form: initForm,
+            isLoading: false,
+            error: new Error,
+            alertIsOpen: false
+        };
+        this.myRef = React.createRef();
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleFormChange = this.handleFormChange.bind(this);
+        this.closeAlert = this.closeAlert.bind(this);
+        this.showAndHideAlert = this.showAndHideAlert.bind(this);
+    }
+
+    showAndHideAlert(e: Error): void {
+        this.setState({
+            error: e,
+            alertIsOpen: true,
+            isLoading: false
+        });
+        setTimeout(() => {
+            this.setState({
+                alertIsOpen: false,
+                isLoading: false
+            });
+        }, Constants.waitShort);
     }
 
     handleSubmit(values: SigninForm): void {
         this.handleFormChange(values);
-        if (!this.props.isloading) {
-            this.props.postSignin(values);
+        if (!this.state.isLoading) {
+            this.postSignin(values);
         }
+    }
+
+    closeAlert(): void {
+        this.setState({
+            alertIsOpen: false
+        });
     }
 
     handleFormChange(values: SigninForm): void {
@@ -67,6 +108,36 @@ class SigninComponent extends Component<MyProps, MyState> {
             }
         });
     }
+
+    postSignin = (values: SigninForm): void => {
+        this.setState({
+            isLoading: true
+        })
+        fetch(Constants.baseUrl + 'users/signup', {
+            method: "PUT",
+            body: JSON.stringify(values),
+            headers: {
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                "Content-Type": "application/json"
+            },
+            credentials: "same-origin"
+        })
+            .then(response => {
+                if (response.ok) {
+                    this.props.signinSuccess(response.statusText);//TODO use response approprite property
+                } else {
+                    const error: Error = new Error('Error ' + response.status + ': ' + response.statusText);
+                    this.showAndHideAlert(error);
+                }
+            },
+                error => {
+                    this.showAndHideAlert(error);
+                })
+            .catch(error => {
+                this.showAndHideAlert(error);
+            });
+    }
+
 
     render(): JSX.Element {
         return (
@@ -83,8 +154,7 @@ class SigninComponent extends Component<MyProps, MyState> {
                                     <Field type="text" className="form-control"
                                         placeholder={this.props.translate("signin-username-placeholder")}
                                         id="username"
-                                        name="username"
-                                        touched={this.handleFormChange} />
+                                        name="username" />
                                     <div style={{ visibility: errors.username && touched.username ? 'visible' : 'hidden' }}
                                         className="error-msg"> {errors.username}
                                     </div>
@@ -111,9 +181,12 @@ class SigninComponent extends Component<MyProps, MyState> {
                         )}
                     </Formik>
                 </div>
-                <div style={{ visibility: this.props.isloading ? 'visible' : 'hidden' }}>
+                <div style={{ visibility: this.state.isLoading ? 'visible' : 'hidden' }}>
                     <LOADING tr={this.props.translate} />
                 </div>
+                <Alert isOpen={this.state.alertIsOpen} toggle={this.closeAlert}
+                    color="danger">{this.state.error?.message}</Alert>
+                {/* <MyAlert ref={ref} isOpen={this.state.alertIsOpen} toggle={this.closeAlert}></MyAlert> */}
             </div>
         );
     }
