@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React, { Component } from "react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Row, Label, Button, Form, Alert, Fade } from "reactstrap";
@@ -10,7 +11,6 @@ import "./signin.scss";
 import { LOADING } from '../LoadingComponent';
 import { Constants } from '../../shared/Constants';
 import 'bootstrap/dist/css/bootstrap.css';
-import PropTypes from 'prop-types';
 
 type MyProps = {
     signinSuccess: (u: string) => void;

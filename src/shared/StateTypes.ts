@@ -13,3 +13,13 @@ export interface SigninReducerState {
 export interface HeaderReducerState {
     lan: Languages
 }
+
+export interface MovieRate {
+    movie: string,
+    rate: number
+}
+
+export interface User {
+    name: string,
+    movies: MovieRate[]
+}
