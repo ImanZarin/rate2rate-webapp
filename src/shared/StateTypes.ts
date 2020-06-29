@@ -19,7 +19,12 @@ export interface MovieRate {
     rate: number
 }
 
-export interface User {
-    name: string,
-    movies: MovieRate[]
+export interface Movie {
+    _id: string;
+    title: string;
+    year: number;
+    brief: string;
+    imageUrl: string;
+    genre: string[];
+    cast: string[];
 }

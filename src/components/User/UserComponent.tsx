@@ -3,13 +3,13 @@ import React, { Component, Fragment } from 'react';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { LOADING } from '../LoadingComponent';
 import { Constants } from '../../shared/Constants';
-import { User, MovieRate } from '../../shared/StateTypes';
+import { MovieRate, Movie } from '../../shared/StateTypes';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Alert } from 'reactstrap';
 
 type MyState = {
     isLoading: boolean;
-    mainList: MovieRate[];
+    mainList: Movie[];
     alertIsOpen: boolean;
     error: Error;
     name: string;
@@ -24,10 +24,17 @@ class UserComponent extends Component<MyProps, MyState>{
 
     constructor(props: MyProps) {
         super(props);
-        this.setState({
+        this.state = {
             isLoading: false,
             alertIsOpen: false,
-        })
+            name: "",
+            error: new Error,
+            mainList: []
+        }
+    }
+
+    componentDidMount(): void {
+        this.fetchList("5ed666e4cc8ec8697817e314");
     }
 
     showAndHideAlert(e: Error): void {
@@ -54,9 +61,8 @@ class UserComponent extends Component<MyProps, MyState>{
         this.setState({
             isLoading: true
         })
-        fetch(Constants.baseUrl + 'users/' + userId, {
+        fetch(Constants.baseUrl + 'movieusers/' + userId, {
             method: "GET",
-            body: userId,
             headers: {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 "Content-Type": "text/html"
@@ -65,11 +71,12 @@ class UserComponent extends Component<MyProps, MyState>{
         })
             .then(response => {
                 if (response.ok) {
-                    const user = response.json() as unknown as User
+                    console.log("we got an ok respond", response);
+                    const movies = response.json() as unknown as Movie[];
+                    console.log("this is the json: ", movies);
                     this.setState({
                         isLoading: false,
-                        mainList: user.movies,
-
+                        mainList: movies
                     });
                 } else {
                     const error: Error = new Error('Error ' + response.status + ': ' + response.statusText);
@@ -85,18 +92,17 @@ class UserComponent extends Component<MyProps, MyState>{
     }
 
 
-    movieRate(movie: string, rate: number): JSX.Element {
-        return (
-            <div></div>
-        );
-    }
-
-
-    render() {
+    render(): JSX.Element {
         return (
             <Fragment>
                 <div>
-                    
+                    <h1>{this.props.tr("user-movies-title")}</h1>
+                    {this.state.mainList.map((movie) => {
+                        return (
+                            <div>{movie.title}</div>
+                        );
+                    }
+                    )}
                 </div>
                 <Alert isOpen={this.state.alertIsOpen} toggle={this.closeAlert}
                     color="danger">{this.state.error?.message}</Alert>
