@@ -3,26 +3,32 @@ import React, { Component, Fragment } from 'react';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { LOADING } from '../LoadingComponent';
 import { Constants } from '../../shared/Constants';
-import { MovieRate, Movie } from '../../shared/StateTypes';
+import { MovieRate } from '../../shared/StateTypes';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Alert } from 'reactstrap';
+import { FindForUserResponse } from '../../shared/apiTypes';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
+
+type RouteParams = {
+    id: string;
+}
 
 type MyState = {
     isLoading: boolean;
-    mainList: Movie[];
+    mainList: MovieRate[];
     alertIsOpen: boolean;
     error: Error;
     name: string;
 }
 
 type MyProps = {
-    userId: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     tr: any;
 }
 
-class UserComponent extends Component<MyProps, MyState>{
+class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps , MyState>{
 
-    constructor(props: MyProps) {
+    constructor(props: RouteComponentProps<RouteParams> & MyProps) {
         super(props);
         this.state = {
             isLoading: false,
@@ -34,7 +40,7 @@ class UserComponent extends Component<MyProps, MyState>{
     }
 
     componentDidMount(): void {
-        this.fetchList("5ed666e4cc8ec8697817e314");
+        this.fetchList(this.props.match.params.id);
     }
 
     showAndHideAlert(e: Error): void {
@@ -71,13 +77,18 @@ class UserComponent extends Component<MyProps, MyState>{
         })
             .then(response => {
                 if (response.ok) {
-                    console.log("we got an ok respond", response);
-                    const movies = response.json() as unknown as Movie[];
-                    console.log("this is the json: ", movies);
-                    this.setState({
-                        isLoading: false,
-                        mainList: movies
-                    });
+                    response.json()
+                        .then(r => {
+                            const rConverted = r as FindForUserResponse;
+                            this.setState({
+                                isLoading: false,
+                                mainList: rConverted.movies,
+                                name: rConverted.user.name
+                            });
+                        })
+                        .catch(er => {
+                            this.showAndHideAlert(er);
+                        })
                 } else {
                     const error: Error = new Error('Error ' + response.status + ': ' + response.statusText);
                     this.showAndHideAlert(error);
@@ -96,21 +107,24 @@ class UserComponent extends Component<MyProps, MyState>{
         return (
             <Fragment>
                 <div>
-                    <h1>{this.props.tr("user-movies-title")}</h1>
-                    {this.state.mainList.map((movie) => {
+                    <h1 style={{ margin: "auto" }}>{this.state.name}</h1>
+                    <h3>{this.props.tr("user-movies-title")}</h3>
+                    {this.state.mainList.map((ratedmovie) => {
                         return (
-                            <div>{movie.title}</div>
+                            <div key={ratedmovie._id}>{ratedmovie.title} : {ratedmovie.rate} </div>
                         );
                     }
                     )}
                 </div>
                 <Alert isOpen={this.state.alertIsOpen} toggle={this.closeAlert}
                     color="danger">{this.state.error?.message}</Alert>
-                <LOADING tr={this.props.tr} />
+                <div style={{ visibility: this.state.isLoading ? 'visible' : 'hidden' }}>
+                    <LOADING tr={this.props.tr} />
+                </div>
             </Fragment>
         );
     }
 }
 
 
-export default UserComponent;
+export default withRouter(UserComponent);

@@ -63,8 +63,8 @@ class MainComponent extends Component<MyProps> {
                     </div>);
                 }
                 } />
-                <Route path="/user" component={(): JSX.Element => 
-                <UserComponent tr={this.props.translate} userId={""}/>} />
+                <Route path="/user/:id" component={(): JSX.Element => 
+                <UserComponent tr={this.props.translate} />} />
             </div>
         );
     }

@@ -15,8 +15,10 @@ export interface HeaderReducerState {
 }
 
 export interface MovieRate {
-    movie: string,
-    rate: number
+        _id: string;
+        title: string;
+        year: number;
+        rate: number;
 }
 
 export interface Movie {
@@ -28,3 +30,4 @@ export interface Movie {
     genre: string[];
     cast: string[];
 }
+
