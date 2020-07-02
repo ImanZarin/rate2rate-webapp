@@ -6,7 +6,7 @@ import { Constants } from '../../shared/Constants';
 import { MovieRate } from '../../shared/StateTypes';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Alert } from 'reactstrap';
-import { FindForUserResponse } from '../../shared/apiTypes';
+import { FindForUserResponse } from '../../shared/ApiTypes';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 type RouteParams = {
