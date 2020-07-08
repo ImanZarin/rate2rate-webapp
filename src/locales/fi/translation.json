@@ -9,5 +9,6 @@
     "signin-email-title": "Sähköposti",
     "signin-password-title": "Salasana",
     "signin-password-placeholder": "valitse salasana",
-    "siginin-form-submit": "Lähetä"
+    "siginin-form-submit": "Lähetä",
+    "user-movies-title": "elokuvat"
 }

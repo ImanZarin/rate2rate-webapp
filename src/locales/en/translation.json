@@ -9,5 +9,6 @@
     "signin-email-placeholder": "enter your email",
     "signin-password-title": "Password",
     "signin-password-placeholder": "choose a password",
-    "siginin-form-submit": "Submit"
+    "siginin-form-submit": "Submit",
+    "user-movies-title": "Movies"
 }

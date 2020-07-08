@@ -13,3 +13,21 @@ export interface SigninReducerState {
 export interface HeaderReducerState {
     lan: Languages
 }
+
+export interface MovieRate {
+        _id: string;
+        title: string;
+        year: number;
+        rate: number;
+}
+
+export interface Movie {
+    _id: string;
+    title: string;
+    year: number;
+    brief: string;
+    imageUrl: string;
+    genre: string[];
+    cast: string[];
+}
+

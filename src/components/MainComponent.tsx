@@ -14,6 +14,7 @@ import { RootState } from "../App";
 import { ThunkDispatch } from 'redux-thunk';
 import { Languages } from "../shared/Enums";
 import { languageChange } from "./Header/headerActions";
+import UserComponent from "./User/UserComponent";
 
 interface StateProps extends RootState {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -62,6 +63,8 @@ class MainComponent extends Component<MyProps> {
                     </div>);
                 }
                 } />
+                <Route path="/user/:id" component={(): JSX.Element => 
+                <UserComponent tr={this.props.translate} />} />
             </div>
         );
     }

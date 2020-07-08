@@ -4,7 +4,7 @@ import React, { Component } from "react";
 import { Nav, Navbar, NavbarToggler, NavbarBrand, Collapse, NavItem, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Button } from "reactstrap";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { NavLink } from 'react-router-dom';
-import { Languages } from "../../shared/Enums";
+import { Languages, Pages } from "../../shared/Enums";
 import i18n from "../../i18n";
 import './header.scss';
 import PropTypes from 'prop-types';
@@ -75,17 +75,17 @@ export class HeaderComponent extends Component<MyProps, MyState> {
                         <Collapse isOpen={this.state.isNavOpen} navbar>
                             <Nav navbar>
                                 <NavItem>
-                                    <NavLink className="nav-link" to="/home">
+                                    <NavLink className="nav-link" to={Pages.home}>
                                         <span className="fa fa-home fa-lg title">Home</span>
                                     </NavLink>
                                 </NavItem>
                                 <NavItem>
-                                    <NavLink className="nav-link" to="/signin">
+                                    <NavLink className="nav-link" to={Pages.signin}>
                                         <span className="fa fa-info fa-lg title">About Us</span>
                                     </NavLink>
                                 </NavItem>
                                 <NavItem>
-                                    <NavLink className="nav-link" to="/">
+                                    <NavLink className="nav-link" to={Pages.user}>
                                         <span className="fa fa-list fa-lg title">Menu</span>
                                     </NavLink>
                                 </NavItem>
