@@ -28,7 +28,6 @@ function app({ t }: any): JSX.Element {
   const store = createStore(rootReducer, applyMiddleware(thunk, logger));
   return (
     <Provider store={store}>
-      <div>{t("t1")}</div>
       <BrowserRouter>
         <Route path="/"
           component={(): JSX.Element =>
