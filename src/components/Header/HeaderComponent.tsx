@@ -7,11 +7,13 @@ import { NavLink } from 'react-router-dom';
 import { Languages, Pages } from "../../shared/Enums";
 import i18n from "../../i18n";
 import './header.scss';
-import PropTypes from 'prop-types';
 
 type MyProps = {
     lan: Languages;
+    username: string;
     changeLan: (l: Languages) => void;
+    changeName: (u: string) => void;
+    translate: any;
 }
 
 type MyState = {
@@ -45,7 +47,7 @@ export class HeaderComponent extends Component<MyProps, MyState> {
         });
     }
 
-    changeLanguage = (l: string): void => {
+    myChangeLanguage = (l: string): void => {
         switch (l) {
             case Languages.en:
                 i18n.changeLanguage("en");
@@ -63,12 +65,14 @@ export class HeaderComponent extends Component<MyProps, MyState> {
     }
 
 
+
+
     render(): JSX.Element {
         return (
             <React.Fragment>
                 <Navbar dark expand="md">
                     <div className="container">
-                        <NavbarToggler onClick={this.toggleNav} className="my-navbar-toggler"/>
+                        <NavbarToggler onClick={this.toggleNav} className="my-navbar-toggler" />
                         <NavbarBrand className="mr-auto " href="/">
                             <img src='assets/images/logo.png' alt="logo" height="30" width="41" />
                         </NavbarBrand>
@@ -97,12 +101,17 @@ export class HeaderComponent extends Component<MyProps, MyState> {
                                             <span className="fa fa-globe fa-lg">Language</span>
                                         </DropdownToggle>
                                         <DropdownMenu>
-                                            <DropdownItem onClick={(): void => this.changeLanguage(Languages.en)}>
+                                            <DropdownItem onClick={(): void => this.myChangeLanguage(Languages.en)}>
                                                 {Languages.en}</DropdownItem>
-                                            <DropdownItem onClick={(): void => this.changeLanguage(Languages.fi)}>
+                                            <DropdownItem onClick={(): void => this.myChangeLanguage(Languages.fi)}>
                                                 {Languages.fi}</DropdownItem>
                                         </DropdownMenu>
                                     </Dropdown>
+                                </NavItem>
+                                <NavItem>
+                                    <Button>
+                                        {this.props.username?.length > 0 ? this.props.username : this.props.translate("header-signin-button")}
+                                    </Button>
                                 </NavItem>
                             </Nav>
                         </Collapse>

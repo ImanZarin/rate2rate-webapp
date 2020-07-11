@@ -5,7 +5,7 @@ import { LOADING } from '../LoadingComponent';
 import { Constants } from '../../shared/Constants';
 import { MovieRate } from '../../shared/StateTypes';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Alert } from 'reactstrap';
+import { Alert, Button } from 'reactstrap';
 import { FindForUserResponse } from '../../shared/ApiTypes';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
@@ -26,7 +26,7 @@ type MyProps = {
     tr: any;
 }
 
-class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps , MyState>{
+class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps, MyState>{
 
     constructor(props: RouteComponentProps<RouteParams> & MyProps) {
         super(props);

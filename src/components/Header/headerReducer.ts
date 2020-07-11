@@ -1,9 +1,10 @@
-import { MyActions, ActionTypes, ChangeLanguageAction } from "../../shared/ActionTypes";
+import { MyActions, ActionTypes, ChangeLanguageAction, ChangeNameAction } from "../../shared/ActionTypes";
 import { Languages } from '../../shared/Enums';
 import { HeaderReducerState } from "../../shared/StateTypes";
 
 const initialState = {
-    lan: Languages.en
+    lan: Languages.en,
+    username: ""
 }
 
 export const HEADER_REDUCER = (state = initialState, action: MyActions): HeaderReducerState => {
@@ -11,11 +12,16 @@ export const HEADER_REDUCER = (state = initialState, action: MyActions): HeaderR
         case ActionTypes.languageChange:
             {
                 const a = action as ChangeLanguageAction;
-                // console.log("header reducer is working too");
                 return {
                     ...state, lan: a.payload
                 };
             }
+        case ActionTypes.nameChange: {
+            const a = action as ChangeNameAction;
+            return {
+                ...state, username: a.payload
+            }
+        }
         default:
             return state;
     }

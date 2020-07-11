@@ -11,9 +11,17 @@ import "./signin.scss";
 import { LOADING } from '../LoadingComponent';
 import { Constants } from '../../shared/Constants';
 import 'bootstrap/dist/css/bootstrap.css';
+import { LoginUserResponse } from "../../shared/ApiTypes";
+import { ReactCookieProps, withCookies } from 'react-cookie';
 
 type MyProps = {
-    signinSuccess: (u: string) => void;
+    changeName: (u: string) => void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    translate: any;
+}
+
+interface MyProps2 extends ReactCookieProps {
+    changeName: (u: string) => void;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     translate: any;
 }
@@ -39,7 +47,8 @@ const initForm: SigninForm = {
     password: ""
 }
 
-class SigninComponent extends Component<MyProps, MyState> {
+class SigninComponent extends Component<MyProps2, MyState> {
+
 
     constructor(props: MyProps) {
         super(props);
@@ -96,18 +105,26 @@ class SigninComponent extends Component<MyProps, MyState> {
         this.setState({
             isLoading: true
         })
-        fetch(Constants.baseUrl + 'users/signup', {
-            method: "PUT",
+        fetch(Constants.baseUrl + 'auth/login', {
+            method: "POST",
             body: JSON.stringify(values),
             headers: {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 "Content-Type": "application/json"
             },
-            credentials: "same-origin"
+            //credentials: "same-origin"
         })
             .then(response => {
                 if (response.ok) {
-                    this.props.signinSuccess(response.statusText);//TODO use response approprite property
+                    response.json()
+                        .then(r => {
+                            const rConverted = r as LoginUserResponse;
+                            console.log("this is the cookie: ", this.props.cookies);
+                            this.props.cookies?.set("Token", rConverted.accessToken);
+                            this.props.changeName(rConverted.userName);
+                            console.log("the access token is: ", this.props.cookies?.get("Token"));
+                        }
+                        )
                 } else {
                     const error: Error = new Error('Error ' + response.status + ': ' + response.statusText);
                     this.showAndHideAlert(error);
@@ -175,4 +192,4 @@ class SigninComponent extends Component<MyProps, MyState> {
 
 }
 
-export default SigninComponent;
+export default withCookies(SigninComponent);

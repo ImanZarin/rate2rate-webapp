@@ -7,11 +7,12 @@ export interface SigninForm {
 }
 
 export interface SigninReducerState {
-    username: string
+    isSignedin: boolean
 }
 
 export interface HeaderReducerState {
-    lan: Languages
+    lan: Languages,
+    username: string
 }
 
 export interface MovieRate {

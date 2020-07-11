@@ -1,6 +1,4 @@
 {
-    "t1": "first string translated",
-    "t2": "second string translated from child component",
     "signin-title": "Sign Up",
     "loading-text": "Loading",
     "signin-username-title": "User Name",
@@ -10,5 +8,6 @@
     "signin-password-title": "Password",
     "signin-password-placeholder": "choose a password",
     "siginin-form-submit": "Submit",
-    "user-movies-title": "Movies"
+    "user-movies-title": "Movies",
+    "header-signin-button": "Sign In"
 }

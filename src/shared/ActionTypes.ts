@@ -1,4 +1,5 @@
 import { Languages } from './Enums';
+import { type } from 'os';
 
 
 export enum ActionTypes {
@@ -6,7 +7,8 @@ export enum ActionTypes {
     signinLoading = "SIGNIN_LOADING",
     signinSuccess = "SIGNIN_SUCCESS",
     signinFailed = "SIGNIN_FAILED",
-    languageChange = "LANGUAGE_CHANGE"
+    languageChange = "LANGUAGE_CHANGE",
+    nameChange = "NAME_CHANGE"
 }
 
 export type SigninSuccessAction = {
@@ -24,4 +26,9 @@ export type ChangeLanguageAction = {
     payload: Languages;
 }
 
-export type MyActions =  SigninSuccessAction | FailedAction | ChangeLanguageAction;
+export type ChangeNameAction = {
+    type: ActionTypes;
+    payload: string;
+}
+
+export type MyActions =  SigninSuccessAction | FailedAction | ChangeLanguageAction | ChangeNameAction;

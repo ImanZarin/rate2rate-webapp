@@ -7,3 +7,8 @@ export interface FindForUserResponse {
     },
     movies: MovieRate[],
 }
+
+export interface LoginUserResponse {
+    accessToken: string;
+    userName: string;
+}

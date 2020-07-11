@@ -7,3 +7,10 @@ export const languageChange = (l: Languages): MyActions => {
         payload: l
     }
 }
+
+export const nameChange = (u: string): MyActions => {
+    return {
+        type: ActionTypes.nameChange,
+        payload: u
+    }
+}
