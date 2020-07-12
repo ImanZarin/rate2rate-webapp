@@ -7,7 +7,8 @@ export interface SigninForm {
 }
 
 export interface SigninReducerState {
-    isSignedin: boolean
+    isSignedin: boolean,
+    token: string
 }
 
 export interface HeaderReducerState {

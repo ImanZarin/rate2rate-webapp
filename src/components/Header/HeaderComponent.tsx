@@ -13,6 +13,7 @@ type MyProps = {
     username: string;
     changeLan: (l: Languages) => void;
     changeName: (u: string) => void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     translate: any;
 }
 

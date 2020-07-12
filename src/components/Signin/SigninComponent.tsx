@@ -13,15 +13,12 @@ import { Constants } from '../../shared/Constants';
 import 'bootstrap/dist/css/bootstrap.css';
 import { LoginUserResponse } from "../../shared/ApiTypes";
 import { ReactCookieProps, withCookies } from 'react-cookie';
+import { myFetch, ReqTypes, ReqContent, ReqAddresses } from "../../shared/my-fetch";
+import { MyCookies } from "../../shared/Enums";
 
-type MyProps = {
+interface MyProps extends ReactCookieProps {
     changeName: (u: string) => void;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    translate: any;
-}
-
-interface MyProps2 extends ReactCookieProps {
-    changeName: (u: string) => void;
+    changeToken: (t: string) => void;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     translate: any;
 }
@@ -47,7 +44,7 @@ const initForm: SigninForm = {
     password: ""
 }
 
-class SigninComponent extends Component<MyProps2, MyState> {
+class SigninComponent extends Component<MyProps, MyState> {
 
 
     constructor(props: MyProps) {
@@ -104,25 +101,18 @@ class SigninComponent extends Component<MyProps2, MyState> {
     postSignin = (values: SigninForm): void => {
         this.setState({
             isLoading: true
-        })
-        fetch(Constants.baseUrl + 'auth/login', {
-            method: "POST",
-            body: JSON.stringify(values),
-            headers: {
-                // eslint-disable-next-line @typescript-eslint/naming-convention
-                "Content-Type": "application/json"
-            },
-            //credentials: "same-origin"
-        })
+        });
+        myFetch(ReqTypes.post, ReqAddresses.login, ReqContent.json,
+            undefined, values, undefined)
             .then(response => {
                 if (response.ok) {
                     response.json()
-                        .then(r => {
-                            const rConverted = r as LoginUserResponse;
+                        .then((r: LoginUserResponse) => {
                             console.log("this is the cookie: ", this.props.cookies);
-                            this.props.cookies?.set("Token", rConverted.accessToken);
-                            this.props.changeName(rConverted.userName);
-                            console.log("the access token is: ", this.props.cookies?.get("Token"));
+                            this.props.cookies?.set("access_token", r.accessToken);
+                            this.props.changeName(r.userName);
+                            this.props.changeToken(r.accessToken);
+                            console.log("the access token is: ", this.props.cookies?.get("access_token"));
                         }
                         )
                 } else {
@@ -136,8 +126,61 @@ class SigninComponent extends Component<MyProps2, MyState> {
             .catch(error => {
                 this.showAndHideAlert(error);
             });
+        // fetch(Constants.baseUrl + 'auth/login', {
+        //     method: "POST",
+        //     body: JSON.stringify(values),
+        //     headers: {
+        //         // eslint-disable-next-line @typescript-eslint/naming-convention
+        //         "Content-Type": "application/json"
+        //     },
+        // })
+        //     .then(response => {
+        //         if (response.ok) {
+        //             response.json()
+        //                 .then(r => {
+        //                     const rConverted = r as LoginUserResponse;
+        //                     console.log("this is the cookie: ", this.props.cookies);
+        //                     this.props.cookies?.set("access_token", rConverted.accessToken);
+        //                     this.props.changeName(rConverted.userName);
+        //                     this.props.changeToken(rConverted.accessToken);
+        //                     console.log("the access token is: ", this.props.cookies?.get("access_token"));
+        //                 }
+        //                 )
+        //         } else {
+        //             const error: Error = new Error('Error ' + response.status + ': ' + response.statusText);
+        //             this.showAndHideAlert(error);
+        //         }
+        //     },
+        //         error => {
+        //             this.showAndHideAlert(error);
+        //         })
+        //     .catch(error => {
+        //         this.showAndHideAlert(error);
+        //     });
     }
 
+    updateMovie() {
+        const values = {
+            year: 2001,
+            brief: "this has been changed from client"
+        }
+        //console.log("the access token is: ", this.props.cookies?.get("access_token"));
+        fetch(Constants.baseUrl + 'movies/5eb466360884d346a82b58e5', {
+            method: "PUT",
+            body: JSON.stringify(values),
+            headers: {
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                "Content-Type": "application/json",
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                "Authorization": 'Bearer ' + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImltYW5raGFuODciLCJzdWIiOiJ6YXJpbi5pbWFuQG91dGxvb2suY29tIiwiaWF0IjoxNTk0NTI3OTAzLCJleHAiOjE1OTgxMjc5MDN9.VXXzElO999EglusZEgZZbAa__mPQJdy6Z6HOpbkoUzg",
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+            },
+            credentials: "omit"
+        }).then(resp => {
+            console.log("update movie respond: ", resp);
+        }, err => { console.log("err type one: ", err) })
+            .catch(err => { console.log("err type two: ", err) })
+    }
 
     render(): JSX.Element {
         return (
@@ -186,6 +229,7 @@ class SigninComponent extends Component<MyProps2, MyState> {
                 </div>
                 <Alert isOpen={this.state.alertIsOpen} toggle={this.closeAlert}
                     color="danger">{this.state.error?.message}</Alert>
+                <Button onClick={this.updateMovie}>update movie Api test</Button>
             </div>
         );
     }

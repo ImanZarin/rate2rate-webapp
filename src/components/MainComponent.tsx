@@ -11,14 +11,14 @@ import { MyActions } from "../shared/ActionTypes";
 import { HeaderComponent } from "./Header/HeaderComponent";
 import { RootState } from "../App";
 import { ThunkDispatch } from 'redux-thunk';
-import { Languages } from "../shared/Enums";
-import { languageChange, nameChange } from "./Header/headerActions";
+import { Languages, MyCookies } from "../shared/Enums";
+import { languageChange, nameChange } from "./Header/header-action";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import UserComponent from "./User/UserComponent";
-import { Constants } from "../shared/Constants";
-import { Button } from "reactstrap";
+import { ReactCookieProps, withCookies } from "react-cookie";
+import { tokenChange } from "./Signin/signin-action";
 
-interface StateProps extends RootState {
+interface StateProps extends RootState, ReactCookieProps {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     translate: any;
 }
@@ -31,13 +31,14 @@ const mapStateToProps = (state: StateProps) => ({
 interface DispatchProps {
     changeLanguage: (l: Languages) => void;
     changeName: (u: string) => void;
-
+    changeToken: (t: string) => void;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, any, MyActions>): DispatchProps => ({
     changeLanguage: (l: Languages): MyActions => dispatch(languageChange(l)),
-    changeName: (u: string): MyActions => dispatch(nameChange(u))
+    changeName: (u: string): MyActions => dispatch(nameChange(u)),
+    changeToken: (t: string): MyActions => dispatch(tokenChange(t))
 });
 
 
@@ -47,25 +48,12 @@ type MyProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 class MainComponent extends Component<MyProps> {
 
     //TODO initial language and name and change them in redux
-
-    updateMovie() {
-        const values = {
-            year: 2001,
-            brief: "this has been changed from client"
+    componentDidMount() {
+        if (this.props.signin.token.length === 0 && this.props.cookies?.get(MyCookies.token)) {
+            this.props.changeToken(this.props.cookies?.get(MyCookies.token));
         }
-        fetch(Constants.baseUrl + 'movies/5eb466360884d346a82b58e5', {
-            method: "PUT",
-            body: JSON.stringify(values),
-            headers: {
-                // eslint-disable-next-line @typescript-eslint/naming-convention
-                "Content-Type": "application/json"
-            },
-            credentials: "same-origin"
-        }).then(resp => {
-            console.log("update movie respond: ", resp);
-        }, err => { console.log("err type one: ", err) })
-            .catch(err => { console.log("err type two: ", err) })
     }
+
 
     render(): JSX.Element {
         return (
@@ -78,7 +66,8 @@ class MainComponent extends Component<MyProps> {
                 <Route path="/signin" component={(): JSX.Element =>
                     <SigninComponent
                         translate={this.props.translate}
-                        changeName={this.props.changeName} />} />
+                        changeName={this.props.changeName}
+                        changeToken={this.props.changeToken} />} />
                 <Route path="/home" component={(): JSX.Element => {
                     return (<div>
                         This is the test to make sure navigation works as expected!
@@ -87,11 +76,10 @@ class MainComponent extends Component<MyProps> {
                 } />
                 <Route path="/user/:id" component={(): JSX.Element =>
                     <UserComponent tr={this.props.translate} />} />
-                <Button onClick={this.updateMovie}>update movie Api test</Button>
             </div>
         );
     }
 }
 
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(MainComponent));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(withCookies(MainComponent)));

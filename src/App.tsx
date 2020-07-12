@@ -8,11 +8,11 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Provider } from 'react-redux';
-import { SIGNIN_REDUCER } from './components/Signin/signinReducer';
+import { SIGNIN_REDUCER } from './components/Signin/signin-reducer';
 import { withNamespaces } from 'react-i18next';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
-import { HEADER_REDUCER } from './components/Header/headerReducer';
+import { HEADER_REDUCER } from './components/Header/header-reducer';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { CookiesProvider } from 'react-cookie';
 
@@ -27,7 +27,6 @@ export type RootState = ReturnType<typeof rootReducer>;
 function app({ t }: any): JSX.Element {
 
   const store = createStore(rootReducer, applyMiddleware(thunk, logger));
-  
 
   return (
     <Provider store={store}>

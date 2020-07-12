@@ -10,3 +10,9 @@ export enum Languages {
     en = "English",
     fi = "Finnish",
 }
+
+export enum MyCookies {
+    token = "access-token",
+    lan = "language",
+    time = "time-zone"
+}
