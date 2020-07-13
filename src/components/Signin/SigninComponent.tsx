@@ -19,6 +19,7 @@ import { MyCookies } from "../../shared/Enums";
 interface MyProps extends ReactCookieProps {
     changeName: (u: string) => void;
     changeToken: (t: string) => void;
+    isLoggedin: boolean;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     translate: any;
 }
@@ -229,7 +230,9 @@ class SigninComponent extends Component<MyProps, MyState> {
                 </div>
                 <Alert isOpen={this.state.alertIsOpen} toggle={this.closeAlert}
                     color="danger">{this.state.error?.message}</Alert>
-                <Button onClick={this.updateMovie}>update movie Api test</Button>
+                <div style={{ visibility: this.props.isLoggedin ? 'hidden' : 'visible' }}>
+                    <Button onClick={this.updateMovie}>update movie Api test</Button>
+                </div>
             </div>
         );
     }

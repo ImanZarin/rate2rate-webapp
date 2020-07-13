@@ -67,7 +67,8 @@ class MainComponent extends Component<MyProps> {
                     <SigninComponent
                         translate={this.props.translate}
                         changeName={this.props.changeName}
-                        changeToken={this.props.changeToken} />} />
+                        changeToken={this.props.changeToken} 
+                        isLoggedin={this.props.signin.isSignedin} />} />
                 <Route path="/home" component={(): JSX.Element => {
                     return (<div>
                         This is the test to make sure navigation works as expected!
@@ -75,7 +76,7 @@ class MainComponent extends Component<MyProps> {
                 }
                 } />
                 <Route path="/user/:id" component={(): JSX.Element =>
-                    <UserComponent tr={this.props.translate} />} />
+                    <UserComponent tr={this.props.translate} isLoggedin={this.props.signin.isSignedin}/>} />
             </div>
         );
     }

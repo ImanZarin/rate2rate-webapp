@@ -13,8 +13,8 @@ export const SIGNIN_REDUCER = (state = initialSigninReducerState, action: MyActi
         case ActionTypes.tokenChange:{
             const a = action as ChangeTokenAction;
             return {
-                ...state, token: a.payload
-            }
+                ...state, token: a.payload, isSignedin: true
+            };
         }
         default:
             return state;

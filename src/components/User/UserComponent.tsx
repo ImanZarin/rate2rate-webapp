@@ -5,9 +5,11 @@ import { LOADING } from '../LoadingComponent';
 import { Constants } from '../../shared/Constants';
 import { MovieRate } from '../../shared/StateTypes';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Alert, Button } from 'reactstrap';
+import { Alert, Button, Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { FindForUserResponse } from '../../shared/ApiTypes';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { RateModal, ModalTypes } from '../Rate/RateComponent';
+import { myFetch, ReqTypes } from '../../shared/my-fetch';
 
 type RouteParams = {
     id: string;
@@ -19,9 +21,12 @@ type MyState = {
     alertIsOpen: boolean;
     error: Error;
     name: string;
+    modalIsOpen: boolean;
+    rate: number;
 }
 
 type MyProps = {
+    isLoggedin: boolean;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     tr: any;
 }
@@ -35,8 +40,14 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
             alertIsOpen: false,
             name: "",
             error: new Error,
-            mainList: []
+            mainList: [],
+            modalIsOpen: false,
+            rate: 0
         }
+        this.showAndHideAlert = this.showAndHideAlert.bind(this);
+        this.closeAlert = this.closeAlert.bind(this);
+        this.toggleModal = this.toggleModal.bind(this);
+        this.changeRate = this.changeRate.bind(this);
     }
 
     componentDidMount(): void {
@@ -61,6 +72,17 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
         this.setState({
             alertIsOpen: false
         });
+    }
+
+    toggleModal(): void {
+        this.setState({
+            modalIsOpen: !this.state.modalIsOpen
+        });
+    }
+
+    changeRate(newRate: number) {
+        //TODO sent new rate
+        this.toggleModal();
     }
 
     fetchList = (userId: string): void => {
@@ -108,6 +130,14 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
             <Fragment>
                 <div>
                     <h1 style={{ margin: "auto" }}>{this.state.name}</h1>
+                    <Modal isOpen={this.state.modalIsOpen} toggle={this.toggleModal}>
+                        <ModalHeader>
+                            <h5>Please Rate The User According To The Chart</h5>
+                        </ModalHeader>
+                        <ModalBody>
+                            <RateModal type={ModalTypes.people} changeRate={this.changeRate} />
+                        </ModalBody>
+                    </Modal>
                     <h3>{this.props.tr("user-movies-title")}</h3>
                     {this.state.mainList.map((ratedmovie) => {
                         return (
@@ -120,6 +150,9 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
                     color="danger">{this.state.error?.message}</Alert>
                 <div style={{ visibility: this.state.isLoading ? 'visible' : 'hidden' }}>
                     <LOADING tr={this.props.tr} />
+                </div>
+                <div style={{ visibility: this.props.isLoggedin ? 'hidden' : 'visible' }}>
+                    <Button onClick={this.toggleModal}>modal up</Button>
                 </div>
             </Fragment>
         );
