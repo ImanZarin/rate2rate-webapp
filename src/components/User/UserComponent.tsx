@@ -6,10 +6,11 @@ import { Constants } from '../../shared/Constants';
 import { MovieRate } from '../../shared/StateTypes';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Alert, Button, Modal, ModalHeader, ModalBody } from 'reactstrap';
-import { FindForUserResponse } from '../../shared/ApiTypes';
+import { FindForUserResponse, IUser } from '../../shared/ApiTypes';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { RateModal, ModalTypes } from '../Rate/RateComponent';
-import { myFetch, ReqTypes } from '../../shared/my-fetch';
+import './user.scss';
 
 type RouteParams = {
     id: string;
@@ -22,11 +23,11 @@ type MyState = {
     error: Error;
     name: string;
     modalIsOpen: boolean;
-    rate: number;
 }
 
 type MyProps = {
     isLoggedin: boolean;
+    mUser: IUser;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     tr: any;
 }
@@ -42,7 +43,6 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
             error: new Error,
             mainList: [],
             modalIsOpen: false,
-            rate: 0
         }
         this.showAndHideAlert = this.showAndHideAlert.bind(this);
         this.closeAlert = this.closeAlert.bind(this);
@@ -52,6 +52,7 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
 
     componentDidMount(): void {
         this.fetchList(this.props.match.params.id);
+
     }
 
     showAndHideAlert(e: Error): void {
@@ -126,8 +127,17 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
 
 
     render(): JSX.Element {
+
+        const body = this.props.mUser.bodies.filter(x => x.bodyUserId === this.props.match.params.id)[0];
         return (
             <Fragment>
+                <div style={{ visibility: this.props.isLoggedin ? "visible" : "hidden", margin: "auto" }}>
+                    <span className={body ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
+                    <span className={body && body.rate > 1 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
+                    <span className={body && body.rate > 2 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
+                    <span className={body && body.rate > 3 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
+                    <span className={body && body.rate > 4 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
+                </div>
                 <div>
                     <h1 style={{ margin: "auto" }}>{this.state.name}</h1>
                     <Modal isOpen={this.state.modalIsOpen} toggle={this.toggleModal}>

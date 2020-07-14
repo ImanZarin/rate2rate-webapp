@@ -11,8 +11,9 @@ export enum Languages {
     fi = "Finnish",
 }
 
-export enum MyCookies {
+export enum MyStorage {
     token = "access-token",
     lan = "language",
-    time = "time-zone"
+    time = "time-zone",
+    user = "user"
 }

@@ -1,5 +1,6 @@
 import { Languages } from "../../shared/Enums"
 import { ActionTypes, MyActions } from "../../shared/ActionTypes"
+import { IUser } from "../../shared/ApiTypes"
 
 export const languageChange = (l: Languages): MyActions => {
     return {
@@ -8,9 +9,9 @@ export const languageChange = (l: Languages): MyActions => {
     }
 }
 
-export const nameChange = (u: string): MyActions => {
+export const userChange = (u: IUser): MyActions => {
     return {
-        type: ActionTypes.nameChange,
+        type: ActionTypes.userChange,
         payload: u
     }
 }

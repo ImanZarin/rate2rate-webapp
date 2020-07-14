@@ -10,5 +10,20 @@ export interface FindForUserResponse {
 
 export interface LoginUserResponse {
     accessToken: string;
-    userName: string;
+    user: IUser;
 }
+
+interface IBody {
+    bodyUserId: string;
+    rate: number;
+}
+
+export interface IUser {
+    _id: string,
+    username: string;
+    email: string;
+    admin: boolean;
+    bodies: [IBody];
+    password: string;
+}
+

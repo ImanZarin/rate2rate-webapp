@@ -11,14 +11,16 @@ import { MyActions } from "../shared/ActionTypes";
 import { HeaderComponent } from "./Header/HeaderComponent";
 import { RootState } from "../App";
 import { ThunkDispatch } from 'redux-thunk';
-import { Languages, MyCookies } from "../shared/Enums";
-import { languageChange, nameChange } from "./Header/header-action";
+import { Languages, MyStorage } from "../shared/Enums";
+import { languageChange, userChange } from "./Header/header-action";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import UserComponent from "./User/UserComponent";
 import { ReactCookieProps, withCookies } from "react-cookie";
 import { tokenChange } from "./Signin/signin-action";
+import { IUser } from "../shared/ApiTypes";
 
-interface StateProps extends RootState, ReactCookieProps {
+//interface StateProps extends RootState, ReactCookieProps {
+interface StateProps extends RootState {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     translate: any;
 }
@@ -30,14 +32,14 @@ const mapStateToProps = (state: StateProps) => ({
 
 interface DispatchProps {
     changeLanguage: (l: Languages) => void;
-    changeName: (u: string) => void;
+    changeUser: (u: IUser) => void;
     changeToken: (t: string) => void;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, any, MyActions>): DispatchProps => ({
     changeLanguage: (l: Languages): MyActions => dispatch(languageChange(l)),
-    changeName: (u: string): MyActions => dispatch(nameChange(u)),
+    changeUser: (u: IUser): MyActions => dispatch(userChange(u)),
     changeToken: (t: string): MyActions => dispatch(tokenChange(t))
 });
 
@@ -49,9 +51,21 @@ class MainComponent extends Component<MyProps> {
 
     //TODO initial language and name and change them in redux
     componentDidMount() {
-        if (this.props.signin.token.length === 0 && this.props.cookies?.get(MyCookies.token)) {
-            this.props.changeToken(this.props.cookies?.get(MyCookies.token));
+        // if (this.props.signin.token.length === 0 && this.props.cookies?.get(MyCookies.token)) {
+        //     this.props.changeToken(this.props.cookies?.get(MyCookies.token));
+        // }
+        if (this.props.signin.token.length === 0 && localStorage.getItem(MyStorage.token)) {
+            let r = localStorage.getItem(MyStorage.token);
+            if (!r)
+                r = "";
+            this.props.changeToken(r);
+            // const u = localStorage.getItem(MyStorage.user);
+            // console.log(u);
+            // if (u) {
+            //     this.props.changeUser(JSON.parse(u));
+            // }
         }
+
     }
 
 
@@ -59,15 +73,15 @@ class MainComponent extends Component<MyProps> {
         return (
             <div>
                 <HeaderComponent lan={this.props.header.lan}
-                    username={this.props.header.username}
-                    changeName={this.props.changeName}
+                    mUser={this.props.header.user}
+                    changeUser={this.props.changeUser}
                     changeLan={this.props.changeLanguage}
                     translate={this.props.translate} />
                 <Route path="/signin" component={(): JSX.Element =>
                     <SigninComponent
                         translate={this.props.translate}
-                        changeName={this.props.changeName}
-                        changeToken={this.props.changeToken} 
+                        changeUser={this.props.changeUser}
+                        changeToken={this.props.changeToken}
                         isLoggedin={this.props.signin.isSignedin} />} />
                 <Route path="/home" component={(): JSX.Element => {
                     return (<div>
@@ -76,11 +90,12 @@ class MainComponent extends Component<MyProps> {
                 }
                 } />
                 <Route path="/user/:id" component={(): JSX.Element =>
-                    <UserComponent tr={this.props.translate} isLoggedin={this.props.signin.isSignedin}/>} />
+                    <UserComponent tr={this.props.translate} isLoggedin={this.props.signin.isSignedin}
+                        mUser={this.props.header.user} />} />
             </div>
         );
     }
 }
 
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(withCookies(MainComponent)));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(MainComponent));

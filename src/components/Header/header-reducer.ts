@@ -1,10 +1,22 @@
-import { MyActions, ActionTypes, ChangeLanguageAction, ChangeNameAction } from "../../shared/ActionTypes";
+import { MyActions, ActionTypes, ChangeLanguageAction, ChangeUserAction } from "../../shared/ActionTypes";
 import { Languages } from '../../shared/Enums';
 import { HeaderReducerState } from "../../shared/StateTypes";
+import { IUser } from '../../shared/ApiTypes';
 
+const initUser: IUser = {
+    username: "",
+    _id: "",
+    admin: false,
+    email: "",
+    bodies: [{
+        bodyUserId: "",
+        rate: 0
+    }],
+    password: ""
+}
 const initialState = {
     lan: Languages.en,
-    username: ""
+    user: initUser
 }
 
 export const HEADER_REDUCER = (state = initialState, action: MyActions): HeaderReducerState => {
@@ -16,10 +28,10 @@ export const HEADER_REDUCER = (state = initialState, action: MyActions): HeaderR
                     ...state, lan: a.payload
                 };
             }
-        case ActionTypes.nameChange: {
-            const a = action as ChangeNameAction;
+        case ActionTypes.userChange: {
+            const a = action as ChangeUserAction;
             return {
-                ...state, username: a.payload
+                ...state, user: a.payload
             }
         }
         default:

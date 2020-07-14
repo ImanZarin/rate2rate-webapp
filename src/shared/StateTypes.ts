@@ -1,4 +1,5 @@
 import { Languages } from "./Enums";
+import { IUser } from "./ApiTypes";
 
 export interface SigninForm {
     username: string,
@@ -13,7 +14,7 @@ export interface SigninReducerState {
 
 export interface HeaderReducerState {
     lan: Languages,
-    username: string
+    user: IUser
 }
 
 export interface MovieRate {

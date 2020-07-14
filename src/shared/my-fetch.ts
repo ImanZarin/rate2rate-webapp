@@ -1,68 +1,44 @@
+import { SigninForm } from "./StateTypes";
+import { MyStorage } from '../shared/Enums';
 import { Constants } from "./Constants";
 
-export enum ReqAddresses {
-    movie = "movies",
-    user = "users",
-    login = "auth/login"
-}
-
-export enum ReqTypes {
+enum ReqTypes {
     put = "PUT",
     post = "POST",
     del = "DELETE",
     get = "GET"
 }
 
-export enum ReqContent {
-    json = "application/json",
-    string = "text/plain",
-    image = "image/jpeg"
-}
+const reqContent = "application/json";
+const reqToken = localStorage.getItem(MyStorage.token);
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
-export async function myFetch(type: ReqTypes, add: ReqAddresses, content: ReqContent, id?: string, body?: any, token?: string): Promise<any> {
-    let mAddress: string = Constants.baseUrl + add;
-    if (id)
-        mAddress += "/" + id;
-    if (body) {
-        switch (content) {
-            case ReqContent.json:
-                return fetch(mAddress, {
-                    method: type,
-                    body: JSON.stringify(body),
-                    headers: {
-                        // eslint-disable-next-line @typescript-eslint/naming-convention
-                        "Content-Type": content,
-                        // eslint-disable-next-line @typescript-eslint/naming-convention
-                        'Authorization': 'Bearer ' + token
-                    },
-                    credentials: "omit"
-                });
-            case ReqContent.string:
-            default:
-                return fetch(mAddress, {
-                    method: type,
-                    body: body,
-                    headers: {
-                        // eslint-disable-next-line @typescript-eslint/naming-convention
-                        "Content-Type": content,
-                        // eslint-disable-next-line @typescript-eslint/naming-convention
-                        'Authorization': 'Bearer ' + ""
-                    },
-                    credentials: "omit"
-                });
-        }
-    }
-    else {
-        return fetch(mAddress, {
+export class MyFetch {
+
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
+    private async myFetch(type: ReqTypes, address: string, mBody?: any): Promise<any> {
+        const reqObj: RequestInit = {
             method: type,
             headers: {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                "Content-Type": content,
+                "Content-Type": reqContent,
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                'Authorization': 'Bearer ' + ""
+                'Authorization': 'Bearer ' + reqToken
             },
             credentials: "omit"
-        });
+        };
+        if (mBody) {
+            reqObj.body = JSON.stringify(mBody);
+        }
+        return fetch(Constants.baseUrl + address, reqObj);
     }
+
+    public async login(values: SigninForm): Promise<any> {
+        return this.myFetch(ReqTypes.post, "auth/login", values);
+    }
+
+
+
+
+
+
 }

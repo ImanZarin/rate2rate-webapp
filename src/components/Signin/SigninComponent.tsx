@@ -11,13 +11,14 @@ import "./signin.scss";
 import { LOADING } from '../LoadingComponent';
 import { Constants } from '../../shared/Constants';
 import 'bootstrap/dist/css/bootstrap.css';
-import { LoginUserResponse } from "../../shared/ApiTypes";
+import { LoginUserResponse, IUser } from "../../shared/ApiTypes";
 import { ReactCookieProps, withCookies } from 'react-cookie';
-import { myFetch, ReqTypes, ReqContent, ReqAddresses } from "../../shared/my-fetch";
-import { MyCookies } from "../../shared/Enums";
+import { MyStorage } from "../../shared/Enums";
+import { MyFetch } from "../../shared/my-fetch";
 
-interface MyProps extends ReactCookieProps {
-    changeName: (u: string) => void;
+//interface MyProps extends ReactCookieProps {
+interface MyProps {
+    changeUser: (u: IUser) => void;
     changeToken: (t: string) => void;
     isLoggedin: boolean;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -103,17 +104,16 @@ class SigninComponent extends Component<MyProps, MyState> {
         this.setState({
             isLoading: true
         });
-        myFetch(ReqTypes.post, ReqAddresses.login, ReqContent.json,
-            undefined, values, undefined)
+        const mF = new MyFetch();
+        mF.login(values)
             .then(response => {
                 if (response.ok) {
                     response.json()
                         .then((r: LoginUserResponse) => {
-                            console.log("this is the cookie: ", this.props.cookies);
-                            this.props.cookies?.set("access_token", r.accessToken);
-                            this.props.changeName(r.userName);
+                            localStorage.setItem(MyStorage.token, r.accessToken);
+                            localStorage.setItem(MyStorage.user,JSON.stringify(r.user));
+                            this.props.changeUser(r.user);
                             this.props.changeToken(r.accessToken);
-                            console.log("the access token is: ", this.props.cookies?.get("access_token"));
                         }
                         )
                 } else {
@@ -160,10 +160,10 @@ class SigninComponent extends Component<MyProps, MyState> {
         //     });
     }
 
-    updateMovie() {
+    updateMovie(): void {
         const values = {
             year: 2001,
-            brief: "this has been changed from client"
+            brief: "this has been changed from client throgh local storage"
         }
         //console.log("the access token is: ", this.props.cookies?.get("access_token"));
         fetch(Constants.baseUrl + 'movies/5eb466360884d346a82b58e5', {
@@ -173,7 +173,7 @@ class SigninComponent extends Component<MyProps, MyState> {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 "Content-Type": "application/json",
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                "Authorization": 'Bearer ' + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImltYW5raGFuODciLCJzdWIiOiJ6YXJpbi5pbWFuQG91dGxvb2suY29tIiwiaWF0IjoxNTk0NTI3OTAzLCJleHAiOjE1OTgxMjc5MDN9.VXXzElO999EglusZEgZZbAa__mPQJdy6Z6HOpbkoUzg",
+                "Authorization": 'Bearer ' + localStorage.getItem(MyStorage.token),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
             },
             credentials: "omit"
@@ -239,4 +239,4 @@ class SigninComponent extends Component<MyProps, MyState> {
 
 }
 
-export default withCookies(SigninComponent);
+export default SigninComponent;

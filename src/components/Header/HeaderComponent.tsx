@@ -7,12 +7,13 @@ import { NavLink } from 'react-router-dom';
 import { Languages, Pages } from "../../shared/Enums";
 import i18n from "../../i18n";
 import './header.scss';
+import { IUser } from "../../shared/ApiTypes";
 
 type MyProps = {
     lan: Languages;
-    username: string;
+    mUser: IUser;
     changeLan: (l: Languages) => void;
-    changeName: (u: string) => void;
+    changeUser: (u: IUser) => void;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     translate: any;
 }
@@ -111,7 +112,7 @@ export class HeaderComponent extends Component<MyProps, MyState> {
                                 </NavItem>
                                 <NavItem>
                                     <Button>
-                                        {this.props.username?.length > 0 ? this.props.username : this.props.translate("header-signin-button")}
+                                        {this.props.mUser ? this.props.mUser.username : this.props.translate("header-signin-button")}
                                     </Button>
                                 </NavItem>
                             </Nav>
