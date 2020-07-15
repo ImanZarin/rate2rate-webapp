@@ -6,11 +6,12 @@ import { Constants } from '../../shared/Constants';
 import { MovieRate } from '../../shared/StateTypes';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Alert, Button, Modal, ModalHeader, ModalBody } from 'reactstrap';
-import { FindForUserResponse, IUser } from '../../shared/ApiTypes';
+import { GetUserInfoResponse, GetUserInfoForSignedResponse, IUser } from '../../shared/ApiTypes';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { RateModal, ModalTypes } from '../Rate/RateComponent';
 import './user.scss';
+import { MyFetch } from '../../shared/my-fetch';
 
 type RouteParams = {
     id: string;
@@ -90,26 +91,23 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
         this.setState({
             isLoading: true
         })
-        fetch(Constants.baseUrl + 'movieusers/' + userId, {
-            method: "GET",
-            headers: {
-                // eslint-disable-next-line @typescript-eslint/naming-convention
-                "Content-Type": "text/html"
-            },
-            credentials: "same-origin"
-        })
+        const mf = new MyFetch();
+        if(this.props.isLoggedin){
+mf.getUserInfoExtra(userId)
+        }
+        else{
+            mf.getUserInfo(userId)
             .then(response => {
                 if (response.ok) {
                     response.json()
-                        .then(r => {
-                            const rConverted = r as FindForUserResponse;
+                        .then((r: GetUserInfoForSignedResponse) => {
                             this.setState({
                                 isLoading: false,
-                                mainList: rConverted.movies,
-                                name: rConverted.user.name
+                                mainList: r.userAndMovies.movies,
+                                name: r.userAndMovies.user.username
                             });
                         })
-                        .catch(er => {
+                        .catch((er: Error) => {
                             this.showAndHideAlert(er);
                         })
                 } else {
@@ -123,6 +121,8 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
             .catch(error => {
                 this.showAndHideAlert(error);
             });
+        }
+       
     }
 
 

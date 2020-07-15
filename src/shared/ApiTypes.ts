@@ -1,11 +1,13 @@
 import { MovieRate } from "./StateTypes";
 
-export interface FindForUserResponse {
-    user: {
-        _id: string;
-        name: string;
-    },
+export interface GetUserInfoResponse {
+    user: IUser,
     movies: MovieRate[],
+}
+
+export interface GetUserInfoForSignedResponse {
+    userAndMovies: GetUserInfoResponse,
+    rate: number //if is signed in and rated this user
 }
 
 export interface LoginUserResponse {

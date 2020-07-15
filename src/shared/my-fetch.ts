@@ -36,9 +36,12 @@ export class MyFetch {
         return this.myFetch(ReqTypes.post, "auth/login", values);
     }
 
+    public async getUserInfo(userId: string): Promise<any> {
+        return this.myFetch(ReqTypes.get, 'movieusers/' + userId, null);
+    }
 
-
-
-
+    public async getUserInfoExtra(userId: string): Promise<any> {
+        return this.myFetch(ReqTypes.get, 'movieusers/signed/' + userId, null);
+    }
 
 }
