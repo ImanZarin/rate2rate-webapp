@@ -40,8 +40,7 @@ export class MyFetch {
         return this.myFetch(ReqTypes.get, 'movieusers/' + userId, null);
     }
 
-    public async getUserInfoExtra(userId: string): Promise<any> {
-        return this.myFetch(ReqTypes.get, 'movieusers/signed/' + userId, null);
+    public async rateUser(newRate: number, userId: string): Promise<any> {
+        return this.myFetch(ReqTypes.put, "users/" + userId, {rate: newRate});
     }
-
 }

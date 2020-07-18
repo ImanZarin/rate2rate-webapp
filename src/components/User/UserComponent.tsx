@@ -24,6 +24,7 @@ type MyState = {
     error: Error;
     name: string;
     modalIsOpen: boolean;
+    personRate: number;
 }
 
 type MyProps = {
@@ -35,6 +36,8 @@ type MyProps = {
 
 class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps, MyState>{
 
+    myfetchObjet = new MyFetch();
+
     constructor(props: RouteComponentProps<RouteParams> & MyProps) {
         super(props);
         this.state = {
@@ -44,6 +47,7 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
             error: new Error,
             mainList: [],
             modalIsOpen: false,
+            personRate: 0
         }
         this.showAndHideAlert = this.showAndHideAlert.bind(this);
         this.closeAlert = this.closeAlert.bind(this);
@@ -83,29 +87,64 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
     }
 
     changeRate(newRate: number) {
-        //TODO sent new rate
-        this.toggleModal();
+        this.setState({
+            isLoading: true
+        });
+        this.myfetchObjet.rateUser(newRate, this.props.match.params.id)
+            .then(response => {
+                console.log("resp: ", response);
+                this.toggleModal();
+                if (response.ok) {
+                    response.json()
+                        .then((r: IUser) => {
+                            this.setState({
+                                isLoading: false,
+                                personRate: r.bodies.filter(x => x.bodyUserId == this.props.match.params.id)[0].rate
+                            });
+                        })
+                        .catch((er: Error) => {
+                            this.showAndHideAlert(er);
+                        })
+                } else {
+                    const error: Error = new Error('Error ' + response.status + ': ' + response.statusText);
+                    this.showAndHideAlert(error);
+                }
+            }, error => {
+                this.toggleModal();
+                this.showAndHideAlert(error);
+            })
+            .catch(error => {
+                this.showAndHideAlert(error);
+                this.toggleModal();
+            });
     }
 
     fetchList = (userId: string): void => {
         this.setState({
             isLoading: true
-        })
-        const mf = new MyFetch();
-        if(this.props.isLoggedin){
-mf.getUserInfoExtra(userId)
-        }
-        else{
-            mf.getUserInfo(userId)
+        });
+        this.myfetchObjet.getUserInfo(userId)
             .then(response => {
                 if (response.ok) {
                     response.json()
-                        .then((r: GetUserInfoForSignedResponse) => {
-                            this.setState({
-                                isLoading: false,
-                                mainList: r.userAndMovies.movies,
-                                name: r.userAndMovies.user.username
-                            });
+                        .then((r: GetUserInfoResponse | GetUserInfoForSignedResponse) => {
+                            if ((r as GetUserInfoForSignedResponse).userAndMovies) {
+                                const r2 = r as GetUserInfoForSignedResponse;
+                                this.setState({
+                                    isLoading: false,
+                                    mainList: r2.userAndMovies.movies,
+                                    name: r2.userAndMovies.user.username,
+                                    personRate: r2.rate
+                                });
+                            } else {
+                                const r3 = r as GetUserInfoResponse;
+                                this.setState({
+                                    isLoading: false,
+                                    mainList: r3.movies,
+                                    name: r3.user.username
+                                });
+                            }
+
                         })
                         .catch((er: Error) => {
                             this.showAndHideAlert(er);
@@ -121,22 +160,22 @@ mf.getUserInfoExtra(userId)
             .catch(error => {
                 this.showAndHideAlert(error);
             });
-        }
-       
+
+
     }
 
 
     render(): JSX.Element {
 
-        const body = this.props.mUser.bodies.filter(x => x.bodyUserId === this.props.match.params.id)[0];
         return (
             <Fragment>
-                <div style={{ visibility: this.props.isLoggedin ? "visible" : "hidden", margin: "auto" }}>
-                    <span className={body ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
-                    <span className={body && body.rate > 1 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
-                    <span className={body && body.rate > 2 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
-                    <span className={body && body.rate > 3 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
-                    <span className={body && body.rate > 4 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
+                <div style={{ visibility: this.props.isLoggedin ? "visible" : "hidden", margin: "auto" }}
+                    onClick={this.toggleModal}>
+                    <span className={this.state.personRate > 0 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
+                    <span className={this.state.personRate > 1 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
+                    <span className={this.state.personRate > 2 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
+                    <span className={this.state.personRate > 3 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
+                    <span className={this.state.personRate > 4 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
                 </div>
                 <div>
                     <h1 style={{ margin: "auto" }}>{this.state.name}</h1>

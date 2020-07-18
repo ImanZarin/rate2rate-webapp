@@ -15,7 +15,6 @@ import { Languages, MyStorage } from "../shared/Enums";
 import { languageChange, userChange } from "./Header/header-action";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import UserComponent from "./User/UserComponent";
-import { ReactCookieProps, withCookies } from "react-cookie";
 import { tokenChange } from "./Signin/signin-action";
 import { IUser } from "../shared/ApiTypes";
 
