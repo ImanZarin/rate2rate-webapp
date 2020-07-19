@@ -14,7 +14,6 @@ import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import { HEADER_REDUCER } from './components/Header/header-reducer';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { CookiesProvider } from 'react-cookie';
 
 const rootReducer = combineReducers({
   signin: SIGNIN_REDUCER,
@@ -30,14 +29,12 @@ function app({ t }: any): JSX.Element {
 
   return (
     <Provider store={store}>
-      <CookiesProvider>
         <BrowserRouter>
           <Route path="/"
             component={(): JSX.Element =>
               <MainComponent translate={t} />}
           />
         </BrowserRouter>
-      </CookiesProvider>
     </Provider>
   );
 }

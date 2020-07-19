@@ -12,7 +12,6 @@ import { LOADING } from '../LoadingComponent';
 import { Constants } from '../../shared/Constants';
 import 'bootstrap/dist/css/bootstrap.css';
 import { LoginUserResponse, IUser } from "../../shared/ApiTypes";
-import { ReactCookieProps, withCookies } from 'react-cookie';
 import { MyStorage } from "../../shared/Enums";
 import { MyFetch } from "../../shared/my-fetch";
 
@@ -36,7 +35,7 @@ const mySchema = yup.object().shape({
     // eslint-disable-next-line no-useless-escape
     email: yup.string().matches(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1, 3}\.[0-9]{1, 3}\.[0-9]{1, 3}\.[0-9]{1, 3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, "invalid email")
         .required(),
-    username: yup.string().min(4, "min 4 char").max(50, "too long").required("required"),
+    username: yup.string().min(4, "min 4 char").max(50, "too long"),
     password: yup.string().min(4, "min 4 char").max(50, "too long").required("required"),
 });
 
@@ -127,37 +126,6 @@ class SigninComponent extends Component<MyProps, MyState> {
             .catch(error => {
                 this.showAndHideAlert(error);
             });
-        // fetch(Constants.baseUrl + 'auth/login', {
-        //     method: "POST",
-        //     body: JSON.stringify(values),
-        //     headers: {
-        //         // eslint-disable-next-line @typescript-eslint/naming-convention
-        //         "Content-Type": "application/json"
-        //     },
-        // })
-        //     .then(response => {
-        //         if (response.ok) {
-        //             response.json()
-        //                 .then(r => {
-        //                     const rConverted = r as LoginUserResponse;
-        //                     console.log("this is the cookie: ", this.props.cookies);
-        //                     this.props.cookies?.set("access_token", rConverted.accessToken);
-        //                     this.props.changeName(rConverted.userName);
-        //                     this.props.changeToken(rConverted.accessToken);
-        //                     console.log("the access token is: ", this.props.cookies?.get("access_token"));
-        //                 }
-        //                 )
-        //         } else {
-        //             const error: Error = new Error('Error ' + response.status + ': ' + response.statusText);
-        //             this.showAndHideAlert(error);
-        //         }
-        //     },
-        //         error => {
-        //             this.showAndHideAlert(error);
-        //         })
-        //     .catch(error => {
-        //         this.showAndHideAlert(error);
-        //     });
     }
 
     updateMovie(): void {

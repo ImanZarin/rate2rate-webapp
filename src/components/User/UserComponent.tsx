@@ -92,7 +92,6 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
         });
         this.myfetchObjet.rateUser(newRate, this.props.match.params.id)
             .then(response => {
-                console.log("resp: ", response);
                 this.toggleModal();
                 if (response.ok) {
                     response.json()

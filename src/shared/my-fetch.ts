@@ -1,6 +1,7 @@
 import { SigninForm } from "./StateTypes";
 import { MyStorage } from '../shared/Enums';
 import { Constants } from "./Constants";
+import { IUser } from "./ApiTypes";
 
 enum ReqTypes {
     put = "PUT",
@@ -41,6 +42,6 @@ export class MyFetch {
     }
 
     public async rateUser(newRate: number, userId: string): Promise<any> {
-        return this.myFetch(ReqTypes.put, "users/" + userId, {rate: newRate});
+        return this.myFetch(ReqTypes.put, "users/" + userId, { rate: newRate });
     }
 }
