@@ -7,6 +7,11 @@ export interface SigninForm {
     email: string
 }
 
+export interface SignupForm {
+    password: string,
+    email: string
+}
+
 export interface LoginForm {
     username: string,//which actually should be filled by Email
     password: string
