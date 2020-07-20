@@ -11,9 +11,15 @@ import "./signin.scss";
 import { LOADING } from '../LoadingComponent';
 import { Constants } from '../../shared/Constants';
 import 'bootstrap/dist/css/bootstrap.css';
+import { LoginUserResponse, IUser } from "../../shared/ApiTypes";
+import { MyStorage } from "../../shared/Enums";
+import { MyFetch } from "../../shared/my-fetch";
 
-type MyProps = {
-    signinSuccess: (u: string) => void;
+//interface MyProps extends ReactCookieProps {
+interface MyProps {
+    changeUser: (u: IUser) => void;
+    changeToken: (t: string) => void;
+    isLoggedin: boolean;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     translate: any;
 }
@@ -29,7 +35,7 @@ const mySchema = yup.object().shape({
     // eslint-disable-next-line no-useless-escape
     email: yup.string().matches(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1, 3}\.[0-9]{1, 3}\.[0-9]{1, 3}\.[0-9]{1, 3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, "invalid email")
         .required(),
-    username: yup.string().min(4, "min 4 char").max(50, "too long").required("required"),
+    username: yup.string().min(4, "min 4 char").max(50, "too long"),
     password: yup.string().min(4, "min 4 char").max(50, "too long").required("required"),
 });
 
@@ -40,6 +46,7 @@ const initForm: SigninForm = {
 }
 
 class SigninComponent extends Component<MyProps, MyState> {
+
 
     constructor(props: MyProps) {
         super(props);
@@ -95,19 +102,19 @@ class SigninComponent extends Component<MyProps, MyState> {
     postSignin = (values: SigninForm): void => {
         this.setState({
             isLoading: true
-        })
-        fetch(Constants.baseUrl + 'users/signup', {
-            method: "PUT",
-            body: JSON.stringify(values),
-            headers: {
-                // eslint-disable-next-line @typescript-eslint/naming-convention
-                "Content-Type": "application/json"
-            },
-            credentials: "same-origin"
-        })
+        });
+        const mF = new MyFetch();
+        mF.login(values)
             .then(response => {
                 if (response.ok) {
-                    this.props.signinSuccess(response.statusText);//TODO use response approprite property
+                    response.json()
+                        .then((r: LoginUserResponse) => {
+                            localStorage.setItem(MyStorage.token, r.accessToken);
+                            localStorage.setItem(MyStorage.user,JSON.stringify(r.user));
+                            this.props.changeUser(r.user);
+                            this.props.changeToken(r.accessToken);
+                        }
+                        )
                 } else {
                     const error: Error = new Error('Error ' + response.status + ': ' + response.statusText);
                     this.showAndHideAlert(error);
@@ -121,6 +128,28 @@ class SigninComponent extends Component<MyProps, MyState> {
             });
     }
 
+    updateMovie(): void {
+        const values = {
+            year: 2001,
+            brief: "this has been changed from client throgh local storage"
+        }
+        //console.log("the access token is: ", this.props.cookies?.get("access_token"));
+        fetch(Constants.baseUrl + 'movies/5eb466360884d346a82b58e5', {
+            method: "PUT",
+            body: JSON.stringify(values),
+            headers: {
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                "Content-Type": "application/json",
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                "Authorization": 'Bearer ' + localStorage.getItem(MyStorage.token),
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+            },
+            credentials: "omit"
+        }).then(resp => {
+            console.log("update movie respond: ", resp);
+        }, err => { console.log("err type one: ", err) })
+            .catch(err => { console.log("err type two: ", err) })
+    }
 
     render(): JSX.Element {
         return (
@@ -169,6 +198,9 @@ class SigninComponent extends Component<MyProps, MyState> {
                 </div>
                 <Alert isOpen={this.state.alertIsOpen} toggle={this.closeAlert}
                     color="danger">{this.state.error?.message}</Alert>
+                <div style={{ visibility: this.props.isLoggedin ? 'hidden' : 'visible' }}>
+                    <Button onClick={this.updateMovie}>update movie Api test</Button>
+                </div>
             </div>
         );
     }

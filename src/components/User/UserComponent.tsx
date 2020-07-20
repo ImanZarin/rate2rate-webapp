@@ -5,9 +5,13 @@ import { LOADING } from '../LoadingComponent';
 import { Constants } from '../../shared/Constants';
 import { MovieRate } from '../../shared/StateTypes';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Alert } from 'reactstrap';
-import { FindForUserResponse } from '../../shared/ApiTypes';
+import { Alert, Button, Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { GetUserInfoResponse, GetUserInfoForSignedResponse, IUser } from '../../shared/ApiTypes';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { RateModal, ModalTypes } from '../Rate/RateComponent';
+import './user.scss';
+import { MyFetch } from '../../shared/my-fetch';
 
 type RouteParams = {
     id: string;
@@ -19,14 +23,20 @@ type MyState = {
     alertIsOpen: boolean;
     error: Error;
     name: string;
+    modalIsOpen: boolean;
+    personRate: number;
 }
 
 type MyProps = {
+    isLoggedin: boolean;
+    mUser: IUser;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     tr: any;
 }
 
-class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps , MyState>{
+class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps, MyState>{
+
+    myfetchObjet = new MyFetch();
 
     constructor(props: RouteComponentProps<RouteParams> & MyProps) {
         super(props);
@@ -35,12 +45,19 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
             alertIsOpen: false,
             name: "",
             error: new Error,
-            mainList: []
+            mainList: [],
+            modalIsOpen: false,
+            personRate: 0
         }
+        this.showAndHideAlert = this.showAndHideAlert.bind(this);
+        this.closeAlert = this.closeAlert.bind(this);
+        this.toggleModal = this.toggleModal.bind(this);
+        this.changeRate = this.changeRate.bind(this);
     }
 
     componentDidMount(): void {
         this.fetchList(this.props.match.params.id);
+
     }
 
     showAndHideAlert(e: Error): void {
@@ -63,30 +80,72 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
         });
     }
 
+    toggleModal(): void {
+        this.setState({
+            modalIsOpen: !this.state.modalIsOpen
+        });
+    }
+
+    changeRate(newRate: number) {
+        this.setState({
+            isLoading: true
+        });
+        this.myfetchObjet.rateUser(newRate, this.props.match.params.id)
+            .then(response => {
+                this.toggleModal();
+                if (response.ok) {
+                    response.json()
+                        .then((r: IUser) => {
+                            this.setState({
+                                isLoading: false,
+                                personRate: r.bodies.filter(x => x.bodyUserId == this.props.match.params.id)[0].rate
+                            });
+                        })
+                        .catch((er: Error) => {
+                            this.showAndHideAlert(er);
+                        })
+                } else {
+                    const error: Error = new Error('Error ' + response.status + ': ' + response.statusText);
+                    this.showAndHideAlert(error);
+                }
+            }, error => {
+                this.toggleModal();
+                this.showAndHideAlert(error);
+            })
+            .catch(error => {
+                this.showAndHideAlert(error);
+                this.toggleModal();
+            });
+    }
+
     fetchList = (userId: string): void => {
         this.setState({
             isLoading: true
-        })
-        fetch(Constants.baseUrl + 'movieusers/' + userId, {
-            method: "GET",
-            headers: {
-                // eslint-disable-next-line @typescript-eslint/naming-convention
-                "Content-Type": "text/html"
-            },
-            credentials: "same-origin"
-        })
+        });
+        this.myfetchObjet.getUserInfo(userId)
             .then(response => {
                 if (response.ok) {
                     response.json()
-                        .then(r => {
-                            const rConverted = r as FindForUserResponse;
-                            this.setState({
-                                isLoading: false,
-                                mainList: rConverted.movies,
-                                name: rConverted.user.name
-                            });
+                        .then((r: GetUserInfoResponse | GetUserInfoForSignedResponse) => {
+                            if ((r as GetUserInfoForSignedResponse).userAndMovies) {
+                                const r2 = r as GetUserInfoForSignedResponse;
+                                this.setState({
+                                    isLoading: false,
+                                    mainList: r2.userAndMovies.movies,
+                                    name: r2.userAndMovies.user.username,
+                                    personRate: r2.rate
+                                });
+                            } else {
+                                const r3 = r as GetUserInfoResponse;
+                                this.setState({
+                                    isLoading: false,
+                                    mainList: r3.movies,
+                                    name: r3.user.username
+                                });
+                            }
+
                         })
-                        .catch(er => {
+                        .catch((er: Error) => {
                             this.showAndHideAlert(er);
                         })
                 } else {
@@ -100,14 +159,33 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
             .catch(error => {
                 this.showAndHideAlert(error);
             });
+
+
     }
 
 
     render(): JSX.Element {
+
         return (
             <Fragment>
+                <div style={{ visibility: this.props.isLoggedin ? "visible" : "hidden", margin: "auto" }}
+                    onClick={this.toggleModal}>
+                    <span className={this.state.personRate > 0 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
+                    <span className={this.state.personRate > 1 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
+                    <span className={this.state.personRate > 2 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
+                    <span className={this.state.personRate > 3 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
+                    <span className={this.state.personRate > 4 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
+                </div>
                 <div>
                     <h1 style={{ margin: "auto" }}>{this.state.name}</h1>
+                    <Modal isOpen={this.state.modalIsOpen} toggle={this.toggleModal}>
+                        <ModalHeader>
+                            <h5>Please Rate The User According To The Chart</h5>
+                        </ModalHeader>
+                        <ModalBody>
+                            <RateModal type={ModalTypes.people} changeRate={this.changeRate} />
+                        </ModalBody>
+                    </Modal>
                     <h3>{this.props.tr("user-movies-title")}</h3>
                     {this.state.mainList.map((ratedmovie) => {
                         return (
@@ -120,6 +198,9 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
                     color="danger">{this.state.error?.message}</Alert>
                 <div style={{ visibility: this.state.isLoading ? 'visible' : 'hidden' }}>
                     <LOADING tr={this.props.tr} />
+                </div>
+                <div style={{ visibility: this.props.isLoggedin ? 'hidden' : 'visible' }}>
+                    <Button onClick={this.toggleModal}>modal up</Button>
                 </div>
             </Fragment>
         );

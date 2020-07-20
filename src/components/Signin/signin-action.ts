@@ -7,3 +7,10 @@ export const signinSuccess = (username: string): MyActions => {
     }
 }
 
+export const tokenChange = (token: string): MyActions => {
+    return {
+        type: ActionTypes.tokenChange,
+        payload: token
+    }
+}
+

@@ -1,4 +1,5 @@
 import { Languages } from './Enums';
+import { IUser } from './ApiTypes';
 
 
 export enum ActionTypes {
@@ -6,7 +7,9 @@ export enum ActionTypes {
     signinLoading = "SIGNIN_LOADING",
     signinSuccess = "SIGNIN_SUCCESS",
     signinFailed = "SIGNIN_FAILED",
-    languageChange = "LANGUAGE_CHANGE"
+    languageChange = "LANGUAGE_CHANGE",
+    userChange = "NAME_CHANGE",
+    tokenChange = "TOKEN_CHANGE"
 }
 
 export type SigninSuccessAction = {
@@ -24,4 +27,15 @@ export type ChangeLanguageAction = {
     payload: Languages;
 }
 
-export type MyActions =  SigninSuccessAction | FailedAction | ChangeLanguageAction;
+export type ChangeUserAction = {
+    type: ActionTypes;
+    payload: IUser;
+}
+
+export type ChangeTokenAction = {
+    type: ActionTypes;
+    payload: string;
+}
+
+export type MyActions = SigninSuccessAction | FailedAction | ChangeLanguageAction | ChangeUserAction
+    | ChangeTokenAction;
