@@ -15,8 +15,9 @@ const MyAlert = (props: MyProps): JSX.Element => {
     const onDismiss = (): void => setVisible(false);
 
     return (
-        <Alert color={props.color} isOpen={visible} toggle={onDismiss}>
-            {props.message} test Alert!
+        <Alert color={props.color} isOpen={visible} toggle={onDismiss}
+            style={{ overflow: 'overlay', position: 'fixed', bottom: 0, zIndex: 9, height: '100%' }}>
+            {props.message}
         </Alert>
     );
 }

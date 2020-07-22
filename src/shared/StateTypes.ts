@@ -3,8 +3,8 @@ import { IUser } from "./ApiTypes";
 
 export interface SigninForm {
     username: string,
-    password: string,
-    email: string
+    usertag: string,
+    password: string
 }
 
 export interface SignupForm {

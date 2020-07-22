@@ -12,6 +12,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { RateModal, ModalTypes } from '../Rate/RateComponent';
 import './user.scss';
 import { MyFetch } from '../../shared/my-fetch';
+import { GetUserInfoResponseResult, GetUserInfoForSignedResponseResult } from '../../shared/result.enums';
 
 type RouteParams = {
     id: string;
@@ -60,7 +61,7 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
 
     }
 
-    showAndHideAlert(e: Error): void {
+    showAndHideAlert(e: Error, wait: number): void {
         this.setState({
             error: e,
             alertIsOpen: true,
@@ -71,7 +72,7 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
                 alertIsOpen: false,
                 isLoading: false
             });
-        }, Constants.waitShort);
+        }, wait);
     }
 
     closeAlert(): void {
@@ -102,18 +103,18 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
                             });
                         })
                         .catch((er: Error) => {
-                            this.showAndHideAlert(er);
+                            this.showAndHideAlert(er, Constants.waitShort);
                         })
                 } else {
                     const error: Error = new Error('Error ' + response.status + ': ' + response.statusText);
-                    this.showAndHideAlert(error);
+                    this.showAndHideAlert(error, Constants.waitShort);
                 }
             }, error => {
                 this.toggleModal();
-                this.showAndHideAlert(error);
+                this.showAndHideAlert(error, Constants.waitShort);
             })
             .catch(error => {
-                this.showAndHideAlert(error);
+                this.showAndHideAlert(error, Constants.waitShort);
                 this.toggleModal();
             });
     }
@@ -127,37 +128,82 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
                 if (response.ok) {
                     response.json()
                         .then((r: GetUserInfoResponse | GetUserInfoForSignedResponse) => {
-                            if ((r as GetUserInfoForSignedResponse).userAndMovies) {
+                            if ((r as GetUserInfoForSignedResponse).rate) {
                                 const r2 = r as GetUserInfoForSignedResponse;
-                                this.setState({
-                                    isLoading: false,
-                                    mainList: r2.userAndMovies.movies,
-                                    name: r2.userAndMovies.user.username,
-                                    personRate: r2.rate
-                                });
+                                switch (r2.result) {
+                                    case GetUserInfoForSignedResponseResult.userNotFound:
+                                        {
+                                            const err = new Error(this.props.tr("user-fetchinfo-err-nouser"));
+                                            this.showAndHideAlert(err, Constants.waitNormal);
+                                        }
+                                        break;
+                                    case GetUserInfoForSignedResponseResult.listEmpty:
+                                        {
+                                            this.setState({
+                                                name: r2.user.username,
+                                                personRate: r2.rate
+                                            });
+                                            const err = new Error(this.props.tr("user-fetchinfo-err-emptymovies"));
+                                            this.showAndHideAlert(err, Constants.waitNormal);
+                                        }
+                                        break;
+                                    case GetUserInfoForSignedResponseResult.success:
+                                        this.setState({
+                                            isLoading: false,
+                                            mainList: r2.movies,
+                                            name: r2.user.username,
+                                            personRate: r2.rate
+                                        });
+                                        break;
+                                    default:
+                                        break;
+                                }
+
                             } else {
                                 const r3 = r as GetUserInfoResponse;
-                                this.setState({
-                                    isLoading: false,
-                                    mainList: r3.movies,
-                                    name: r3.user.username
-                                });
+                                console.log("r3 is: ", r3);
+                                switch (r3.result) {
+                                    case GetUserInfoResponseResult.userNotFound:
+                                        {
+                                            const err = new Error(this.props.tr("user-fetchinfo-err-nouser"));
+                                            this.showAndHideAlert(err, Constants.waitNormal);
+                                        }
+                                        break;
+                                    case GetUserInfoResponseResult.listEmpty:
+                                        {
+                                            this.setState({
+                                                name: r3.user.username
+                                            });
+                                            const err = new Error(this.props.tr("user-fetchinfo-err-emptymovies"));
+                                            this.showAndHideAlert(err, Constants.waitNormal);
+                                        }
+                                        break;
+                                    case GetUserInfoResponseResult.success:
+                                        this.setState({
+                                            isLoading: false,
+                                            mainList: r3.movies,
+                                            name: r3.user.username
+                                        });
+                                        break;
+                                    default:
+                                        break;
+                                }
                             }
 
                         })
                         .catch((er: Error) => {
-                            this.showAndHideAlert(er);
+                            this.showAndHideAlert(er, Constants.waitShort);
                         })
                 } else {
                     const error: Error = new Error('Error ' + response.status + ': ' + response.statusText);
-                    this.showAndHideAlert(error);
+                    this.showAndHideAlert(error, Constants.waitShort);
                 }
             },
                 error => {
-                    this.showAndHideAlert(error);
+                    this.showAndHideAlert(error, Constants.waitShort);
                 })
             .catch(error => {
-                this.showAndHideAlert(error);
+                this.showAndHideAlert(error, Constants.waitShort);
             });
 
 
@@ -198,9 +244,6 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
                     color="danger">{this.state.error?.message}</Alert>
                 <div style={{ visibility: this.state.isLoading ? 'visible' : 'hidden' }}>
                     <LOADING tr={this.props.tr} />
-                </div>
-                <div style={{ visibility: this.props.isLoggedin ? 'hidden' : 'visible' }}>
-                    <Button onClick={this.toggleModal}>modal up</Button>
                 </div>
             </Fragment>
         );

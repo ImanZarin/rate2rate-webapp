@@ -16,5 +16,7 @@
     "signin-form-error-min": "vähintään 4 merkkiä",
     "signin-form-error-max": "liian pitkä",
     "signin-linkto-login": "tai",
-    "signin-linkto-signup": "jos olet uusi sitten"
+    "signin-linkto-signup": "jos olet uusi sitten",
+    "user-fetchinfo-err-nouser": "käyttäjää ei ole olemassa",
+    "user-fetchinfo-err-emptymovies": "tämä käyttäjä ei ole vielä arvioinut yhtäkään elokuvaa"
 }

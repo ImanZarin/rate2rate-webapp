@@ -1,12 +1,16 @@
 import { MovieRate } from "./StateTypes";
+import { GetUserInfoResponseResult, GetUserInfoForSignedResponseResult } from "./result.enums";
 
 export interface GetUserInfoResponse {
+    result: GetUserInfoResponseResult,
     user: IUser,
     movies: MovieRate[],
 }
 
 export interface GetUserInfoForSignedResponse {
-    userAndMovies: GetUserInfoResponse,
+    result: GetUserInfoForSignedResponseResult,
+    user: IUser,
+    movies: MovieRate[],
     rate: number //if is signed in and rated this user
 }
 

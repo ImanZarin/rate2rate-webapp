@@ -16,5 +16,7 @@
     "signin-form-error-min": "minimum 4 character",
     "signin-form-error-max": "too long",
     "signin-linkto-login": "or",
-    "signin-linkto-signup": "if you are new then"
+    "signin-linkto-signup": "if you are new then",
+    "user-fetchinfo-err-nouser": "the user does not exist",
+    "user-fetchinfo-err-emptymovies": "this user has not rated any movie yet"
 }

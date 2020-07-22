@@ -36,7 +36,7 @@ type MyState = {
 
 const initForm: SigninForm = {
     username: "",
-    email: "",
+    usertag: "",
     password: ""
 }
 
@@ -59,12 +59,12 @@ class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MySt
     }
 
     mySchema = yup.object().shape({
-        email: yup.string()
+        username: yup.string()
             // eslint-disable-next-line no-useless-escape
             .matches(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1, 3}\.[0-9]{1, 3}\.[0-9]{1, 3}\.[0-9]{1, 3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
                 this.props.translate("signin-form-error-email"))
             .required(this.props.translate("signin-form-error-require")),
-        username: yup.string()
+        usertag: yup.string()
             .min(4, this.props.translate("signin-form-error-min"))
             .max(50, this.props.translate("signin-form-error-max")),
         password: yup.string()
@@ -104,9 +104,9 @@ class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MySt
     handleFormChange(values: SigninForm): void {
         this.setState({
             form: {
-                email: values.email,
+                username: values.username,
                 password: "",
-                username: values.username
+                usertag: values.usertag
             }
         });
     }
@@ -145,8 +145,10 @@ class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MySt
                 });
         }
         else {
+            console.log("should log in now");
             mF.login(values as SigninForm)
                 .then(response => {
+                    console.log(response);
                     if (response.ok) {
                         response.json()
                             .then((r: LoginUserResponse) => {
@@ -207,22 +209,22 @@ class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MySt
                         {({ handleSubmit, errors, touched }): JSX.Element => (
                             <Form onSubmit={handleSubmit}>
                                 <Row className="form-group" style={{ display: this.state.isSignUp ? "block" : "none" }}>
-                                    <Label htmlFor="username">{this.props.translate("signin-username-title")}</Label>
+                                    <Label htmlFor="usertag">{this.props.translate("signin-username-title")}</Label>
                                     <Field type="text" className="form-control"
                                         placeholder={this.props.translate("signin-username-placeholder")}
-                                        id="username"
-                                        name="username" />
-                                    <div style={{ visibility: errors.username && touched.username ? 'visible' : 'hidden' }}
-                                        className="error-msg"> {errors.username}
+                                        id="usertag"
+                                        name="usertag" />
+                                    <div style={{ visibility: errors.usertag && touched.usertag ? 'visible' : 'hidden' }}
+                                        className="error-msg"> {errors.usertag}
                                     </div>
                                 </Row>
                                 <Row className="form-group" >
-                                    <Label htmlFor="email">{this.props.translate("signin-email-title")}</Label>
+                                    <Label htmlFor="username">{this.props.translate("signin-email-title")}</Label>
                                     <Field type="text" className="form-control"
                                         placeholder={this.props.translate("signin-email-placeholder")}
-                                        name="email" id="email" />
-                                    <div style={{ visibility: errors.email && touched.email ? 'visible' : 'hidden' }}
-                                        className="error-msg"> {errors.email}
+                                        name="username" id="username" />
+                                    <div style={{ visibility: errors.username && touched.username ? 'visible' : 'hidden' }}
+                                        className="error-msg"> {errors.username}
                                     </div>
                                 </Row>
                                 <Row className="form-group" name="password">
