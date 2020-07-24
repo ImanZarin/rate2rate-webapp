@@ -1,5 +1,6 @@
 {
-    "signin-title": "Kirjaudu",
+    "signup-title": "Kirjaudu",
+    "signin-title": "Kirjaudu sisään",
     "loading-text": "Ladataan",
     "signin-username-title": "käyttäjätunnus",
     "signin-username-placeholder": "valitse käyttäjänimi",
@@ -9,5 +10,17 @@
     "signin-password-placeholder": "valitse salasana",
     "siginin-form-submit": "Lähetä",
     "user-movies-title": "Elokuvat",
-    "header-signin-button": "Kirjaudu sisään" 
+    "header-signin-button": "Kirjaudu sisään",
+    "signin-form-error-email": "virheellinen sähköpostiosoite",
+    "signin-form-error-require": "vaaditaan",
+    "signin-form-error-min": "vähintään 4 merkkiä",
+    "signin-form-error-max": "liian pitkä",
+    "signin-linkto-login": "tai",
+    "signin-linkto-signup": "jos olet uusi sitten",
+    "user-fetchinfo-err-nouser": "käyttäjää ei ole olemassa",
+    "user-fetchinfo-err-emptymovies": "tämä käyttäjä ei ole vielä arvioinut yhtäkään elokuvaa",
+    "sigin-login-err-nouser": "käyttäjää ei ole olemassa",
+    "sigin-signup-err-repetedemail": "tämä sähköposti on jo rekisteröity järjestelmään",
+    "user-rating-err-sameppl": "sinulla ei ole oikeutta arvioida itseäsi",
+    "user-rating-err-nouser": "käyttäjää ei ole olemassa"
 }

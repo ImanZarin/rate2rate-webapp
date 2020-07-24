@@ -3,8 +3,8 @@ import React, { Component } from "react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Nav, Navbar, NavbarToggler, NavbarBrand, Collapse, NavItem, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Button } from "reactstrap";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { NavLink } from 'react-router-dom';
-import { Languages, Pages } from "../../shared/Enums";
+import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
+import { Languages, Pages, MyStorage } from "../../shared/Enums";
 import i18n from "../../i18n";
 import './header.scss';
 import { IUser } from "../../shared/ApiTypes";
@@ -12,8 +12,10 @@ import { IUser } from "../../shared/ApiTypes";
 type MyProps = {
     lan: Languages;
     mUser: IUser;
+    isLoggedin: boolean;
     changeLan: (l: Languages) => void;
     changeUser: (u: IUser) => void;
+    logout: () => void;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     translate: any;
 }
@@ -24,9 +26,9 @@ type MyState = {
 }
 
 
-export class HeaderComponent extends Component<MyProps, MyState> {
+class HeaderComponent extends Component<MyProps & RouteComponentProps<any>, MyState> {
 
-    constructor(props: MyProps) {
+    constructor(props: MyProps & RouteComponentProps<any>) {
         super(props);
 
         this.state = {
@@ -66,6 +68,16 @@ export class HeaderComponent extends Component<MyProps, MyState> {
         }
     }
 
+    onSignin = (): void => {
+        if (this.props.isLoggedin) {
+            localStorage.removeItem(MyStorage.token);
+            this.props.logout();
+        }
+        else {
+            this.props.history.push("/signin")
+            //TODO link to signin page
+        }
+    }
 
 
 
@@ -111,8 +123,8 @@ export class HeaderComponent extends Component<MyProps, MyState> {
                                     </Dropdown>
                                 </NavItem>
                                 <NavItem>
-                                    <Button>
-                                        {this.props.mUser ? this.props.mUser.username : this.props.translate("header-signin-button")}
+                                    <Button className="button-right" onClick={() => this.onSignin()}>
+                                        {this.props.isLoggedin ? this.props.mUser.username : this.props.translate("header-signin-button")}
                                     </Button>
                                 </NavItem>
                             </Nav>
@@ -123,3 +135,5 @@ export class HeaderComponent extends Component<MyProps, MyState> {
         );
     }
 }
+
+export default withRouter(HeaderComponent);

@@ -10,12 +10,16 @@ export const initialSigninReducerState: SigninReducerState = {
 
 export const SIGNIN_REDUCER = (state = initialSigninReducerState, action: MyActions): SigninReducerState => {
     switch (action.type) {
-        case ActionTypes.tokenChange:{
+        case ActionTypes.tokenChange: {
             const a = action as ChangeTokenAction;
             return {
                 ...state, token: a.payload, isSignedin: true
             };
         }
+        case ActionTypes.logout:
+            return {
+                ...state, token: "", isSignedin: false
+            }
         default:
             return state;
     }

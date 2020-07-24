@@ -1,5 +1,6 @@
 {
-    "signin-title": "Sign Up",
+    "signin-title": "Sign In",
+    "signup-title": "Sign Up",
     "loading-text": "Loading",
     "signin-username-title": "User Name",
     "signin-username-placeholder": "choose a username",
@@ -9,5 +10,17 @@
     "signin-password-placeholder": "choose a password",
     "siginin-form-submit": "Submit",
     "user-movies-title": "Movies",
-    "header-signin-button": "Sign In"
+    "header-signin-button": "Sign In",
+    "signin-form-error-email": "invalid email",
+    "signin-form-error-require": "required",
+    "signin-form-error-min": "minimum 4 character",
+    "signin-form-error-max": "too long",
+    "signin-linkto-login": "or",
+    "signin-linkto-signup": "if you are new then",
+    "user-fetchinfo-err-nouser": "the user does not exist",
+    "user-fetchinfo-err-emptymovies": "this user has not rated any movie yet",
+    "sigin-login-err-nouser": "the user does not exist",
+    "sigin-signup-err-repetedemail": "this email has already registed in the system",
+    "user-rating-err-sameppl": "you are not allowed to rate yourself",
+    "user-rating-err-nouser": "the user does not exist"
 }

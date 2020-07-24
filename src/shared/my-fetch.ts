@@ -1,4 +1,4 @@
-import { SigninForm } from "./StateTypes";
+import { SigninForm, SignupForm } from "./StateTypes";
 import { MyStorage } from '../shared/Enums';
 import { Constants } from "./Constants";
 import { IUser } from "./ApiTypes";
@@ -35,6 +35,10 @@ export class MyFetch {
 
     public async login(values: SigninForm): Promise<any> {
         return this.myFetch(ReqTypes.post, "auth/login", values);
+    }
+
+    public async signup(values: SignupForm): Promise<any> {
+        return this.myFetch(ReqTypes.post, "auth/signup", values);
     }
 
     public async getUserInfo(userId: string): Promise<any> {
