@@ -1,5 +1,5 @@
 import { MovieRate } from "./StateTypes";
-import { GetUserInfoResponseResult, GetUserInfoForSignedResponseResult } from "./result.enums";
+import { GetUserInfoResponseResult, GetUserInfoForSignedResponseResult, LoginUserResponseResult, UpdateBodyResponseResult } from "./result.enums";
 
 export interface GetUserInfoResponse {
     result: GetUserInfoResponseResult,
@@ -15,8 +15,14 @@ export interface GetUserInfoForSignedResponse {
 }
 
 export interface LoginUserResponse {
+    result: LoginUserResponseResult;
     accessToken: string;
     user: IUser;
+}
+
+export interface UpdateBodyResponse {
+    result: UpdateBodyResponseResult,
+    user: IUser
 }
 
 interface IBody {

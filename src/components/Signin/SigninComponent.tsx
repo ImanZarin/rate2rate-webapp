@@ -15,8 +15,8 @@ import { LoginUserResponse, IUser } from "../../shared/ApiTypes";
 import { MyStorage } from "../../shared/Enums";
 import { MyFetch } from "../../shared/my-fetch";
 import { withRouter, RouteComponentProps } from "react-router-dom";
+import { LoginUserResponseResult } from "../../shared/result.enums";
 
-//interface MyProps extends ReactCookieProps {
 interface MyProps {
     changeUser: (u: IUser) => void;
     changeToken: (t: string) => void;
@@ -122,11 +122,27 @@ class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MySt
                     if (response.ok) {
                         response.json()
                             .then((r: LoginUserResponse) => {
-                                localStorage.setItem(MyStorage.token, r.accessToken);
-                                localStorage.setItem(MyStorage.user, JSON.stringify(r.user));
-                                this.props.changeUser(r.user);
-                                this.props.changeToken(r.accessToken);
-                                //TODO redirect to profile
+                                switch (r.result) {
+                                    case LoginUserResponseResult.userNotFound: {
+                                        const error: Error = new Error(this.props.translate("sigin-login-err-nouser"));
+                                        this.showAndHideAlert(error);
+                                    }
+                                        break;
+                                    case LoginUserResponseResult.repetedEmail: {
+                                        const error: Error = new Error(this.props.translate("sigin-signup-err-repetedemail"));
+                                        this.showAndHideAlert(error);
+                                    }
+                                        break;
+                                    case LoginUserResponseResult.success:
+                                        localStorage.setItem(MyStorage.token, r.accessToken);
+                                        localStorage.setItem(MyStorage.user, JSON.stringify(r.user));
+                                        this.props.changeUser(r.user);
+                                        this.props.changeToken(r.accessToken);
+                                        //TODO redirect to profile                                            
+                                        break;
+                                    default:
+                                        break;
+                                }
                             }
                             )
                     } else {
@@ -145,18 +161,27 @@ class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MySt
                 });
         }
         else {
-            console.log("should log in now");
             mF.login(values as SigninForm)
                 .then(response => {
-                    console.log(response);
                     if (response.ok) {
                         response.json()
                             .then((r: LoginUserResponse) => {
-                                localStorage.setItem(MyStorage.token, r.accessToken);
-                                localStorage.setItem(MyStorage.user, JSON.stringify(r.user));
-                                this.props.changeUser(r.user);
-                                this.props.changeToken(r.accessToken);
-                                //TODO redirect to profile
+                                switch (r.result) {
+                                    case LoginUserResponseResult.userNotFound: {
+                                        const error: Error = new Error(this.props.translate("sigin-login-err-nouser"));
+                                        this.showAndHideAlert(error);
+                                    }
+                                        break;
+                                    case LoginUserResponseResult.success:
+                                        localStorage.setItem(MyStorage.token, r.accessToken);
+                                        localStorage.setItem(MyStorage.user, JSON.stringify(r.user));
+                                        this.props.changeUser(r.user);
+                                        this.props.changeToken(r.accessToken);
+                                        //TODO redirect to profile                                            
+                                        break;
+                                    default:
+                                        break;
+                                }
                             }
                             )
                     } else {

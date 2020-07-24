@@ -14,3 +14,9 @@ export const tokenChange = (token: string): MyActions => {
     }
 }
 
+export const logout = (): MyActions => {
+    return {
+        type: ActionTypes.logout
+    }
+}
+

@@ -8,14 +8,14 @@ import { withRouter, RouteComponentProps, Route } from "react-router-dom";
 import SigninComponent from "./Signin/SigninComponent";
 import { MyActions } from "../shared/ActionTypes";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { HeaderComponent } from "./Header/HeaderComponent";
+import HeaderComponent from "./Header/HeaderComponent";
 import { RootState } from "../App";
 import { ThunkDispatch } from 'redux-thunk';
 import { Languages, MyStorage } from "../shared/Enums";
 import { languageChange, userChange } from "./Header/header-action";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import UserComponent from "./User/UserComponent";
-import { tokenChange } from "./Signin/signin-action";
+import { tokenChange, logout } from "./Signin/signin-action";
 import { IUser } from "../shared/ApiTypes";
 
 //interface StateProps extends RootState, ReactCookieProps {
@@ -33,13 +33,15 @@ interface DispatchProps {
     changeLanguage: (l: Languages) => void;
     changeUser: (u: IUser) => void;
     changeToken: (t: string) => void;
+    logout: () => void;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, any, MyActions>): DispatchProps => ({
     changeLanguage: (l: Languages): MyActions => dispatch(languageChange(l)),
     changeUser: (u: IUser): MyActions => dispatch(userChange(u)),
-    changeToken: (t: string): MyActions => dispatch(tokenChange(t))
+    changeToken: (t: string): MyActions => dispatch(tokenChange(t)),
+    logout: (): MyActions => dispatch(logout())
 });
 
 
@@ -50,32 +52,27 @@ class MainComponent extends Component<MyProps> {
 
     //TODO initial language and name and change them in redux
     componentDidMount() {
-        // if (this.props.signin.token.length === 0 && this.props.cookies?.get(MyCookies.token)) {
-        //     this.props.changeToken(this.props.cookies?.get(MyCookies.token));
-        // }
         if (this.props.signin.token.length === 0 && localStorage.getItem(MyStorage.token)) {
-            let r = localStorage.getItem(MyStorage.token);
+            const r = localStorage.getItem(MyStorage.token);
             if (!r)
-                r = "";
-            this.props.changeToken(r);
-            // const u = localStorage.getItem(MyStorage.user);
-            // console.log(u);
-            // if (u) {
-            //     this.props.changeUser(JSON.parse(u));
-            // }
+                this.props.logout();
+            else
+                this.props.changeToken(r);
         }
 
     }
 
-
     render(): JSX.Element {
         return (
             <div>
-                <HeaderComponent lan={this.props.header.lan}
+                <HeaderComponent
+                    lan={this.props.header.lan}
                     mUser={this.props.header.user}
                     changeUser={this.props.changeUser}
                     changeLan={this.props.changeLanguage}
-                    translate={this.props.translate} />
+                    translate={this.props.translate}
+                    isLoggedin={this.props.signin.isSignedin}
+                    logout={this.props.logout} />
                 <Route path="/signup" component={(): JSX.Element =>
                     <SigninComponent
                         translate={this.props.translate}
@@ -95,7 +92,8 @@ class MainComponent extends Component<MyProps> {
                 }
                 } />
                 <Route path="/user/:id" component={(): JSX.Element =>
-                    <UserComponent tr={this.props.translate} isLoggedin={this.props.signin.isSignedin}
+                    <UserComponent tr={this.props.translate}
+                        isLoggedin={this.props.signin.isSignedin}
                         mUser={this.props.header.user} />} />
             </div>
         );
