@@ -22,5 +22,8 @@
     "sigin-login-err-nouser": "käyttäjää ei ole olemassa",
     "sigin-signup-err-repetedemail": "tämä sähköposti on jo rekisteröity järjestelmään",
     "user-rating-err-sameppl": "sinulla ei ole oikeutta arvioida itseäsi",
-    "user-rating-err-nouser": "käyttäjää ei ole olemassa"
+    "user-rating-err-nouser": "käyttäjää ei ole olemassa",
+    "movie-fetchinfo-err-nomovie": "elokuvaa ei ole",
+    "movie-fetchinfo-err-emptyusers": "kukaan ei ole vielä arvioinut tätä elokuvaa",
+    "movie-users-title": "käyttäjähinnat: "
 }

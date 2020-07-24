@@ -94,7 +94,75 @@ export function RateModal(props: MyProps): JSX.Element {
         case ModalTypes.movies:
         default:
             return (
-                <div></div>
+                <Fragment>
+                     <ButtonGroup className="fullwidth">
+                        <Container>
+                            <Row className="fullwidth">
+                                <Button className="fullwidth" onClick={() => setRate(5)}>
+                                    <Row>
+                                        <div className="stars">
+                                            <span className="fa fa-star fa-lg" />
+                                            <span className="fa fa-star fa-lg" />
+                                            <span className="fa fa-star fa-lg" />
+                                            <span className="fa fa-star fa-lg" />
+                                            <span className="fa fa-star fa-lg" />
+                                        </div>
+                                        <text className="text">must watch movie before death</text>
+                                    </Row>
+                                </Button>
+                            </Row>
+                            <Row className="fullwidth">
+                                <Button className="fullwidth" onClick={() => setRate(4)}>
+                                    <Row>
+                                        <div className="stars">
+                                            <span className="fa fa-star fa-lg" />
+                                            <span className="fa fa-star fa-lg" />
+                                            <span className="fa fa-star fa-lg" />
+                                            <span className="fa fa-star fa-lg" />
+                                        </div>
+                                        <text className="text">highly recommended</text>
+                                    </Row>
+                                </Button>
+                            </Row>
+                            <Row className="fullwidth">
+                                <Button className="fullwidth" onClick={() => setRate(3)}>
+                                    <Row>
+                                        <div className="stars">
+                                            <span className="fa fa-star fa-lg" />
+                                            <span className="fa fa-star fa-lg" />
+                                            <span className="fa fa-star fa-lg" />
+                                        </div>
+                                        <text className="text">not a bad movie</text>
+                                    </Row>
+                                </Button>
+                            </Row>
+                            <Row className="fullwidth">
+                                <Button className="fullwidth" onClick={() => setRate(2)}>
+                                    <Row>
+                                        <div className="stars">
+                                            <span className="fa fa-star fa-lg" />
+                                            <span className="fa fa-star fa-lg" />
+                                        </div>
+                                        <text className="text">waste of money</text>
+                                    </Row>
+                                </Button>
+                            </Row>
+                            <Row className="fullwidth">
+                                <Button className="fullwidth" onClick={() => setRate(1)}>
+                                    <Row>
+                                        <div className="stars">
+                                            <span className="fa fa-star fa-lg" />
+                                        </div>
+                                        <text className="text">waste of time</text>
+                                    </Row>
+                                </Button>
+                            </Row>
+                        </Container>
+                    </ButtonGroup>
+                    <Row>
+                        <Button onClick={() => props.changeRate(rate)} className="button2">Submit Rate</Button>
+                    </Row>
+                </Fragment>
             );
     }
 

@@ -17,6 +17,7 @@ import { languageChange, userChange } from "./Header/header-action";
 import UserComponent from "./User/UserComponent";
 import { tokenChange, logout } from "./Signin/signin-action";
 import { IUser } from "../shared/ApiTypes";
+import MovieComponent from "./Movie/MovieComponent";
 
 //interface StateProps extends RootState, ReactCookieProps {
 interface StateProps extends RootState {
@@ -92,7 +93,13 @@ class MainComponent extends Component<MyProps> {
                 }
                 } />
                 <Route path="/user/:id" component={(): JSX.Element =>
-                    <UserComponent tr={this.props.translate}
+                    <UserComponent
+                        tr={this.props.translate}
+                        isLoggedin={this.props.signin.isSignedin}
+                        mUser={this.props.header.user} />} />
+                <Route path="/movie/:id" component={(): JSX.Element =>
+                    <MovieComponent
+                        tr={this.props.translate}
                         isLoggedin={this.props.signin.isSignedin}
                         mUser={this.props.header.user} />} />
             </div>
