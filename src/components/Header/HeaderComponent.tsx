@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import React, { Component } from "react";
+import React, { Component, EventHandler, ChangeEvent } from "react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Nav, Navbar, NavbarToggler, NavbarBrand, Collapse, NavItem, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Button } from "reactstrap";
+import { Nav, Navbar, NavbarToggler, NavbarBrand, Collapse, NavItem, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Button, Input, InputGroup, InputGroupAddon, InputGroupText } from "reactstrap";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import { Languages, Pages, MyStorage } from "../../shared/Enums";
@@ -75,11 +75,8 @@ class HeaderComponent extends Component<MyProps & RouteComponentProps<any>, MySt
         }
         else {
             this.props.history.push("/signin")
-            //TODO link to signin page
         }
     }
-
-
 
     render(): JSX.Element {
         return (

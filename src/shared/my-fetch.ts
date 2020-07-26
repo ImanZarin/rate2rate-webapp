@@ -52,4 +52,16 @@ export class MyFetch {
     public async rateUser(newRate: number, userId: string): Promise<any> {
         return this.myFetch(ReqTypes.put, "users/" + userId, { rate: newRate });
     }
+
+    public async rateMovie(newRate: number, movieId: string): Promise<any> {
+        return this.myFetch(ReqTypes.put, "movieusers/" + movieId, { rate: newRate });
+    }
+
+    public async searchMovie(movieName: string): Promise<any> {
+        return this.myFetch(ReqTypes.post, "movies", { movie: movieName });
+    }
+
+    public async getMovieId(imdbId: string): Promise<any> {
+        return this.myFetch(ReqTypes.put, "movies", { imdbId: imdbId })
+    }
 }

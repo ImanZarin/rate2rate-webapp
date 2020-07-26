@@ -101,7 +101,14 @@ class MainComponent extends Component<MyProps> {
                     <MovieComponent
                         tr={this.props.translate}
                         isLoggedin={this.props.signin.isSignedin}
-                        mUser={this.props.header.user} />} />
+                        mUser={this.props.header.user}
+                        searchMode={false} />} />
+                <Route path="/movie" component={(): JSX.Element =>
+                    <MovieComponent
+                        tr={this.props.translate}
+                        isLoggedin={this.props.signin.isSignedin}
+                        mUser={this.props.header.user}
+                        searchMode={true} />} />
             </div>
         );
     }
