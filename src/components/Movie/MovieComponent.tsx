@@ -327,7 +327,12 @@ class MovieComponent extends Component<RouteComponentProps<RouteParams> & MyProp
                     </InputGroupAddon>
                     <Input
                         onChange={this.onSearchChange}
-                        placeholder={this.props.tr("movie-search-placeholder")} />
+                        placeholder={this.props.tr("movie-search-placeholder")}
+                        onKeyPress={(event) => {
+                            if (event.key === "Enter") {
+                                this.onSearchSubmit();
+                            }
+                        }} />
                 </InputGroup>
                 <div style={{ visibility: this.props.isLoggedin && !this.props.searchMode ? "visible" : "hidden", margin: "auto" }}
                     onClick={this.toggleModal}>
@@ -338,6 +343,7 @@ class MovieComponent extends Component<RouteComponentProps<RouteParams> & MyProp
                     <span className={this.state.personRate > 4 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
                 </div>
                 <div style={{ visibility: this.props.searchMode ? "hidden" : "visible" }}>
+                    <img src={this.state.movie.imageUrl} className="img_main"/>
                     <h1 style={{ margin: "auto" }}>{this.state.movie.title}</h1>
                     <h3>{this.state.movie.year}</h3>
                     <h2>{this.state.movie.genre?.join(" ,")}</h2>
@@ -365,13 +371,14 @@ class MovieComponent extends Component<RouteComponentProps<RouteParams> & MyProp
                 <div style={{ visibility: this.props.searchMode ? "visible" : "hidden" }}>
                     {this.state.searchResult.map((ms) => {
                         return (
-                            <div key={ms.imdbID} onClick={() => this.onSelectMovie(ms.imdbID)}>
+                            <div key={ms.imdbID} onClick={() => this.onSelectMovie(ms.imdbID)}
+                                className="search_row">
                                 <img src={ms.Poster} className="search_img" />{ms.Title} ({ms.Year})</div>
                         );
                     })}
                 </div>
                 <Alert isOpen={this.state.alertIsOpen} toggle={this.closeAlert}
-                    color="danger">{this.state.error?.message}</Alert>
+                    color="danger" className="myAlert">{this.state.error?.message}</Alert>
                 <div style={{ visibility: this.state.isLoading ? 'visible' : 'hidden' }}>
                     <LOADING tr={this.props.tr} />
                 </div>

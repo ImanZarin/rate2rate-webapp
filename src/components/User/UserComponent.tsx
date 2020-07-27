@@ -259,7 +259,7 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
                     )}
                 </div>
                 <Alert isOpen={this.state.alertIsOpen} toggle={this.closeAlert}
-                    color="danger">{this.state.error?.message}</Alert>
+                    color="danger" className="myAlert">{this.state.error?.message}</Alert>
                 <div style={{ visibility: this.state.isLoading ? 'visible' : 'hidden' }}>
                     <LOADING tr={this.props.tr} />
                 </div>
