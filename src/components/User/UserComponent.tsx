@@ -6,13 +6,13 @@ import { Constants } from '../../shared/Constants';
 import { MovieRate } from '../../shared/StateTypes';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Alert, Button, Modal, ModalHeader, ModalBody } from 'reactstrap';
-import { GetUserInfoResponse, GetUserInfoForSignedResponse, IUser, UpdateBodyResponse } from '../../shared/ApiTypes';
+import { GetUserInfoResponse, GetUserInfoForSignedResponse, IUser, UpdateBuddyResponse } from '../../shared/ApiTypes';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { RateModal, ModalTypes } from '../Rate/RateComponent';
 import './user.scss';
 import { MyFetch } from '../../shared/my-fetch';
-import { GetUserInfoResponseResult, GetUserInfoForSignedResponseResult, UpdateBodyResponseResult } from '../../shared/result.enums';
+import { GetUserInfoResponseResult, GetUserInfoForSignedResponseResult, UpdateBuddyResponseResult } from '../../shared/result.enums';
 
 type RouteParams = {
     id: string;
@@ -96,21 +96,21 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
                 this.toggleModal();
                 if (response.ok) {
                     response.json()
-                        .then((r: UpdateBodyResponse) => {
+                        .then((r: UpdateBuddyResponse) => {
                             switch (r.result) {
-                                case UpdateBodyResponseResult.success:
+                                case UpdateBuddyResponseResult.success:
                                     this.setState({
                                         isLoading: false,
-                                        personRate: r.user.bodies.filter(x => x.bodyUserId == this.props.match.params.id)[0].rate
+                                        personRate: r.user.buddies.filter(x => x.buddyId == this.props.match.params.id)[0].rate
                                     });
                                     break;
-                                case UpdateBodyResponseResult.userIsBody:
+                                case UpdateBuddyResponseResult.userIsBuddy:
                                     {
                                         const err = new Error(this.props.tr("user-rating-err-sameppl"));
                                         this.showAndHideAlert(err, Constants.waitLong);
                                     }
                                     break;
-                                case UpdateBodyResponseResult.userNotFound:
+                                case UpdateBuddyResponseResult.userNotFound:
                                     {
                                         const err = new Error(this.props.tr("user-rating-err-nouser"));
                                         this.showAndHideAlert(err, Constants.waitLong);

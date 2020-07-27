@@ -8,9 +8,11 @@ const initUser: IUser = {
     _id: "",
     admin: false,
     email: "",
-    bodies: [{
-        bodyUserId: "",
-        rate: 0
+    buddies: [{
+        buddyId: "",
+        rate: 0,
+        buddyName: "",
+        timeStamp: ""
     }],
     password: ""
 }

@@ -1,5 +1,8 @@
 import { MovieRate } from "./StateTypes";
-import { GetUserInfoResponseResult, GetUserInfoForSignedResponseResult, LoginUserResponseResult, UpdateBodyResponseResult, GetMovieInfoResponseResult, GetMovieInfoForSignedResponseResult, UpdateMovieRateResponseResult, SearchMovieResponseResult } from "./result.enums";
+import {
+    GetUserInfoResponseResult, GetUserInfoForSignedResponseResult, LoginUserResponseResult,
+    UpdateBuddyResponseResult, GetMovieInfoResponseResult, GetMovieInfoForSignedResponseResult, UpdateMovieRateResponseResult, SearchMovieResponseResult, GetProfileInfoResponseResult
+} from "./result.enums";
 
 export interface GetUserInfoResponse {
     result: GetUserInfoResponseResult,
@@ -20,8 +23,8 @@ export interface LoginUserResponse {
     user: IUser;
 }
 
-export interface UpdateBodyResponse {
-    result: UpdateBodyResponseResult,
+export interface UpdateBuddyResponse {
+    result: UpdateBuddyResponseResult,
     user: IUser
 }
 
@@ -30,9 +33,11 @@ export interface UpdateMovieRateResponse {
     movieuser: IMovieUser
 }
 
-interface IBody {
-    bodyUserId: string;
+export interface IBuddy {
+    buddyId: string;
+    buddyName: string;
     rate: number;
+    timeStamp: string;
 }
 
 export interface IUser {
@@ -40,7 +45,7 @@ export interface IUser {
     username: string;
     email: string;
     admin: boolean;
-    bodies: [IBody];
+    buddies: [IBuddy];
     password: string;
 }
 
@@ -95,4 +100,10 @@ export interface IMDBsearch {
 export interface SearchMovieResponse {
     result: SearchMovieResponseResult,
     movies: IMDBsearch[]
+}
+
+export interface GetProfileInfoResponse {
+    result: GetProfileInfoResponseResult,
+    movies: MovieRate[],
+    me: IUser
 }

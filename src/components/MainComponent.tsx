@@ -17,7 +17,10 @@ import { languageChange, userChange } from "./Header/header-action";
 import UserComponent from "./User/UserComponent";
 import { tokenChange, logout } from "./Signin/signin-action";
 import { IUser } from "../shared/ApiTypes";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import MovieComponent from "./Movie/MovieComponent";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import ProfileComponent from "./Profile/ProfileComponent";
 
 //interface StateProps extends RootState, ReactCookieProps {
 interface StateProps extends RootState {
@@ -109,6 +112,9 @@ class MainComponent extends Component<MyProps> {
                         isLoggedin={this.props.signin.isSignedin}
                         mUser={this.props.header.user}
                         searchMode={true} />} />
+                <Route path="/profile" component={(): JSX.Element =>
+                    <ProfileComponent
+                        tr={this.props.translate} />} />
             </div>
         );
     }

@@ -3,16 +3,15 @@ import React, { Component, Fragment, ChangeEvent } from 'react';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { LOADING } from '../LoadingComponent';
 import { Constants } from '../../shared/Constants';
-import { MovieRate } from '../../shared/StateTypes';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Alert, Button, Modal, ModalHeader, ModalBody, InputGroup, InputGroupAddon, Input } from 'reactstrap';
-import { GetUserInfoResponse, GetUserInfoForSignedResponse, IUser, UpdateBodyResponse, IMovie, GetMovieInfoResponse, GetMovieInfoForSignedResponse, UserRate, UpdateMovieRateResponse, SearchMovieResponse, IMDBsearch } from '../../shared/ApiTypes';
+import { IUser, IMovie, GetMovieInfoResponse, GetMovieInfoForSignedResponse, UserRate, UpdateMovieRateResponse, SearchMovieResponse, IMDBsearch } from '../../shared/ApiTypes';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { RateModal, ModalTypes } from '../Rate/RateComponent';
 import './movie.scss';
 import { MyFetch } from '../../shared/my-fetch';
-import { GetUserInfoResponseResult, GetUserInfoForSignedResponseResult, UpdateBodyResponseResult, GetMovieInfoForSignedResponseResult, GetMovieInfoResponseResult, UpdateMovieRateResponseResult, SearchMovieResponseResult } from '../../shared/result.enums';
+import { GetMovieInfoForSignedResponseResult, GetMovieInfoResponseResult, UpdateMovieRateResponseResult, SearchMovieResponseResult } from '../../shared/result.enums';
 
 type RouteParams = {
     id: string;
@@ -191,7 +190,6 @@ class MovieComponent extends Component<RouteComponentProps<RouteParams> & MyProp
 
                             } else {
                                 const r3 = r as GetMovieInfoResponse;
-                                console.log("my rate second: ", this.state.personRate);
                                 switch (r3.result) {
                                     case GetMovieInfoResponseResult.movieNotFound:
                                         {

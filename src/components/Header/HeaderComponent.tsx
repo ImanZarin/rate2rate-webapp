@@ -26,8 +26,10 @@ type MyState = {
 }
 
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 class HeaderComponent extends Component<MyProps & RouteComponentProps<any>, MyState> {
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(props: MyProps & RouteComponentProps<any>) {
         super(props);
 

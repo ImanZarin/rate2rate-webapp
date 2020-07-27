@@ -1,5 +1,7 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React, { Fragment, useState } from "react";
 import './rate.scss';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { ButtonGroup, Button, Container, Col, Row } from "reactstrap";
 
 export enum ModalTypes {

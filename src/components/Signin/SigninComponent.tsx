@@ -40,9 +40,11 @@ const initForm: SigninForm = {
     password: ""
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MyState> {
 
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(props: MyProps & RouteComponentProps<any>) {
         super(props);
         this.state = {
@@ -198,29 +200,6 @@ class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MySt
 
         }
 
-    }
-
-    updateMovie(): void {
-        const values = {
-            year: 2001,
-            brief: "this has been changed from client throgh local storage"
-        }
-        //console.log("the access token is: ", this.props.cookies?.get("access_token"));
-        fetch(Constants.baseUrl + 'movies/5eb466360884d346a82b58e5', {
-            method: "PUT",
-            body: JSON.stringify(values),
-            headers: {
-                // eslint-disable-next-line @typescript-eslint/naming-convention
-                "Content-Type": "application/json",
-                // eslint-disable-next-line @typescript-eslint/naming-convention
-                "Authorization": 'Bearer ' + localStorage.getItem(MyStorage.token),
-                // eslint-disable-next-line @typescript-eslint/naming-convention
-            },
-            credentials: "omit"
-        }).then(resp => {
-            console.log("update movie respond: ", resp);
-        }, err => { console.log("err type one: ", err) })
-            .catch(err => { console.log("err type two: ", err) })
     }
 
     render(): JSX.Element {
