@@ -275,7 +275,7 @@ class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MySt
                     <LOADING tr={this.props.translate} />
                 </div>
                 <Alert isOpen={this.state.alertIsOpen} toggle={this.closeAlert}
-                    color="danger">{this.state.error?.message}</Alert>
+                    color="danger" className="myAlert">{this.state.error?.message}</Alert>
             </div>
         );
     }

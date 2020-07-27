@@ -22,5 +22,12 @@
     "sigin-login-err-nouser": "käyttäjää ei ole olemassa",
     "sigin-signup-err-repetedemail": "tämä sähköposti on jo rekisteröity järjestelmään",
     "user-rating-err-sameppl": "sinulla ei ole oikeutta arvioida itseäsi",
-    "user-rating-err-nouser": "käyttäjää ei ole olemassa"
+    "user-rating-err-nouser": "käyttäjää ei ole olemassa",
+    "movie-fetchinfo-err-nomovie": "elokuvaa ei ole",
+    "movie-fetchinfo-err-emptyusers": "kukaan ei ole vielä arvioinut tätä elokuvaa",
+    "movie-users-title": "käyttäjähinnat: ",
+    "movie-rating-err-notfound": "ei ole kirjaa siitä, että arvioisit tämän elokuvan",
+    "movie-search-placeholder": "etsi elokuvia, näyttelijöitä, ohjaajia ...",
+    "movie-search-err-failed": "jotain meni pieleen",
+    "movie-search-err-nomovie": "mikään elokuva ei vastaa nimeä"
 }

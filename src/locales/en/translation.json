@@ -22,5 +22,12 @@
     "sigin-login-err-nouser": "the user does not exist",
     "sigin-signup-err-repetedemail": "this email has already registed in the system",
     "user-rating-err-sameppl": "you are not allowed to rate yourself",
-    "user-rating-err-nouser": "the user does not exist"
+    "user-rating-err-nouser": "the user does not exist",
+    "movie-fetchinfo-err-nomovie": "the movie does not exist",
+    "movie-fetchinfo-err-emptyusers": "nobody has rated this movie yet",
+    "movie-users-title": "user rates:",
+    "movie-rating-err-notfound": "there is no record of you rating this movie",
+    "movie-search-placeholder": "search movies, actors, directors ...",
+    "movie-search-err-failed": "somthing went wrong",
+    "movie-search-err-nomovie": "no movie is matched to the name"
 }
