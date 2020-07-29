@@ -1,6 +1,5 @@
-import { Component } from "react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import React from "react";
+import React, { Component } from "react";
 import { connect } from 'react-redux';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { withRouter, RouteComponentProps, Route } from "react-router-dom";

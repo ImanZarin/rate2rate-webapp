@@ -1,7 +1,8 @@
 import { MovieRate } from "./StateTypes";
 import {
     GetUserInfoResponseResult, GetUserInfoForSignedResponseResult, LoginUserResponseResult,
-    UpdateBuddyResponseResult, GetMovieInfoResponseResult, GetMovieInfoForSignedResponseResult, UpdateMovieRateResponseResult, SearchMovieResponseResult, GetProfileInfoResponseResult
+    UpdateBuddyResponseResult, GetMovieInfoResponseResult, GetMovieInfoForSignedResponseResult,
+    UpdateMovieRateResponseResult, SearchMovieResponseResult, GetProfileInfoResponseResult
 } from "./result.enums";
 
 export interface GetUserInfoResponse {
