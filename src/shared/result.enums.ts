@@ -54,3 +54,8 @@ export enum GetProfileInfoResponseResult {
     noMovienoBuddy = "EMPTY_BOTH_LIST",
     noUser = "USER_NOT_FOUND"
 }
+
+export enum GetRecentRatesResponseResult {
+    success = "SUCCESS",
+    fail = "FAIL"
+}

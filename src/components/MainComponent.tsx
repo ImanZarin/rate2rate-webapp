@@ -20,6 +20,7 @@ import { IUser } from "../shared/ApiTypes";
 import MovieComponent from "./Movie/MovieComponent";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import ProfileComponent from "./Profile/ProfileComponent";
+import HomeComponent from "./Home/homeComponent";
 
 //interface StateProps extends RootState, ReactCookieProps {
 interface StateProps extends RootState {
@@ -88,12 +89,9 @@ class MainComponent extends Component<MyProps> {
                         changeUser={this.props.changeUser}
                         changeToken={this.props.changeToken}
                         isLoggedin={this.props.signin.isSignedin} />} />
-                <Route path="/home" component={(): JSX.Element => {
-                    return (<div>
-                        This is the test to make sure navigation works as expected!
-                    </div>);
-                }
-                } />
+                <Route path="/home" component={(): JSX.Element =>
+                    <HomeComponent
+                        tr={this.props.translate} />} />
                 <Route path="/user/:id" component={(): JSX.Element =>
                     <UserComponent
                         tr={this.props.translate}

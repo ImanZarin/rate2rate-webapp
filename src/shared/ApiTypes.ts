@@ -2,7 +2,7 @@ import { MovieRate } from "./StateTypes";
 import {
     GetUserInfoResponseResult, GetUserInfoForSignedResponseResult, LoginUserResponseResult,
     UpdateBuddyResponseResult, GetMovieInfoResponseResult, GetMovieInfoForSignedResponseResult,
-    UpdateMovieRateResponseResult, SearchMovieResponseResult, GetProfileInfoResponseResult
+    UpdateMovieRateResponseResult, SearchMovieResponseResult, GetProfileInfoResponseResult, GetRecentRatesResponseResult
 } from "./result.enums";
 
 export interface GetUserInfoResponse {
@@ -114,4 +114,17 @@ export interface GetProfileInfoResponse {
     movies: MovieRate[],
     buddies: UserRate[],
     me: IUser
+}
+
+export interface MovieUserNames {
+    movieId: string;
+    userId: string;
+    movieTitle: string;
+    userName: string;
+    rate: number;
+}
+
+export interface GetRecentRatesResponse {
+    result: GetRecentRatesResponseResult,
+    movies: MovieUserNames[]
 }

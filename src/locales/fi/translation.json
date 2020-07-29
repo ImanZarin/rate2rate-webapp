@@ -37,5 +37,6 @@
     "profile-fetch-err-nouser": "käyttäjää ei ole olemassa",
     "profile-movie-maintext-nomovie": "Et ole vielä arvioinut yhtäkään elokuvaa.\n Aloita elokuvien arviointi etsimällä niiden nimiä.",
     "profile-buddy-maintext-nobuddy": "Et ole vielä arvioinut ketään.\n Aloita ihmisten luokitus etsimällä heidän käyttömerkkiä tai sähköpostia.",
-    "profile-logout-button": "kirjautua ulos"
+    "profile-logout-button": "kirjautua ulos",
+    "home-livelist-title": "Viimeaikaiset Hinnat"
 }
