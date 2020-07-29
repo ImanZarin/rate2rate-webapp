@@ -14,6 +14,7 @@ const reqToken = localStorage.getItem(MyStorage.token);
 
 export class MyFetch {
 
+    private abortController = new AbortController();
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
     private async myFetch(type: ReqTypes, address: string, mBody?: any): Promise<any> {
         const reqObj: RequestInit = {
@@ -24,14 +25,19 @@ export class MyFetch {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 'Authorization': 'Bearer ' + reqToken
             },
-            credentials: "omit"
+            credentials: "omit",
+            signal: this.abortController.signal
         };
+        
         if (mBody) {
             reqObj.body = JSON.stringify(mBody);
         }
         return fetch(Constants.baseUrl + address, reqObj);
     }
 
+    public abort(): void{
+        this.abortController.abort();
+    }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public async login(values: SigninForm): Promise<any> {
         return this.myFetch(ReqTypes.post, "auth/login", values);

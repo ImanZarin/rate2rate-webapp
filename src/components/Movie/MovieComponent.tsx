@@ -12,6 +12,7 @@ import { RateModal, ModalTypes } from '../Rate/RateComponent';
 import './movie.scss';
 import { MyFetch } from '../../shared/my-fetch';
 import { GetMovieInfoForSignedResponseResult, GetMovieInfoResponseResult, UpdateMovieRateResponseResult, SearchMovieResponseResult } from '../../shared/result.enums';
+import { MyStorage } from '../../shared/Enums';
 
 type RouteParams = {
     id: string;
@@ -27,12 +28,13 @@ type MyState = {
     personRate: number;
     searchText: string;
     searchResult: IMDBsearch[];
+    searchMode: boolean;
 }
 
 type MyProps = {
     isLoggedin: boolean;
     mUser: IUser;
-    searchMode: boolean;
+    logout: () => void;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     tr: any;
 }
@@ -55,14 +57,17 @@ class MovieComponent extends Component<RouteComponentProps<RouteParams> & MyProp
                 brief: "",
                 imageUrl: "",
                 year: 0,
-                imdbId: ""
+                imdbId: "",
+                insertDate: "",
+                updateDate: ""
             },
             error: new Error,
             mainList: [],
             modalIsOpen: false,
             personRate: 0,
             searchText: "",
-            searchResult: []
+            searchResult: [],
+            searchMode: true
         }
         this.showAndHideAlert = this.showAndHideAlert.bind(this);
         this.closeAlert = this.closeAlert.bind(this);
@@ -73,8 +78,12 @@ class MovieComponent extends Component<RouteComponentProps<RouteParams> & MyProp
     }
 
     componentDidMount(): void {
-        if (!this.props.searchMode)
+        if (!this.props.match.params.id) {
+            this.setState({
+                searchMode: false
+            });
             this.fetchList(this.props.match.params.id);
+        }
 
     }
 
@@ -182,6 +191,14 @@ class MovieComponent extends Component<RouteComponentProps<RouteParams> & MyProp
                                             mainList: r2.users,
                                             movie: r2.movie,
                                             personRate: r2.rate
+                                        });
+                                        break;
+                                    case GetMovieInfoForSignedResponseResult.userFake:
+                                        this.props.logout();
+                                        this.setState({
+                                            isLoading: false,
+                                            mainList: [],
+                                            movie: r2.movie,
                                         });
                                         break;
                                     default:
@@ -318,7 +335,7 @@ class MovieComponent extends Component<RouteComponentProps<RouteParams> & MyProp
 
         return (
             <Fragment>
-                <InputGroup style={{ visibility: this.props.searchMode ? "visible" : "hidden" }}>
+                <InputGroup style={{ visibility: this.state.searchMode ? "visible" : "hidden" }}>
                     <InputGroupAddon addonType="prepend">
                         <Button className="fa fa-search fa-lg"
                             onClick={this.onSearchSubmit}></Button>
@@ -332,7 +349,7 @@ class MovieComponent extends Component<RouteComponentProps<RouteParams> & MyProp
                             }
                         }} />
                 </InputGroup>
-                <div style={{ visibility: this.props.isLoggedin && !this.props.searchMode ? "visible" : "hidden", margin: "auto" }}
+                <div style={{ visibility: this.props.isLoggedin && !this.state.searchMode ? "visible" : "hidden", margin: "auto" }}
                     onClick={this.toggleModal}>
                     <span className={this.state.personRate > 0 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
                     <span className={this.state.personRate > 1 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
@@ -340,8 +357,8 @@ class MovieComponent extends Component<RouteComponentProps<RouteParams> & MyProp
                     <span className={this.state.personRate > 3 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
                     <span className={this.state.personRate > 4 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
                 </div>
-                <div style={{ visibility: this.props.searchMode ? "hidden" : "visible" }}>
-                    <img src={this.state.movie.imageUrl} className="img_main"/>
+                <div style={{ visibility: this.state.searchMode ? "hidden" : "visible" }}>
+                    <img src={this.state.movie.imageUrl} className="img_main" />
                     <h1 style={{ margin: "auto" }}>{this.state.movie.title}</h1>
                     <h3>{this.state.movie.year}</h3>
                     <h2>{this.state.movie.genre?.join(" ,")}</h2>
@@ -361,12 +378,12 @@ class MovieComponent extends Component<RouteComponentProps<RouteParams> & MyProp
                     </h3>
                     {this.state.mainList.map((userRated) => {
                         return (
-                            <div key={userRated._id}>{userRated.name} : {userRated.rate} </div>
+                            <div key={userRated.buddyId}>{userRated.buddyName} : {userRated.rate} </div>
                         );
                     }
                     )}
                 </div>
-                <div style={{ visibility: this.props.searchMode ? "visible" : "hidden" }}>
+                <div style={{ visibility: this.state.searchMode ? "visible" : "hidden" }}>
                     {this.state.searchResult.map((ms) => {
                         return (
                             <div key={ms.imdbID} onClick={() => this.onSelectMovie(ms.imdbID)}

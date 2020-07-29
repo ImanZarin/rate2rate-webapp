@@ -32,6 +32,7 @@ export interface MovieRate {
         title: string;
         year: number;
         rate: number;
+        rateDate: string;
 }
 
 export interface Movie {

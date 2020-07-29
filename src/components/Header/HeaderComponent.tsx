@@ -4,7 +4,7 @@ import React, { Component, EventHandler, ChangeEvent } from "react";
 import { Nav, Navbar, NavbarToggler, NavbarBrand, Collapse, NavItem, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Button, Input, InputGroup, InputGroupAddon, InputGroupText } from "reactstrap";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
-import { Languages, Pages, MyStorage } from "../../shared/Enums";
+import { Languages, Pages } from "../../shared/Enums";
 import i18n from "../../i18n";
 import './header.scss';
 import { IUser } from "../../shared/ApiTypes";
@@ -71,13 +71,10 @@ class HeaderComponent extends Component<MyProps & RouteComponentProps<any>, MySt
     }
 
     onSignin = (): void => {
-        if (this.props.isLoggedin) {
-            localStorage.removeItem(MyStorage.token);
+        if (this.props.isLoggedin)
             this.props.logout();
-        }
-        else {
+        else
             this.props.history.push("/signin")
-        }
     }
 
     render(): JSX.Element {

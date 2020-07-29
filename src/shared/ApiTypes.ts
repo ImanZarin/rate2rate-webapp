@@ -35,9 +35,8 @@ export interface UpdateMovieRateResponse {
 
 export interface IBuddy {
     buddyId: string;
-    buddyName: string;
     rate: number;
-    timeStamp: string;
+    reateDate: string;
 }
 
 export interface IUser {
@@ -47,6 +46,8 @@ export interface IUser {
     admin: boolean;
     buddies: [IBuddy];
     password: string;
+    insertDate: string;
+    updateDate: string;
 }
 
 export interface IMovie {
@@ -59,6 +60,8 @@ export interface IMovie {
     cast: string[];
     director: string[];
     imdbId: string;
+    insertDate: string;
+    updateDate: string;
 }
 
 export interface IMovieUser {
@@ -66,6 +69,8 @@ export interface IMovieUser {
     userId: string;
     rate: number;
     movieId: string;
+    insertDate: string;
+    updateDate: string;
 }
 
 export interface GetMovieInfoResponse {
@@ -82,9 +87,10 @@ export interface GetMovieInfoForSignedResponse {
 }
 
 export interface UserRate {
-    _id: string;
-    name: string;
+    buddyId: string;
+    buddyName: string;
     rate: number;
+    rateDate: string;
 }
 
 export interface IMDBsearch {
@@ -105,5 +111,6 @@ export interface SearchMovieResponse {
 export interface GetProfileInfoResponse {
     result: GetProfileInfoResponseResult,
     movies: MovieRate[],
+    buddies: UserRate[],
     me: IUser
 }

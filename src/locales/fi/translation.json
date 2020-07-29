@@ -35,5 +35,7 @@
     "profile-tabs-me-title": "Itse",
     "profile-fetch-err-emptylists": "et ole vielä arvioinut yhtäkään elokuvaa tai käyttäjää",
     "profile-fetch-err-nouser": "käyttäjää ei ole olemassa",
-    "profile-movie-maintext-nomovie": "Et ole vielä arvioinut yhtäkään elokuvaa./n Aloita elokuvien arviointi etsimällä niiden nimiä."
+    "profile-movie-maintext-nomovie": "Et ole vielä arvioinut yhtäkään elokuvaa.\n Aloita elokuvien arviointi etsimällä niiden nimiä.",
+    "profile-buddy-maintext-nobuddy": "Et ole vielä arvioinut ketään.\n Aloita ihmisten luokitus etsimällä heidän käyttömerkkiä tai sähköpostia.",
+    "profile-logout-button": "kirjautua ulos"
 }

@@ -11,10 +11,11 @@ const initUser: IUser = {
     buddies: [{
         buddyId: "",
         rate: 0,
-        buddyName: "",
-        timeStamp: ""
+        reateDate: ""
     }],
-    password: ""
+    password: "",
+    insertDate: "",
+    updateDate: ""
 }
 const initialState = {
     lan: Languages.en,

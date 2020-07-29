@@ -35,5 +35,7 @@
     "profile-tabs-me-title": "Myself",
     "profile-fetch-err-emptylists": "you have not rated any movie or user yet",
     "profile-fetch-err-nouser": "the user does not exist",
-    "profile-movie-maintext-nomovie": "You have not rated any movie yet./n Start rating movies by searching their names."
+    "profile-movie-maintext-nomovie": "You have not rated any movie yet.\n Start rating movies by searching their names.",
+    "profile-buddy-maintext-nobuddy": "You have not rated anyone yet.\n Start rating people by searching their usertag or email.",
+    "profile-logout-button": "logout"
 }

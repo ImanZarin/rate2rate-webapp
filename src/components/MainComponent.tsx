@@ -105,16 +105,17 @@ class MainComponent extends Component<MyProps> {
                         tr={this.props.translate}
                         isLoggedin={this.props.signin.isSignedin}
                         mUser={this.props.header.user}
-                        searchMode={false} />} />
+                        logout={this.props.logout} />} />
                 <Route path="/movie" component={(): JSX.Element =>
                     <MovieComponent
                         tr={this.props.translate}
                         isLoggedin={this.props.signin.isSignedin}
                         mUser={this.props.header.user}
-                        searchMode={true} />} />
+                        logout={this.props.logout} />} />
                 <Route path="/profile" component={(): JSX.Element =>
                     <ProfileComponent
-                        tr={this.props.translate} />} />
+                        tr={this.props.translate}
+                        logout={this.props.logout} />} />
             </div>
         );
     }

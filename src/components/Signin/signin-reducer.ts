@@ -1,5 +1,6 @@
 import { MyActions, ActionTypes, ChangeTokenAction } from "../../shared/ActionTypes";
 import { SigninReducerState } from '../../shared/StateTypes';
+import { MyStorage } from "../../shared/Enums";
 
 
 
@@ -17,6 +18,7 @@ export const SIGNIN_REDUCER = (state = initialSigninReducerState, action: MyActi
             };
         }
         case ActionTypes.logout:
+            localStorage.removeItem(MyStorage.token);
             return {
                 ...state, token: "", isSignedin: false
             }
