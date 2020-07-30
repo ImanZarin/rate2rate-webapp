@@ -27,9 +27,11 @@ type MyProps = {
     tr: any;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 class ProfileComponent extends Component<MyProps & RouteComponentProps<any>, MyState> {
 
     _isMounted = false;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(props: MyProps & RouteComponentProps<any>) {
         super(props);
 
@@ -89,6 +91,8 @@ class ProfileComponent extends Component<MyProps & RouteComponentProps<any>, MyS
     fetchInfo(): void {
         this.myFetch.getProfileInfo()
             .then(resp => {
+                if (!this._isMounted)
+                    return;
                 if (resp.ok) {
                     resp.json()
                         .then((r: GetProfileInfoResponse) => {
@@ -100,20 +104,18 @@ class ProfileComponent extends Component<MyProps & RouteComponentProps<any>, MyS
                                     }
                                     break;
                                 case GetProfileInfoResponseResult.noBuddy:
-                                    if (this._isMounted)
-                                        this.setState({
-                                            profile: r.me,
-                                            myMovies: r.movies,
-                                            myBuddies: []
-                                        });
+                                    this.setState({
+                                        profile: r.me,
+                                        myMovies: r.movies,
+                                        myBuddies: []
+                                    });
                                     break;
                                 case GetProfileInfoResponseResult.noMovie:
-                                    if (this._isMounted)
-                                        this.setState({
-                                            profile: r.me,
-                                            myMovies: [],
-                                            myBuddies: r.buddies
-                                        });
+                                    this.setState({
+                                        profile: r.me,
+                                        myMovies: [],
+                                        myBuddies: r.buddies
+                                    });
                                     break;
                                 case GetProfileInfoResponseResult.noUser:
                                     {
@@ -122,12 +124,11 @@ class ProfileComponent extends Component<MyProps & RouteComponentProps<any>, MyS
                                     }
                                     break;
                                 case GetProfileInfoResponseResult.success:
-                                    if (this._isMounted)
-                                        this.setState({
-                                            profile: r.me,
-                                            myMovies: r.movies,
-                                            myBuddies: r.buddies
-                                        });
+                                    this.setState({
+                                        profile: r.me,
+                                        myMovies: r.movies,
+                                        myBuddies: r.buddies
+                                    });
                                     break;
                                 default:
                                     break;
@@ -139,42 +140,44 @@ class ProfileComponent extends Component<MyProps & RouteComponentProps<any>, MyS
                     this.showAndHideAlert(error, Constants.waitShort);
                 }
             }, error => {
+                if (!this._isMounted)
+                    return;
                 this.showAndHideAlert(error, Constants.waitNormal);
             })
             .catch(err => {
+                if (!this._isMounted)
+                    return;
                 this.showAndHideAlert(err, Constants.waitNormal);
             })
     }
 
     onTabChange(n: number): void {
         if (n !== this.state.activeTab)
-            if (this._isMounted)
-                this.setState({
-                    activeTab: n
-                });
+            this.setState({
+                activeTab: n
+            });
     }
 
     showAndHideAlert(e: Error, wait: number): void {
-        if (this._isMounted)
+        this.setState({
+            error: e,
+            alertIsOpen: true,
+            isLoading: false
+        });
+        setTimeout(() => {
+            if (!this._isMounted)
+                return;
             this.setState({
-                error: e,
-                alertIsOpen: true,
+                alertIsOpen: false,
                 isLoading: false
             });
-        setTimeout(() => {
-            if (this._isMounted)
-                this.setState({
-                    alertIsOpen: false,
-                    isLoading: false
-                });
         }, wait);
     }
 
     closeAlert(): void {
-        if (this._isMounted)
-            this.setState({
-                alertIsOpen: false
-            });
+        this.setState({
+            alertIsOpen: false
+        });
     }
 
     render(): JSX.Element {
