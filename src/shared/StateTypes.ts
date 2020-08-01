@@ -18,11 +18,11 @@ export interface LoginForm {
 }
 
 export interface SigninReducerState {
-    isSignedin: boolean,
+    isSignedin?: boolean,
     token: string
 }
 
 export interface HeaderReducerState {
     lan: Languages,
-    user: User
+    user: string
 }

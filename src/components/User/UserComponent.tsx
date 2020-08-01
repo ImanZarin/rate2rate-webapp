@@ -29,8 +29,7 @@ type MyState = {
 }
 
 type MyProps = {
-    isLoggedin: boolean;
-    mUser: User;
+    isLoggedin?: boolean;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     tr: any;
 }

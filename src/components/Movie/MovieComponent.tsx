@@ -29,8 +29,7 @@ type MyState = {
 }
 
 type MyProps = {
-    isLoggedin: boolean;
-    mUser: User;
+    isLoggedin?: boolean;
     logout: () => void;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     tr: any;
@@ -172,10 +171,8 @@ class MovieComponent extends Component<RouteComponentProps<any> & MyProps, MySta
                 if (response.ok) {
                     response.json()
                         .then((r: GetMovieInfoResponse | GetMovieInfoForSignedResponse) => {
-                            console.log("actual response is: ", r);
                             if ((r as GetMovieInfoForSignedResponse).myRate !== undefined) {
                                 const r2 = r as GetMovieInfoForSignedResponse;
-                                console.log("signed response is: ", r2);
                                 switch (r2.result) {
                                     case GetMovieInfoForSignedResponseResult.movieNotFound:
                                         {
@@ -221,7 +218,6 @@ class MovieComponent extends Component<RouteComponentProps<any> & MyProps, MySta
 
                             } else {
                                 const r3 = r as GetMovieInfoResponse;
-                                console.log("response is: ", r3);
                                 switch (r3.result) {
                                     case GetMovieInfoResponseResult.movieNotFound:
                                         {

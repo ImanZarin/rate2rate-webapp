@@ -5,7 +5,7 @@ import { MyStorage } from "../../shared/Enums";
 
 
 export const initialSigninReducerState: SigninReducerState = {
-    isSignedin: false,
+    isSignedin: undefined,
     token: ""
 }
 

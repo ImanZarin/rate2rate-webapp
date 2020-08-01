@@ -1,6 +1,5 @@
 import { Languages } from "../../shared/Enums"
 import { ActionTypes, MyActions } from "../../shared/ActionTypes"
-import { User } from "../../shared/dto.models"
 
 export const languageChange = (l: Languages): MyActions => {
     return {
@@ -9,7 +8,7 @@ export const languageChange = (l: Languages): MyActions => {
     }
 }
 
-export const userChange = (u: User): MyActions => {
+export const userChange = (u: string): MyActions => {
     return {
         type: ActionTypes.userChange,
         payload: u

@@ -16,12 +16,11 @@ import { MyStorage } from "../../shared/Enums";
 import { MyFetch } from "../../shared/my-fetch";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { LoginUserResponseResult } from "../../shared/result.enums";
-import { User } from "../../shared/dto.models";
 
 interface MyProps {
-    changeUser: (u: User) => void;
+    changeUser: (u: string) => void;
     changeToken: (t: string) => void;
-    isLoggedin: boolean;
+    isLoggedin?: boolean;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     translate: any;
 }
@@ -138,8 +137,8 @@ class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MySt
                                         break;
                                     case LoginUserResponseResult.success:
                                         localStorage.setItem(MyStorage.token, r.accessToken);
-                                        localStorage.setItem(MyStorage.user, JSON.stringify(r.user));
-                                        this.props.changeUser(r.user);
+                                        localStorage.setItem(MyStorage.usertag, r.user.username);
+                                        this.props.changeUser(r.user.username);
                                         this.props.changeToken(r.accessToken);
                                         //TODO redirect to profile                                            
                                         break;
@@ -177,8 +176,8 @@ class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MySt
                                         break;
                                     case LoginUserResponseResult.success:
                                         localStorage.setItem(MyStorage.token, r.accessToken);
-                                        localStorage.setItem(MyStorage.user, JSON.stringify(r.user));
-                                        this.props.changeUser(r.user);
+                                        localStorage.setItem(MyStorage.usertag, r.user.username);
+                                        this.props.changeUser(r.user.username);
                                         this.props.changeToken(r.accessToken);
                                         //TODO redirect to profile                                            
                                         break;

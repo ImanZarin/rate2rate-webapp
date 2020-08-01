@@ -30,7 +30,7 @@ export type ChangeLanguageAction = {
 
 export type ChangeUserAction = {
     type: ActionTypes;
-    payload: User;
+    payload: string;
 }
 
 export type ChangeTokenAction = {
