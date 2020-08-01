@@ -13,10 +13,7 @@ import './movie.scss';
 import { MyFetch } from '../../shared/my-fetch';
 import { GetMovieInfoForSignedResponseResult, GetMovieInfoResponseResult, UpdateMovieRateResponseResult, SearchMovieResponseResult } from '../../shared/result.enums';
 import { Movie, IMDBsearch, User, MovieRate } from '../../shared/dto.models';
-
-type RouteParams = {
-    id: string;
-}
+import { isNullOrUndefined } from 'util';
 
 type MyState = {
     isLoading: boolean;
@@ -39,11 +36,14 @@ type MyProps = {
     tr: any;
 }
 
-class MovieComponent extends Component<RouteComponentProps<RouteParams> & MyProps, MyState>{
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+class MovieComponent extends Component<RouteComponentProps<any> & MyProps, MyState>{
 
     myfetchObjet = new MyFetch();
+    _isMounted = false;
 
-    constructor(props: RouteComponentProps<RouteParams> & MyProps) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    constructor(props: RouteComponentProps<any> & MyProps) {
         super(props);
         this.state = {
             isLoading: false,
@@ -74,13 +74,19 @@ class MovieComponent extends Component<RouteComponentProps<RouteParams> & MyProp
     }
 
     componentDidMount(): void {
-        if (!this.props.match.params.id) {
+        this._isMounted = true;
+        if (!isNullOrUndefined(this.props.match.params.id)) {
             this.setState({
                 searchMode: false
             });
             this.fetchList(this.props.match.params.id);
         }
 
+    }
+
+    componentWillUnmount(): void {
+        this._isMounted = false;
+        this.myfetchObjet.abort();
     }
 
     showAndHideAlert(e: Error, wait: number): void {
@@ -90,6 +96,8 @@ class MovieComponent extends Component<RouteComponentProps<RouteParams> & MyProp
             isLoading: false
         });
         setTimeout(() => {
+            if (!this._isMounted)
+                return;
             this.setState({
                 alertIsOpen: false,
                 isLoading: false
@@ -115,6 +123,8 @@ class MovieComponent extends Component<RouteComponentProps<RouteParams> & MyProp
         });
         this.myfetchObjet.rateMovie(newRate, this.props.match.params.id)
             .then(response => {
+                if (!this._isMounted)
+                    return;
                 this.toggleModal();
                 if (response.ok) {
                     response.json()
@@ -162,8 +172,10 @@ class MovieComponent extends Component<RouteComponentProps<RouteParams> & MyProp
                 if (response.ok) {
                     response.json()
                         .then((r: GetMovieInfoResponse | GetMovieInfoForSignedResponse) => {
-                            if ((r as GetMovieInfoForSignedResponse).myRate.rate) {
+                            console.log("actual response is: ", r);
+                            if ((r as GetMovieInfoForSignedResponse).myRate !== undefined) {
                                 const r2 = r as GetMovieInfoForSignedResponse;
+                                console.log("signed response is: ", r2);
                                 switch (r2.result) {
                                     case GetMovieInfoForSignedResponseResult.movieNotFound:
                                         {
@@ -197,12 +209,19 @@ class MovieComponent extends Component<RouteComponentProps<RouteParams> & MyProp
                                             movie: r2.movie,
                                         });
                                         break;
+                                    case GetMovieInfoForSignedResponseResult.wrongUrl:
+                                        {
+                                            const err = new Error(this.props.tr("movie-fetchinfo-err-noparamid"));
+                                            this.showAndHideAlert(err, Constants.waitNormal);
+                                        }
+                                        break;
                                     default:
                                         break;
                                 }
 
                             } else {
                                 const r3 = r as GetMovieInfoResponse;
+                                console.log("response is: ", r3);
                                 switch (r3.result) {
                                     case GetMovieInfoResponseResult.movieNotFound:
                                         {
@@ -226,7 +245,12 @@ class MovieComponent extends Component<RouteComponentProps<RouteParams> & MyProp
                                             movie: r3.movie
                                         });
                                         break;
-                                    default:
+                                    case GetMovieInfoResponseResult.wrongUrl:
+                                        {
+                                            const err = new Error(this.props.tr("movie-fetchinfo-err-noparamid"));
+                                            this.showAndHideAlert(err, Constants.waitNormal);
+                                        }
+                                        break; default:
                                         break;
                                 }
                             }

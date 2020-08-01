@@ -37,5 +37,6 @@
     "profile-fetch-err-nouser": "the user does not exist",
     "profile-movie-maintext-nomovie": "You have not rated any movie yet.\n Start rating movies by searching their names.",
     "profile-buddy-maintext-nobuddy": "You have not rated anyone yet.\n Start rating people by searching their usertag or email.",
-    "profile-logout-button": "logout"
+    "profile-logout-button": "logout",
+    "movie-fetchinfo-err-noparamid": "this is not an approprite address"
 }
