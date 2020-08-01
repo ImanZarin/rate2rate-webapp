@@ -1,21 +1,20 @@
 import { MyActions, ActionTypes, ChangeLanguageAction, ChangeUserAction } from "../../shared/ActionTypes";
 import { Languages } from '../../shared/Enums';
 import { HeaderReducerState } from "../../shared/StateTypes";
-import { IUser } from '../../shared/ApiTypes';
+import { User } from "../../shared/dto.models";
 
-const initUser: IUser = {
+const initUser: User = {
     username: "",
-    _id: "",
-    admin: false,
+    id: "",
     email: "",
     buddies: [{
         buddyId: "",
         rate: 0,
-        reateDate: ""
+        rateDate: "",
+        buddyName: "",
+        userId: "",
+        userName: ""
     }],
-    password: "",
-    insertDate: "",
-    updateDate: ""
 }
 const initialState = {
     lan: Languages.en,

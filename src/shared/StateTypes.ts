@@ -1,5 +1,5 @@
 import { Languages } from "./Enums";
-import { IUser } from "./ApiTypes";
+import { User } from "./dto.models";
 
 export interface SigninForm {
     username: string,
@@ -24,24 +24,5 @@ export interface SigninReducerState {
 
 export interface HeaderReducerState {
     lan: Languages,
-    user: IUser
+    user: User
 }
-
-export interface MovieRate {
-        _id: string;
-        title: string;
-        year: number;
-        rate: number;
-        rateDate: string;
-}
-
-export interface Movie {
-    _id: string;
-    title: string;
-    year: number;
-    brief: string;
-    imageUrl: string;
-    genre: string[];
-    cast: string[];
-}
-

@@ -1,5 +1,5 @@
 import { Languages } from './Enums';
-import { IUser } from './ApiTypes';
+import { User } from './dto.models';
 
 
 export enum ActionTypes {
@@ -30,7 +30,7 @@ export type ChangeLanguageAction = {
 
 export type ChangeUserAction = {
     type: ActionTypes;
-    payload: IUser;
+    payload: User;
 }
 
 export type ChangeTokenAction = {

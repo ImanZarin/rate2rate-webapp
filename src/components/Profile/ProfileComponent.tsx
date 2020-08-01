@@ -2,19 +2,19 @@
 import React, { Component, Fragment } from "react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Nav, NavItem, NavLink, TabContent, TabPane, Row, Col, Alert, Button } from "reactstrap";
-import { GetProfileInfoResponse, IUser, UserRate } from "../../shared/ApiTypes";
+import { GetProfileInfoResponse } from "../../shared/ApiTypes";
 import { MyFetch } from "../../shared/my-fetch";
 import { Constants } from "../../shared/Constants";
 import { GetProfileInfoResponseResult } from "../../shared/result.enums";
-import { MovieRate } from "../../shared/StateTypes";
 import './profile.scss';
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { MyStorage } from "../../shared/Enums";
+import { MovieRate, User, UserRate } from "../../shared/dto.models";
 
 type MyState = {
     activeTab: number;
     myMovies: MovieRate[];
-    profile: IUser;
+    profile: User;
     myBuddies: UserRate[];
     isLoading: boolean;
     alertIsOpen: boolean;
@@ -38,31 +38,33 @@ class ProfileComponent extends Component<MyProps & RouteComponentProps<any>, MyS
         this.state = {
             activeTab: 1,
             profile: {
-                _id: "",
-                admin: false,
+                id: "",
                 buddies: [{
                     buddyId: "",
+                    buddyName: "",
                     rate: 0,
-                    reateDate: ""
+                    rateDate: "",
+                    userId: "",
+                    userName: "",
                 }],
                 email: "",
-                password: "",
                 username: "",
-                insertDate: "",
-                updateDate: ""
             },
             myMovies: [{
-                _id: "",
                 rate: 0,
-                title: "",
-                year: 0,
-                rateDate: ""
+                movieId: "",
+                movieTitle: "",
+                rateDate: "",
+                userId: "",
+                userName: ""
             }],
             myBuddies: [{
                 buddyId: "",
                 rate: 0,
                 rateDate: "",
-                buddyName: ""
+                buddyName: "",
+                userId: "",
+                userName: ""
             }],
             alertIsOpen: false,
             error: new Error,
@@ -207,11 +209,11 @@ class ProfileComponent extends Component<MyProps & RouteComponentProps<any>, MyS
                     <TabPane tabId={1}>
                         {this.state.myMovies.map((movie) => {
                             return (
-                                <Row key={movie._id} className="my_row"
-                                    onClick={() => this.props.history.push("movie/" + movie._id)}>
+                                <Row key={movie.movieId} className="my_row"
+                                    onClick={() => this.props.history.push("movie/" + movie.movieId)}>
                                     <Col sm="3">
                                         <div className="row_text">
-                                            {movie.title}
+                                            {movie.movieTitle}
                                         </div>
                                     </Col>
                                     <Col sm="3">

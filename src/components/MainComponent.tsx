@@ -15,11 +15,11 @@ import { languageChange, userChange } from "./Header/header-action";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import UserComponent from "./User/UserComponent";
 import { tokenChange, logout } from "./Signin/signin-action";
-import { IUser } from "../shared/ApiTypes";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import MovieComponent from "./Movie/MovieComponent";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import ProfileComponent from "./Profile/ProfileComponent";
+import { User } from "../shared/dto.models";
 
 //interface StateProps extends RootState, ReactCookieProps {
 interface StateProps extends RootState {
@@ -34,7 +34,7 @@ const mapStateToProps = (state: StateProps) => ({
 
 interface DispatchProps {
     changeLanguage: (l: Languages) => void;
-    changeUser: (u: IUser) => void;
+    changeUser: (u: User) => void;
     changeToken: (t: string) => void;
     logout: () => void;
 }
@@ -42,7 +42,7 @@ interface DispatchProps {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, any, MyActions>): DispatchProps => ({
     changeLanguage: (l: Languages): MyActions => dispatch(languageChange(l)),
-    changeUser: (u: IUser): MyActions => dispatch(userChange(u)),
+    changeUser: (u: User): MyActions => dispatch(userChange(u)),
     changeToken: (t: string): MyActions => dispatch(tokenChange(t)),
     logout: (): MyActions => dispatch(logout())
 });

@@ -11,14 +11,15 @@ import "./signin.scss";
 import { LOADING } from '../LoadingComponent';
 import { Constants } from '../../shared/Constants';
 import 'bootstrap/dist/css/bootstrap.css';
-import { LoginUserResponse, IUser } from "../../shared/ApiTypes";
+import { LoginUserResponse } from "../../shared/ApiTypes";
 import { MyStorage } from "../../shared/Enums";
 import { MyFetch } from "../../shared/my-fetch";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { LoginUserResponseResult } from "../../shared/result.enums";
+import { User } from "../../shared/dto.models";
 
 interface MyProps {
-    changeUser: (u: IUser) => void;
+    changeUser: (u: User) => void;
     changeToken: (t: string) => void;
     isLoggedin: boolean;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
