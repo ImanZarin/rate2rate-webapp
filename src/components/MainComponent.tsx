@@ -95,6 +95,7 @@ class MainComponent extends Component<MyProps> {
                         isLoggedin={this.props.signin.isSignedin} />} />
                 <Route path="/home" component={(): JSX.Element =>
                     <HomeComponent
+                        user={this.props.header.user}
                         tr={this.props.translate} />} />
                 <Route path="/user/:id" component={(): JSX.Element =>
                     <UserComponent

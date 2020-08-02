@@ -82,4 +82,8 @@ export class MyFetch {
     public async getProfileInfo(): Promise<any> {
         return this.myFetch(ReqTypes.get, "movieusers/profile", null);
     }
+
+    public async getHomeMovies(): Promise<any> {
+        return this.myFetch(ReqTypes.get, "movieusers/home", null);
+    }
 }

@@ -12,7 +12,7 @@ import { RateModal, ModalTypes } from '../Rate/RateComponent';
 import './user.scss';
 import { MyFetch } from '../../shared/my-fetch';
 import { GetUserInfoResponseResult, GetUserInfoForSignedResponseResult, UpdateBuddyResponseResult } from '../../shared/result.enums';
-import { MovieRate, User } from '../../shared/dto.models';
+import { MovieRate } from '../../shared/dto.models';
 
 type RouteParams = {
     id: string;

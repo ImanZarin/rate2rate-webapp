@@ -40,3 +40,10 @@ export type IMDBsearch = {
     imdbID: string;
     Poster: string;
 }
+
+export type MovieSuggest = {
+    movieId: string;
+    movieTitle: string;
+    rates: number[];
+    likeability: number;
+}

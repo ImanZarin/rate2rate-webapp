@@ -39,5 +39,7 @@
     "profile-buddy-maintext-nobuddy": "Et ole vielä arvioinut ketään.\n Aloita ihmisten luokitus etsimällä heidän käyttömerkkiä tai sähköpostia.",
     "profile-logout-button": "kirjautua ulos",
     "home-livelist-title": "Viimeaikaiset Hinnat",
-    "movie-fetchinfo-err-noparamid": "tämä ei ole oikea osoite"
+    "movie-fetchinfo-err-noparamid": "tämä ei ole oikea osoite",
+    "home-fetch-err-nomovie": "tällä hetkellä ei ole hintoja",
+    "home-suggests-title": "ehdotti elokuvia"
 }

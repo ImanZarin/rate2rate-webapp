@@ -7,7 +7,6 @@ import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import { Languages, Pages } from "../../shared/Enums";
 import i18n from "../../i18n";
 import './header.scss';
-import { User } from "../../shared/dto.models";
 
 type MyProps = {
     lan: Languages;

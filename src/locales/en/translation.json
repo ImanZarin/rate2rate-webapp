@@ -39,5 +39,7 @@
     "profile-buddy-maintext-nobuddy": "You have not rated anyone yet.\n Start rating people by searching their usertag or email.",
     "profile-logout-button": "logout",
     "home-livelist-title": "Recent Rates",
-    "movie-fetchinfo-err-noparamid": "this is not an approprite address"
+    "movie-fetchinfo-err-noparamid": "this is not an approprite address",
+    "home-fetch-err-nomovie": "there are no rates to show at the moment",
+    "home-suggests-title": "Suggested movies for"
 }

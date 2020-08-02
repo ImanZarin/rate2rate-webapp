@@ -59,5 +59,11 @@ export enum GetProfileInfoResponseResult {
 
 export enum GetRecentRatesResponseResult {
     success = "SUCCESS",
-    fail = "FAIL"
+    noMovie = "EMPTY_LIST",
+}
+
+export enum GetRecentRatesForSignedResponseResult{
+    noMovie = "EMPTY_MOVIE_LIST",
+    success = "SUCCESS",
+    noSuggest = "EMPTY_SUGGEST_LIST"
 }

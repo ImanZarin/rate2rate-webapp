@@ -1,6 +1,6 @@
 import { GetUserInfoResponseResult, GetUserInfoForSignedResponseResult, LoginUserResponseResult, 
-    UpdateBuddyResponseResult, GetMovieInfoResponseResult, GetMovieInfoForSignedResponseResult, UpdateMovieRateResponseResult, SearchMovieResponseResult, GetProfileInfoResponseResult, GetRecentRatesResponseResult } from "./result.enums";
-import { MovieRate, UserRate, User, Movie, IMDBsearch } from "./dto.models";
+    UpdateBuddyResponseResult, GetMovieInfoResponseResult, GetMovieInfoForSignedResponseResult, UpdateMovieRateResponseResult, SearchMovieResponseResult, GetProfileInfoResponseResult, GetRecentRatesResponseResult, GetRecentRatesForSignedResponseResult } from "./result.enums";
+import { MovieRate, UserRate, User, Movie, IMDBsearch, MovieSuggest } from "./dto.models";
 
 export interface GetUserInfoResponse {
     result: GetUserInfoResponseResult,
@@ -56,16 +56,13 @@ export interface GetProfileInfoResponse {
     me: User
 }
 
-export interface MovieUserNames {
-    movieId: string;
-    userId: string;
-    movieTitle: string;
-    userName: string;
-    rate: number;
-}
-
 export interface GetRecentRatesResponse {
     result: GetRecentRatesResponseResult,
-    movies: MovieUserNames[]
-    me: User
+    movies: MovieRate[]
+}
+
+export interface GetRecentRatesForSignedResponse {
+    result: GetRecentRatesForSignedResponseResult,
+    movies: MovieRate[],
+    suggests: MovieSuggest[],
 }
