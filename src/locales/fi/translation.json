@@ -29,5 +29,14 @@
     "movie-rating-err-notfound": "ei ole kirjaa siitä, että arvioisit tämän elokuvan",
     "movie-search-placeholder": "etsi elokuvia, näyttelijöitä, ohjaajia ...",
     "movie-search-err-failed": "jotain meni pieleen",
-    "movie-search-err-nomovie": "mikään elokuva ei vastaa nimeä"
+    "movie-search-err-nomovie": "mikään elokuva ei vastaa nimeä",
+    "profile-tabs-movies-title": "Elokuvani",
+    "profile-tabs-bodies-title": "Ystäväni",
+    "profile-tabs-me-title": "Itse",
+    "profile-fetch-err-emptylists": "et ole vielä arvioinut yhtäkään elokuvaa tai käyttäjää",
+    "profile-fetch-err-nouser": "käyttäjää ei ole olemassa",
+    "profile-movie-maintext-nomovie": "Et ole vielä arvioinut yhtäkään elokuvaa.\n Aloita elokuvien arviointi etsimällä niiden nimiä.",
+    "profile-buddy-maintext-nobuddy": "Et ole vielä arvioinut ketään.\n Aloita ihmisten luokitus etsimällä heidän käyttömerkkiä tai sähköpostia.",
+    "profile-logout-button": "kirjautua ulos",
+    "movie-fetchinfo-err-noparamid": "tämä ei ole oikea osoite"
 }

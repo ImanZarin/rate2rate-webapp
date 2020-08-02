@@ -3,67 +3,66 @@ import React, { Component, Fragment, ChangeEvent } from 'react';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { LOADING } from '../LoadingComponent';
 import { Constants } from '../../shared/Constants';
-import { MovieRate } from '../../shared/StateTypes';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Alert, Button, Modal, ModalHeader, ModalBody, InputGroup, InputGroupAddon, Input } from 'reactstrap';
-import { GetUserInfoResponse, GetUserInfoForSignedResponse, IUser, UpdateBodyResponse, IMovie, GetMovieInfoResponse, GetMovieInfoForSignedResponse, UserRate, UpdateMovieRateResponse, SearchMovieResponse, IMDBsearch } from '../../shared/ApiTypes';
+import { GetMovieInfoResponse, GetMovieInfoForSignedResponse, UpdateMovieRateResponse, SearchMovieResponse } from '../../shared/ApiTypes';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { RateModal, ModalTypes } from '../Rate/RateComponent';
 import './movie.scss';
 import { MyFetch } from '../../shared/my-fetch';
-import { GetUserInfoResponseResult, GetUserInfoForSignedResponseResult, UpdateBodyResponseResult, GetMovieInfoForSignedResponseResult, GetMovieInfoResponseResult, UpdateMovieRateResponseResult, SearchMovieResponseResult } from '../../shared/result.enums';
-
-type RouteParams = {
-    id: string;
-}
+import { GetMovieInfoForSignedResponseResult, GetMovieInfoResponseResult, UpdateMovieRateResponseResult, SearchMovieResponseResult } from '../../shared/result.enums';
+import { Movie, IMDBsearch, User, MovieRate } from '../../shared/dto.models';
+import { isNullOrUndefined } from 'util';
 
 type MyState = {
     isLoading: boolean;
-    mainList: UserRate[];
+    mainList: MovieRate[];
     alertIsOpen: boolean;
     error: Error;
-    movie: IMovie;
+    movie: Movie;
     modalIsOpen: boolean;
     personRate: number;
     searchText: string;
     searchResult: IMDBsearch[];
+    searchMode: boolean;
 }
 
 type MyProps = {
-    isLoggedin: boolean;
-    mUser: IUser;
-    searchMode: boolean;
+    isLoggedin?: boolean;
+    logout: () => void;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     tr: any;
 }
 
-class MovieComponent extends Component<RouteComponentProps<RouteParams> & MyProps, MyState>{
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+class MovieComponent extends Component<RouteComponentProps<any> & MyProps, MyState>{
 
     myfetchObjet = new MyFetch();
+    _isMounted = false;
 
-    constructor(props: RouteComponentProps<RouteParams> & MyProps) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    constructor(props: RouteComponentProps<any> & MyProps) {
         super(props);
         this.state = {
             isLoading: false,
             alertIsOpen: false,
             movie: {
-                _id: "",
                 title: "",
                 genre: [],
-                cast: [],
+                actors: [],
                 director: [],
-                brief: "",
-                imageUrl: "",
+                plot: "",
+                poster: "",
                 year: 0,
-                imdbId: ""
             },
             error: new Error,
             mainList: [],
             modalIsOpen: false,
             personRate: 0,
             searchText: "",
-            searchResult: []
+            searchResult: [],
+            searchMode: true
         }
         this.showAndHideAlert = this.showAndHideAlert.bind(this);
         this.closeAlert = this.closeAlert.bind(this);
@@ -74,9 +73,19 @@ class MovieComponent extends Component<RouteComponentProps<RouteParams> & MyProp
     }
 
     componentDidMount(): void {
-        if (!this.props.searchMode)
+        this._isMounted = true;
+        if (!isNullOrUndefined(this.props.match.params.id)) {
+            this.setState({
+                searchMode: false
+            });
             this.fetchList(this.props.match.params.id);
+        }
 
+    }
+
+    componentWillUnmount(): void {
+        this._isMounted = false;
+        this.myfetchObjet.abort();
     }
 
     showAndHideAlert(e: Error, wait: number): void {
@@ -86,6 +95,8 @@ class MovieComponent extends Component<RouteComponentProps<RouteParams> & MyProp
             isLoading: false
         });
         setTimeout(() => {
+            if (!this._isMounted)
+                return;
             this.setState({
                 alertIsOpen: false,
                 isLoading: false
@@ -111,6 +122,8 @@ class MovieComponent extends Component<RouteComponentProps<RouteParams> & MyProp
         });
         this.myfetchObjet.rateMovie(newRate, this.props.match.params.id)
             .then(response => {
+                if (!this._isMounted)
+                    return;
                 this.toggleModal();
                 if (response.ok) {
                     response.json()
@@ -158,7 +171,7 @@ class MovieComponent extends Component<RouteComponentProps<RouteParams> & MyProp
                 if (response.ok) {
                     response.json()
                         .then((r: GetMovieInfoResponse | GetMovieInfoForSignedResponse) => {
-                            if ((r as GetMovieInfoForSignedResponse).rate) {
+                            if ((r as GetMovieInfoForSignedResponse).myRate !== undefined) {
                                 const r2 = r as GetMovieInfoForSignedResponse;
                                 switch (r2.result) {
                                     case GetMovieInfoForSignedResponseResult.movieNotFound:
@@ -171,7 +184,7 @@ class MovieComponent extends Component<RouteComponentProps<RouteParams> & MyProp
                                         {
                                             this.setState({
                                                 movie: r2.movie,
-                                                personRate: r2.rate
+                                                personRate: r2.myRate.rate
                                             });
                                             const err = new Error(this.props.tr("movie-fetchinfo-err-emptyusers"));
                                             this.showAndHideAlert(err, Constants.waitNormal);
@@ -182,8 +195,22 @@ class MovieComponent extends Component<RouteComponentProps<RouteParams> & MyProp
                                             isLoading: false,
                                             mainList: r2.users,
                                             movie: r2.movie,
-                                            personRate: r2.rate
+                                            personRate: r2.myRate.rate
                                         });
+                                        break;
+                                    case GetMovieInfoForSignedResponseResult.userFake:
+                                        this.props.logout();
+                                        this.setState({
+                                            isLoading: false,
+                                            mainList: [],
+                                            movie: r2.movie,
+                                        });
+                                        break;
+                                    case GetMovieInfoForSignedResponseResult.wrongUrl:
+                                        {
+                                            const err = new Error(this.props.tr("movie-fetchinfo-err-noparamid"));
+                                            this.showAndHideAlert(err, Constants.waitNormal);
+                                        }
                                         break;
                                     default:
                                         break;
@@ -191,7 +218,6 @@ class MovieComponent extends Component<RouteComponentProps<RouteParams> & MyProp
 
                             } else {
                                 const r3 = r as GetMovieInfoResponse;
-                                console.log("my rate second: ", this.state.personRate);
                                 switch (r3.result) {
                                     case GetMovieInfoResponseResult.movieNotFound:
                                         {
@@ -215,7 +241,12 @@ class MovieComponent extends Component<RouteComponentProps<RouteParams> & MyProp
                                             movie: r3.movie
                                         });
                                         break;
-                                    default:
+                                    case GetMovieInfoResponseResult.wrongUrl:
+                                        {
+                                            const err = new Error(this.props.tr("movie-fetchinfo-err-noparamid"));
+                                            this.showAndHideAlert(err, Constants.waitNormal);
+                                        }
+                                        break; default:
                                         break;
                                 }
                             }
@@ -320,7 +351,7 @@ class MovieComponent extends Component<RouteComponentProps<RouteParams> & MyProp
 
         return (
             <Fragment>
-                <InputGroup style={{ visibility: this.props.searchMode ? "visible" : "hidden" }}>
+                <InputGroup style={{ visibility: this.state.searchMode ? "visible" : "hidden" }}>
                     <InputGroupAddon addonType="prepend">
                         <Button className="fa fa-search fa-lg"
                             onClick={this.onSearchSubmit}></Button>
@@ -334,7 +365,7 @@ class MovieComponent extends Component<RouteComponentProps<RouteParams> & MyProp
                             }
                         }} />
                 </InputGroup>
-                <div style={{ visibility: this.props.isLoggedin && !this.props.searchMode ? "visible" : "hidden", margin: "auto" }}
+                <div style={{ visibility: this.props.isLoggedin && !this.state.searchMode ? "visible" : "hidden", margin: "auto" }}
                     onClick={this.toggleModal}>
                     <span className={this.state.personRate > 0 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
                     <span className={this.state.personRate > 1 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
@@ -342,14 +373,14 @@ class MovieComponent extends Component<RouteComponentProps<RouteParams> & MyProp
                     <span className={this.state.personRate > 3 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
                     <span className={this.state.personRate > 4 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
                 </div>
-                <div style={{ visibility: this.props.searchMode ? "hidden" : "visible" }}>
-                    <img src={this.state.movie.imageUrl} className="img_main"/>
+                <div style={{ visibility: this.state.searchMode ? "hidden" : "visible" }}>
+                    <img src={this.state.movie.poster} className="img_main" />
                     <h1 style={{ margin: "auto" }}>{this.state.movie.title}</h1>
                     <h3>{this.state.movie.year}</h3>
                     <h2>{this.state.movie.genre?.join(" ,")}</h2>
-                    <h2>{this.state.movie.cast?.join(" ,")}</h2>
+                    <h2>{this.state.movie.actors?.join(" ,")}</h2>
                     <h2>{this.state.movie.director?.join(" ,")}</h2>
-                    <h5>{this.state.movie.brief}</h5>
+                    <h5>{this.state.movie.plot}</h5>
                     <Modal isOpen={this.state.modalIsOpen} toggle={this.toggleModal}>
                         <ModalHeader>
                             <h5>Please Rate The Movies According To The Chart</h5>
@@ -363,12 +394,12 @@ class MovieComponent extends Component<RouteComponentProps<RouteParams> & MyProp
                     </h3>
                     {this.state.mainList.map((userRated) => {
                         return (
-                            <div key={userRated._id}>{userRated.name} : {userRated.rate} </div>
+                            <div key={userRated.userId}>{userRated.userName} : {userRated.rate} </div>
                         );
                     }
                     )}
                 </div>
-                <div style={{ visibility: this.props.searchMode ? "visible" : "hidden" }}>
+                <div style={{ visibility: this.state.searchMode ? "visible" : "hidden" }}>
                     {this.state.searchResult.map((ms) => {
                         return (
                             <div key={ms.imdbID} onClick={() => this.onSelectMovie(ms.imdbID)}

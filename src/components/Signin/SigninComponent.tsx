@@ -11,16 +11,16 @@ import "./signin.scss";
 import { LOADING } from '../LoadingComponent';
 import { Constants } from '../../shared/Constants';
 import 'bootstrap/dist/css/bootstrap.css';
-import { LoginUserResponse, IUser } from "../../shared/ApiTypes";
+import { LoginUserResponse } from "../../shared/ApiTypes";
 import { MyStorage } from "../../shared/Enums";
 import { MyFetch } from "../../shared/my-fetch";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { LoginUserResponseResult } from "../../shared/result.enums";
 
 interface MyProps {
-    changeUser: (u: IUser) => void;
+    changeUser: (u: string) => void;
     changeToken: (t: string) => void;
-    isLoggedin: boolean;
+    isLoggedin?: boolean;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     translate: any;
 }
@@ -40,9 +40,11 @@ const initForm: SigninForm = {
     password: ""
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MyState> {
 
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(props: MyProps & RouteComponentProps<any>) {
         super(props);
         this.state = {
@@ -135,8 +137,8 @@ class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MySt
                                         break;
                                     case LoginUserResponseResult.success:
                                         localStorage.setItem(MyStorage.token, r.accessToken);
-                                        localStorage.setItem(MyStorage.user, JSON.stringify(r.user));
-                                        this.props.changeUser(r.user);
+                                        localStorage.setItem(MyStorage.usertag, r.user.username);
+                                        this.props.changeUser(r.user.username);
                                         this.props.changeToken(r.accessToken);
                                         //TODO redirect to profile                                            
                                         break;
@@ -174,8 +176,8 @@ class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MySt
                                         break;
                                     case LoginUserResponseResult.success:
                                         localStorage.setItem(MyStorage.token, r.accessToken);
-                                        localStorage.setItem(MyStorage.user, JSON.stringify(r.user));
-                                        this.props.changeUser(r.user);
+                                        localStorage.setItem(MyStorage.usertag, r.user.username);
+                                        this.props.changeUser(r.user.username);
                                         this.props.changeToken(r.accessToken);
                                         //TODO redirect to profile                                            
                                         break;
@@ -198,29 +200,6 @@ class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MySt
 
         }
 
-    }
-
-    updateMovie(): void {
-        const values = {
-            year: 2001,
-            brief: "this has been changed from client throgh local storage"
-        }
-        //console.log("the access token is: ", this.props.cookies?.get("access_token"));
-        fetch(Constants.baseUrl + 'movies/5eb466360884d346a82b58e5', {
-            method: "PUT",
-            body: JSON.stringify(values),
-            headers: {
-                // eslint-disable-next-line @typescript-eslint/naming-convention
-                "Content-Type": "application/json",
-                // eslint-disable-next-line @typescript-eslint/naming-convention
-                "Authorization": 'Bearer ' + localStorage.getItem(MyStorage.token),
-                // eslint-disable-next-line @typescript-eslint/naming-convention
-            },
-            credentials: "omit"
-        }).then(resp => {
-            console.log("update movie respond: ", resp);
-        }, err => { console.log("err type one: ", err) })
-            .catch(err => { console.log("err type two: ", err) })
     }
 
     render(): JSX.Element {

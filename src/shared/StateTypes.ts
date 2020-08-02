@@ -1,5 +1,4 @@
 import { Languages } from "./Enums";
-import { IUser } from "./ApiTypes";
 
 export interface SigninForm {
     username: string,
@@ -18,29 +17,11 @@ export interface LoginForm {
 }
 
 export interface SigninReducerState {
-    isSignedin: boolean,
+    isSignedin?: boolean,
     token: string
 }
 
 export interface HeaderReducerState {
     lan: Languages,
-    user: IUser
+    user: string
 }
-
-export interface MovieRate {
-        _id: string;
-        title: string;
-        year: number;
-        rate: number;
-}
-
-export interface Movie {
-    _id: string;
-    title: string;
-    year: number;
-    brief: string;
-    imageUrl: string;
-    genre: string[];
-    cast: string[];
-}
-

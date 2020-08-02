@@ -29,5 +29,14 @@
     "movie-rating-err-notfound": "there is no record of you rating this movie",
     "movie-search-placeholder": "search movies, actors, directors ...",
     "movie-search-err-failed": "somthing went wrong",
-    "movie-search-err-nomovie": "no movie is matched to the name"
+    "movie-search-err-nomovie": "no movie is matched to the name",
+    "profile-tabs-movies-title": "My Movies",
+    "profile-tabs-bodies-title": "My Buddies",
+    "profile-tabs-me-title": "Myself",
+    "profile-fetch-err-emptylists": "you have not rated any movie or user yet",
+    "profile-fetch-err-nouser": "the user does not exist",
+    "profile-movie-maintext-nomovie": "You have not rated any movie yet.\n Start rating movies by searching their names.",
+    "profile-buddy-maintext-nobuddy": "You have not rated anyone yet.\n Start rating people by searching their usertag or email.",
+    "profile-logout-button": "logout",
+    "movie-fetchinfo-err-noparamid": "this is not an approprite address"
 }
