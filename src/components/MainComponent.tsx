@@ -15,7 +15,6 @@ import { languageChange, userChange } from "./Header/header-action";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import UserComponent from "./User/UserComponent";
 import { tokenChange, logout } from "./Signin/signin-action";
-import { IUser } from "../shared/ApiTypes";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import MovieComponent from "./Movie/MovieComponent";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -36,7 +35,7 @@ const mapStateToProps = (state: StateProps) => ({
 
 interface DispatchProps {
     changeLanguage: (l: Languages) => void;
-    changeUser: (u: IUser) => void;
+    changeUser: (u: string) => void;
     changeToken: (t: string) => void;
     logout: () => void;
 }
@@ -44,7 +43,7 @@ interface DispatchProps {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, any, MyActions>): DispatchProps => ({
     changeLanguage: (l: Languages): MyActions => dispatch(languageChange(l)),
-    changeUser: (u: IUser): MyActions => dispatch(userChange(u)),
+    changeUser: (u: string): MyActions => dispatch(userChange(u)),
     changeToken: (t: string): MyActions => dispatch(tokenChange(t)),
     logout: (): MyActions => dispatch(logout())
 });
@@ -63,16 +62,20 @@ class MainComponent extends Component<MyProps> {
                 this.props.logout();
             else
                 this.props.changeToken(r);
+            if (localStorage.getItem(MyStorage.usertag))
+                this.props.changeUser(localStorage.getItem(MyStorage.usertag) || "");
         }
 
     }
 
     render(): JSX.Element {
+        if (this.props.signin.isSignedin === undefined)
+            return (<div></div>);
         return (
             <div>
                 <HeaderComponent
                     lan={this.props.header.lan}
-                    mUser={this.props.header.user}
+                    usertag={this.props.header.user}
                     changeUser={this.props.changeUser}
                     changeLan={this.props.changeLanguage}
                     translate={this.props.translate}
@@ -96,19 +99,16 @@ class MainComponent extends Component<MyProps> {
                 <Route path="/user/:id" component={(): JSX.Element =>
                     <UserComponent
                         tr={this.props.translate}
-                        isLoggedin={this.props.signin.isSignedin}
-                        mUser={this.props.header.user} />} />
+                        isLoggedin={this.props.signin.isSignedin} />} />
                 <Route path="/movie/:id" component={(): JSX.Element =>
                     <MovieComponent
                         tr={this.props.translate}
                         isLoggedin={this.props.signin.isSignedin}
-                        mUser={this.props.header.user}
                         logout={this.props.logout} />} />
                 <Route path="/movie" component={(): JSX.Element =>
                     <MovieComponent
                         tr={this.props.translate}
                         isLoggedin={this.props.signin.isSignedin}
-                        mUser={this.props.header.user}
                         logout={this.props.logout} />} />
                 <Route path="/profile" component={(): JSX.Element =>
                     <ProfileComponent

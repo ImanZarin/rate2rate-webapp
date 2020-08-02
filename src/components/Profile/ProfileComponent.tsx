@@ -2,19 +2,19 @@
 import React, { Component, Fragment } from "react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Nav, NavItem, NavLink, TabContent, TabPane, Row, Col, Alert, Button } from "reactstrap";
-import { GetProfileInfoResponse, IUser, UserRate } from "../../shared/ApiTypes";
+import { GetProfileInfoResponse } from "../../shared/ApiTypes";
 import { MyFetch } from "../../shared/my-fetch";
 import { Constants } from "../../shared/Constants";
 import { GetProfileInfoResponseResult } from "../../shared/result.enums";
-import { MovieRate } from "../../shared/StateTypes";
 import './profile.scss';
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { MyStorage } from "../../shared/Enums";
+import { MovieRate, User, UserRate } from "../../shared/dto.models";
 
 type MyState = {
     activeTab: number;
     myMovies: MovieRate[];
-    profile: IUser;
+    profile: User;
     myBuddies: UserRate[];
     isLoading: boolean;
     alertIsOpen: boolean;
@@ -27,40 +27,44 @@ type MyProps = {
     tr: any;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 class ProfileComponent extends Component<MyProps & RouteComponentProps<any>, MyState> {
 
     _isMounted = false;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(props: MyProps & RouteComponentProps<any>) {
         super(props);
 
         this.state = {
             activeTab: 1,
             profile: {
-                _id: "",
-                admin: false,
+                id: "",
                 buddies: [{
                     buddyId: "",
+                    buddyName: "",
                     rate: 0,
-                    reateDate: ""
+                    rateDate: "",
+                    userId: "",
+                    userName: "",
                 }],
                 email: "",
-                password: "",
                 username: "",
-                insertDate: "",
-                updateDate: ""
             },
             myMovies: [{
-                _id: "",
                 rate: 0,
-                title: "",
-                year: 0,
-                rateDate: ""
+                movieId: "",
+                movieTitle: "",
+                rateDate: "",
+                userId: "",
+                userName: ""
             }],
             myBuddies: [{
                 buddyId: "",
                 rate: 0,
                 rateDate: "",
-                buddyName: ""
+                buddyName: "",
+                userId: "",
+                userName: ""
             }],
             alertIsOpen: false,
             error: new Error,
@@ -89,6 +93,8 @@ class ProfileComponent extends Component<MyProps & RouteComponentProps<any>, MyS
     fetchInfo(): void {
         this.myFetch.getProfileInfo()
             .then(resp => {
+                if (!this._isMounted)
+                    return;
                 if (resp.ok) {
                     resp.json()
                         .then((r: GetProfileInfoResponse) => {
@@ -100,20 +106,18 @@ class ProfileComponent extends Component<MyProps & RouteComponentProps<any>, MyS
                                     }
                                     break;
                                 case GetProfileInfoResponseResult.noBuddy:
-                                    if (this._isMounted)
-                                        this.setState({
-                                            profile: r.me,
-                                            myMovies: r.movies,
-                                            myBuddies: []
-                                        });
+                                    this.setState({
+                                        profile: r.me,
+                                        myMovies: r.movies,
+                                        myBuddies: []
+                                    });
                                     break;
                                 case GetProfileInfoResponseResult.noMovie:
-                                    if (this._isMounted)
-                                        this.setState({
-                                            profile: r.me,
-                                            myMovies: [],
-                                            myBuddies: r.buddies
-                                        });
+                                    this.setState({
+                                        profile: r.me,
+                                        myMovies: [],
+                                        myBuddies: r.buddies
+                                    });
                                     break;
                                 case GetProfileInfoResponseResult.noUser:
                                     {
@@ -122,12 +126,11 @@ class ProfileComponent extends Component<MyProps & RouteComponentProps<any>, MyS
                                     }
                                     break;
                                 case GetProfileInfoResponseResult.success:
-                                    if (this._isMounted)
-                                        this.setState({
-                                            profile: r.me,
-                                            myMovies: r.movies,
-                                            myBuddies: r.buddies
-                                        });
+                                    this.setState({
+                                        profile: r.me,
+                                        myMovies: r.movies,
+                                        myBuddies: r.buddies
+                                    });
                                     break;
                                 default:
                                     break;
@@ -139,42 +142,44 @@ class ProfileComponent extends Component<MyProps & RouteComponentProps<any>, MyS
                     this.showAndHideAlert(error, Constants.waitShort);
                 }
             }, error => {
+                if (!this._isMounted)
+                    return;
                 this.showAndHideAlert(error, Constants.waitNormal);
             })
             .catch(err => {
+                if (!this._isMounted)
+                    return;
                 this.showAndHideAlert(err, Constants.waitNormal);
             })
     }
 
     onTabChange(n: number): void {
         if (n !== this.state.activeTab)
-            if (this._isMounted)
-                this.setState({
-                    activeTab: n
-                });
+            this.setState({
+                activeTab: n
+            });
     }
 
     showAndHideAlert(e: Error, wait: number): void {
-        if (this._isMounted)
+        this.setState({
+            error: e,
+            alertIsOpen: true,
+            isLoading: false
+        });
+        setTimeout(() => {
+            if (!this._isMounted)
+                return;
             this.setState({
-                error: e,
-                alertIsOpen: true,
+                alertIsOpen: false,
                 isLoading: false
             });
-        setTimeout(() => {
-            if (this._isMounted)
-                this.setState({
-                    alertIsOpen: false,
-                    isLoading: false
-                });
         }, wait);
     }
 
     closeAlert(): void {
-        if (this._isMounted)
-            this.setState({
-                alertIsOpen: false
-            });
+        this.setState({
+            alertIsOpen: false
+        });
     }
 
     render(): JSX.Element {
@@ -204,11 +209,11 @@ class ProfileComponent extends Component<MyProps & RouteComponentProps<any>, MyS
                     <TabPane tabId={1}>
                         {this.state.myMovies.map((movie) => {
                             return (
-                                <Row key={movie._id} className="my_row"
-                                    onClick={() => this.props.history.push("movie/" + movie._id)}>
+                                <Row key={movie.movieId} className="my_row"
+                                    onClick={() => this.props.history.push("movie/" + movie.movieId)}>
                                     <Col sm="3">
                                         <div className="row_text">
-                                            {movie.title}
+                                            {movie.movieTitle}
                                         </div>
                                     </Col>
                                     <Col sm="3">

@@ -7,14 +7,14 @@ import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import { Languages, Pages } from "../../shared/Enums";
 import i18n from "../../i18n";
 import './header.scss';
-import { IUser } from "../../shared/ApiTypes";
+import { User } from "../../shared/dto.models";
 
 type MyProps = {
     lan: Languages;
-    mUser: IUser;
-    isLoggedin: boolean;
+    usertag: string;
+    isLoggedin?: boolean;
     changeLan: (l: Languages) => void;
-    changeUser: (u: IUser) => void;
+    changeUser: (u: string) => void;
     logout: () => void;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     translate: any;
@@ -24,7 +24,6 @@ type MyState = {
     isNavOpen: boolean;
     isDropdownOpen: boolean;
 }
-
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 class HeaderComponent extends Component<MyProps & RouteComponentProps<any>, MyState> {
@@ -120,7 +119,7 @@ class HeaderComponent extends Component<MyProps & RouteComponentProps<any>, MySt
                                 </NavItem>
                                 <NavItem>
                                     <Button className="button-right" onClick={() => this.onSignin()}>
-                                        {this.props.isLoggedin ? this.props.mUser.username : this.props.translate("header-signin-button")}
+                                        {this.props.isLoggedin ? this.props.usertag : this.props.translate("header-signin-button")}
                                     </Button>
                                 </NavItem>
                             </Nav>

@@ -1,25 +1,10 @@
 import { MyActions, ActionTypes, ChangeLanguageAction, ChangeUserAction } from "../../shared/ActionTypes";
 import { Languages } from '../../shared/Enums';
 import { HeaderReducerState } from "../../shared/StateTypes";
-import { IUser } from '../../shared/ApiTypes';
 
-const initUser: IUser = {
-    username: "",
-    _id: "",
-    admin: false,
-    email: "",
-    buddies: [{
-        buddyId: "",
-        rate: 0,
-        reateDate: ""
-    }],
-    password: "",
-    insertDate: "",
-    updateDate: ""
-}
 const initialState = {
     lan: Languages.en,
-    user: initUser
+    user: ""
 }
 
 export const HEADER_REDUCER = (state = initialState, action: MyActions): HeaderReducerState => {

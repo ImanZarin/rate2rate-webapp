@@ -3,16 +3,16 @@ import React, { Component, Fragment } from 'react';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { LOADING } from '../LoadingComponent';
 import { Constants } from '../../shared/Constants';
-import { MovieRate } from '../../shared/StateTypes';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Alert, Button, Modal, ModalHeader, ModalBody } from 'reactstrap';
-import { GetUserInfoResponse, GetUserInfoForSignedResponse, IUser, UpdateBuddyResponse } from '../../shared/ApiTypes';
+import { GetUserInfoResponse, GetUserInfoForSignedResponse, UpdateBuddyResponse } from '../../shared/ApiTypes';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { RateModal, ModalTypes } from '../Rate/RateComponent';
 import './user.scss';
 import { MyFetch } from '../../shared/my-fetch';
 import { GetUserInfoResponseResult, GetUserInfoForSignedResponseResult, UpdateBuddyResponseResult } from '../../shared/result.enums';
+import { MovieRate, User } from '../../shared/dto.models';
 
 type RouteParams = {
     id: string;
@@ -29,8 +29,7 @@ type MyState = {
 }
 
 type MyProps = {
-    isLoggedin: boolean;
-    mUser: IUser;
+    isLoggedin?: boolean;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     tr: any;
 }
@@ -57,6 +56,7 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
     }
 
     componentDidMount(): void {
+        //TODO redirect if the user is the signed user
         this.fetchList(this.props.match.params.id);
 
     }
@@ -147,7 +147,7 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
                 if (response.ok) {
                     response.json()
                         .then((r: GetUserInfoResponse | GetUserInfoForSignedResponse) => {
-                            if ((r as GetUserInfoForSignedResponse).rate) {
+                            if ((r as GetUserInfoForSignedResponse).buddy) {
                                 const r2 = r as GetUserInfoForSignedResponse;
                                 switch (r2.result) {
                                     case GetUserInfoForSignedResponseResult.userNotFound:
@@ -160,7 +160,7 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
                                         {
                                             this.setState({
                                                 name: r2.user.username,
-                                                personRate: r2.rate
+                                                personRate: r2.buddy.rate
                                             });
                                             const err = new Error(this.props.tr("user-fetchinfo-err-emptymovies"));
                                             this.showAndHideAlert(err, Constants.waitNormal);
@@ -171,7 +171,7 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
                                             isLoading: false,
                                             mainList: r2.movies,
                                             name: r2.user.username,
-                                            personRate: r2.rate
+                                            personRate: r2.buddy.rate
                                         });
                                         break;
                                     default:
@@ -253,7 +253,7 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
                     <h3>{this.props.tr("user-movies-title")}</h3>
                     {this.state.mainList.map((ratedmovie) => {
                         return (
-                            <div key={ratedmovie._id}>{ratedmovie.title} : {ratedmovie.rate} </div>
+                            <div key={ratedmovie.movieId}>{ratedmovie.movieTitle} : {ratedmovie.rate} </div>
                         );
                     }
                     )}

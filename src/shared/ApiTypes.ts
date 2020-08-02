@@ -1,107 +1,47 @@
-import { MovieRate } from "./StateTypes";
-import {
-    GetUserInfoResponseResult, GetUserInfoForSignedResponseResult, LoginUserResponseResult,
-    UpdateBuddyResponseResult, GetMovieInfoResponseResult, GetMovieInfoForSignedResponseResult,
-    UpdateMovieRateResponseResult, SearchMovieResponseResult, GetProfileInfoResponseResult, GetRecentRatesResponseResult
-} from "./result.enums";
+import { GetUserInfoResponseResult, GetUserInfoForSignedResponseResult, LoginUserResponseResult, 
+    UpdateBuddyResponseResult, GetMovieInfoResponseResult, GetMovieInfoForSignedResponseResult, UpdateMovieRateResponseResult, SearchMovieResponseResult, GetProfileInfoResponseResult, GetRecentRatesResponseResult } from "./result.enums";
+import { MovieRate, UserRate, User, Movie, IMDBsearch } from "./dto.models";
 
 export interface GetUserInfoResponse {
     result: GetUserInfoResponseResult,
-    user: IUser,
+    user: User,
     movies: MovieRate[],
 }
 
 export interface GetUserInfoForSignedResponse {
     result: GetUserInfoForSignedResponseResult,
-    user: IUser,
+    user: User,
     movies: MovieRate[],
-    rate: number //if is signed in and rated this user
+    buddy: UserRate
 }
 
 export interface LoginUserResponse {
-    result: LoginUserResponseResult;
-    accessToken: string;
-    user: IUser;
+    result: LoginUserResponseResult,
+    accessToken: string,
+    user: User
 }
 
 export interface UpdateBuddyResponse {
     result: UpdateBuddyResponseResult,
-    user: IUser
-}
-
-export interface UpdateMovieRateResponse {
-    result: UpdateMovieRateResponseResult,
-    movieuser: IMovieUser
-}
-
-export interface IBuddy {
-    buddyId: string;
-    rate: number;
-    reateDate: string;
-}
-
-export interface IUser {
-    _id: string,
-    username: string;
-    email: string;
-    admin: boolean;
-    buddies: [IBuddy];
-    password: string;
-    insertDate: string;
-    updateDate: string;
-}
-
-export interface IMovie {
-    _id: string;
-    title: string;
-    year: number;
-    brief: string;
-    imageUrl: string;
-    genre: string[];
-    cast: string[];
-    director: string[];
-    imdbId: string;
-    insertDate: string;
-    updateDate: string;
-}
-
-export interface IMovieUser {
-    _id: string;
-    userId: string;
-    rate: number;
-    movieId: string;
-    insertDate: string;
-    updateDate: string;
+    user: User
 }
 
 export interface GetMovieInfoResponse {
     result: GetMovieInfoResponseResult,
-    movie: IMovie,
-    users: UserRate[],
+    movie: Movie,
+    users: MovieRate[],
 }
 
 export interface GetMovieInfoForSignedResponse {
     result: GetMovieInfoForSignedResponseResult,
-    movie: IMovie,
-    users: UserRate[],
-    rate: number
+    movie: Movie,
+    users: MovieRate[],
+    myRate: MovieRate
 }
 
-export interface UserRate {
-    buddyId: string;
-    buddyName: string;
-    rate: number;
-    rateDate: string;
-}
-
-export interface IMDBsearch {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    Title: string;
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    Year: number;
-    imdbID: string;
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    Poster: string;
+export interface UpdateMovieRateResponse {
+    result: UpdateMovieRateResponseResult,
+    movieuser: MovieRate
 }
 
 export interface SearchMovieResponse {
@@ -113,7 +53,7 @@ export interface GetProfileInfoResponse {
     result: GetProfileInfoResponseResult,
     movies: MovieRate[],
     buddies: UserRate[],
-    me: IUser
+    me: User
 }
 
 export interface MovieUserNames {
@@ -127,4 +67,5 @@ export interface MovieUserNames {
 export interface GetRecentRatesResponse {
     result: GetRecentRatesResponseResult,
     movies: MovieUserNames[]
+    me: User
 }

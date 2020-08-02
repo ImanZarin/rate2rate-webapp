@@ -15,5 +15,5 @@ export enum MyStorage {
     token = "access-token",
     lan = "language",
     time = "time-zone",
-    user = "user"
+    usertag = "usertag"
 }
