@@ -69,7 +69,7 @@ class MainComponent extends Component<MyProps> {
     }
 
     render(): JSX.Element {
-        if (isUndefined(this.props.signin.isSignedin))
+        if (this.props.signin.isSignedin === undefined)
             return (<div></div>);
         return (
             <div>
