@@ -12,7 +12,7 @@ import { RateModal, ModalTypes } from '../Rate/RateComponent';
 import './user.scss';
 import { MyFetch } from '../../shared/my-fetch';
 import { GetUserInfoResponseResult, GetUserInfoForSignedResponseResult, UpdateBuddyResponseResult } from '../../shared/result.enums';
-import { MovieRate } from '../../shared/dto.models';
+import { MovieRate, User } from '../../shared/dto.models';
 
 type RouteParams = {
     id: string;
@@ -30,6 +30,7 @@ type MyState = {
 
 type MyProps = {
     isLoggedin?: boolean;
+    user: User;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     tr: any;
 }
@@ -37,6 +38,7 @@ type MyProps = {
 class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps, MyState>{
 
     myfetchObjet = new MyFetch();
+    _isMounted = false;
 
     constructor(props: RouteComponentProps<RouteParams> & MyProps) {
         super(props);
@@ -56,9 +58,16 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
     }
 
     componentDidMount(): void {
-        //TODO redirect if the user is the signed user
+        if (this.props.match.params.id.toString() == this.props.user.id)
+            this.props.history.replace("/profile");
+        this._isMounted = true;
         this.fetchList(this.props.match.params.id);
 
+    }
+
+    componentWillUnmount(): void {
+        this._isMounted = false;
+        this.myfetchObjet.abort();
     }
 
     showAndHideAlert(e: Error, wait: number): void {
@@ -68,6 +77,8 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
             isLoading: false
         });
         setTimeout(() => {
+            if (!this._isMounted)
+                return;
             this.setState({
                 alertIsOpen: false,
                 isLoading: false
@@ -93,6 +104,8 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
         });
         this.myfetchObjet.rateUser(newRate, this.props.match.params.id)
             .then(response => {
+                if (!this._isMounted)
+                    return;
                 this.toggleModal();
                 if (response.ok) {
                     response.json()
@@ -129,10 +142,14 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
                     this.showAndHideAlert(error, Constants.waitShort);
                 }
             }, error => {
+                if (!this._isMounted)
+                    return;
                 this.toggleModal();
                 this.showAndHideAlert(error, Constants.waitShort);
             })
             .catch(error => {
+                if (!this._isMounted)
+                    return;
                 this.showAndHideAlert(error, Constants.waitShort);
                 this.toggleModal();
             });
@@ -144,6 +161,8 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
         });
         this.myfetchObjet.getUserInfo(userId)
             .then(response => {
+                if (!this._isMounted)
+                    return;
                 if (response.ok) {
                     response.json()
                         .then((r: GetUserInfoResponse | GetUserInfoForSignedResponse) => {
@@ -155,6 +174,12 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
                                             const err = new Error(this.props.tr("user-fetchinfo-err-nouser"));
                                             this.showAndHideAlert(err, Constants.waitNormal);
                                         }
+                                        break;
+                                    case GetUserInfoForSignedResponseResult.userHimself:
+                                        this.props.history.replace("/profile");
+                                        this.setState({
+                                            isLoading: false
+                                        });
                                         break;
                                     case GetUserInfoForSignedResponseResult.listEmpty:
                                         {
@@ -218,9 +243,13 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
                 }
             },
                 error => {
+                    if (!this._isMounted)
+                        return;
                     this.showAndHideAlert(error, Constants.waitShort);
                 })
             .catch(error => {
+                if (!this._isMounted)
+                    return;
                 this.showAndHideAlert(error, Constants.waitShort);
             });
 

@@ -41,5 +41,9 @@
     "home-livelist-title": "Viimeaikaiset Hinnat",
     "movie-fetchinfo-err-noparamid": "tämä ei ole oikea osoite",
     "home-fetch-err-nomovie": "tällä hetkellä ei ole hintoja",
-    "home-suggests-title": "ehdotti elokuvia"
+    "home-suggests-title": "ehdotti elokuvia",
+    "home-about-title": "Noin",
+    "home-about-text": "Rate2Rate on luokitusjärjestelmä, jonka avulla arvioit ihmisiä ja elokuvia.\n Uskomme taiteesta, että henkilöllisillä näkemyksillä on enemmän merkitystä. \n Tässä lähestymistavassa arvioit paitsi eniten samaa mieltä olevia ihmisiä myös niitä, joista olet eri mieltä kaavion mukaan.\n Siksi kaikki saavat erilaisen hinnan jokaiselle elokuvalle.",
+    "home-jumbo-title": "Korko Arvostaa",
+    "home-jumbo-subtitle": "Arvioi Elokuvia, Arvioituja Ihmisiä, Saat Henkilökohtaisen Hinnan"
 }

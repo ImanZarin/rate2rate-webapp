@@ -83,6 +83,7 @@ export class MyFetch {
         return this.myFetch(ReqTypes.get, "movieusers/profile", null);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public async getHomeMovies(): Promise<any> {
         return this.myFetch(ReqTypes.get, "movieusers/home", null);
     }

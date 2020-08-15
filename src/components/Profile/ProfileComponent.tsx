@@ -54,6 +54,7 @@ class ProfileComponent extends Component<MyProps & RouteComponentProps<any>, MyS
                 rate: 0,
                 movieId: "",
                 movieTitle: "",
+                movieImg: "",
                 rateDate: "",
                 userId: "",
                 userName: ""

@@ -1,9 +1,82 @@
-@import '../../App.scss';
+@import "../../App.scss";
 
-.list_movie {
-    cursor: pointer;
+.bg {
+    background-color: $bgstart;
+    min-height: 100vh;
 }
 
-.list_user {
+.first_list {
+    color: $teritary;
+    font-size: 2rem;
     cursor: pointer;
+    text-align: center;
+}
+
+.second_list {
+    color: black;
+    font-size: 1rem;
+    cursor: pointer;
+    text-align: left;
+}
+
+.first_section {
+    @extend .side_paddings;
+    color: $secondary;
+    padding-top: 15px;
+}
+
+.second_section {
+    @extend .side_paddings;
+    color: $secondary;
+    padding-top: 15px;
+}
+
+.third_section {
+    @extend .side_paddings;
+    color: $secondary;
+    padding-top: 15px;
+    background-color: $bgend;
+    white-space: pre-line;
+    padding-bottom: 15px;
+}
+
+.row_card {
+    width: 100%;
+    min-height: 355px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    flex-wrap: nowrap !important;
+    &::-webkit-scrollbar {
+        width: 10px; /* Chrome & Safari & Opera */
+    }
+    &::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 5px $bgend;
+        background: whitesmoke;
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 5px;
+        background: $bgend;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+        background: blue;
+    }
+    scrollbar-width: 10px; /* Firefox */
+    @include phone {
+        &::-webkit-scrollbar {
+            display: none;
+        }
+        /* Hide scrollbar for IE, Edge and Firefox */
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+    }
+}
+
+.my_jumbotron {
+    background-size: contain; 
+    color: $bgstart;
+    background-image: url("../../assets/jumbotron.jpg");
+    font-size: 2.5rem;
+    @include phone {
+        font-size: 2rem;
+    }
 }

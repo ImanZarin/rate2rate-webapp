@@ -2,9 +2,14 @@ import { MyActions, ActionTypes, ChangeLanguageAction, ChangeUserAction } from "
 import { Languages } from '../../shared/Enums';
 import { HeaderReducerState } from "../../shared/StateTypes";
 
-const initialState = {
+const initialState: HeaderReducerState = {
     lan: Languages.en,
-    user: ""
+    user: {
+        id: "",
+        username: "",
+        email: "",
+        buddies: []
+    }
 }
 
 export const HEADER_REDUCER = (state = initialState, action: MyActions): HeaderReducerState => {

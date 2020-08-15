@@ -16,9 +16,10 @@ import { MyStorage } from "../../shared/Enums";
 import { MyFetch } from "../../shared/my-fetch";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { LoginUserResponseResult } from "../../shared/result.enums";
+import { User } from "../../shared/dto.models";
 
 interface MyProps {
-    changeUser: (u: string) => void;
+    changeUser: (u: User) => void;
     changeToken: (t: string) => void;
     isLoggedin?: boolean;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -43,7 +44,8 @@ const initForm: SigninForm = {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MyState> {
 
-
+    mF = new MyFetch();
+    _isMounted = false;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(props: MyProps & RouteComponentProps<any>) {
         super(props);
@@ -75,6 +77,14 @@ class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MySt
             .required(this.props.translate("signin-form-error-require"))
     });
 
+    componentDidMount() {
+        this._isMounted = true;
+    }
+
+    componentWillUnmount(): void {
+        this._isMounted = false;
+        this.mF.abort();
+    }
 
     showAndHideAlert(e: Error): void {
         this.setState({
@@ -83,6 +93,8 @@ class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MySt
             isLoading: false
         });
         setTimeout(() => {
+            if (!this._isMounted)
+                return;
             this.setState({
                 alertIsOpen: false,
                 isLoading: false
@@ -117,10 +129,11 @@ class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MySt
         this.setState({
             isLoading: true
         });
-        const mF = new MyFetch();
         if (this.state.isSignUp) {
-            mF.signup(values as SignupForm)
+            this.mF.signup(values as SignupForm)
                 .then(response => {
+                    if (!this._isMounted)
+                        return;
                     if (response.ok) {
                         response.json()
                             .then((r: LoginUserResponse) => {
@@ -137,10 +150,10 @@ class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MySt
                                         break;
                                     case LoginUserResponseResult.success:
                                         localStorage.setItem(MyStorage.token, r.accessToken);
-                                        localStorage.setItem(MyStorage.usertag, r.user.username);
-                                        this.props.changeUser(r.user.username);
+                                        localStorage.setItem(MyStorage.user, r.user.username);
+                                        this.props.changeUser(r.user);
                                         this.props.changeToken(r.accessToken);
-                                        //TODO redirect to profile                                            
+                                        this.props.history.push("/profile");
                                         break;
                                     default:
                                         break;
@@ -156,15 +169,21 @@ class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MySt
                     }
                 },
                     error => {
+                        if (!this._isMounted)
+                            return;
                         this.showAndHideAlert(error);
                     })
                 .catch(error => {
+                    if (!this._isMounted)
+                        return;
                     this.showAndHideAlert(error);
                 });
         }
         else {
-            mF.login(values as SigninForm)
+            this.mF.login(values as SigninForm)
                 .then(response => {
+                    if (!this._isMounted)
+                        return;
                     if (response.ok) {
                         response.json()
                             .then((r: LoginUserResponse) => {
@@ -176,10 +195,10 @@ class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MySt
                                         break;
                                     case LoginUserResponseResult.success:
                                         localStorage.setItem(MyStorage.token, r.accessToken);
-                                        localStorage.setItem(MyStorage.usertag, r.user.username);
-                                        this.props.changeUser(r.user.username);
+                                        localStorage.setItem(MyStorage.user, JSON.stringify(r.user));
+                                        this.props.changeUser(r.user);
                                         this.props.changeToken(r.accessToken);
-                                        //TODO redirect to profile                                            
+                                        this.props.history.push("/profile");
                                         break;
                                     default:
                                         break;
@@ -192,9 +211,13 @@ class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MySt
                     }
                 },
                     error => {
+                        if (!this._isMounted)
+                            return;
                         this.showAndHideAlert(error);
                     })
                 .catch(error => {
+                    if (!this._isMounted)
+                        return;
                     this.showAndHideAlert(error);
                 });
 

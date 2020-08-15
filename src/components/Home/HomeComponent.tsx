@@ -2,18 +2,20 @@
 import React, { Component, Fragment } from 'react';
 import { MyFetch } from '../../shared/my-fetch';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Row, Col, Alert } from 'reactstrap';
+import { Row, Col, Alert, Jumbotron } from 'reactstrap';
 import './home.scss';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { MovieRate, MovieSuggest } from '../../shared/dto.models';
+import { MovieRate, MovieSuggest, User } from '../../shared/dto.models';
 import { Constants } from '../../shared/Constants';
 import { GetRecentRatesResponse, GetRecentRatesForSignedResponse } from '../../shared/ApiTypes';
-import { GetRecentRatesResponseResult, GetMovieInfoForSignedResponseResult, GetRecentRatesForSignedResponseResult } from '../../shared/result.enums';
+import { GetRecentRatesResponseResult, GetRecentRatesForSignedResponseResult } from '../../shared/result.enums';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { MY_CARD } from '../CardComponent';
 
 type MyProps = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     tr: any;
-    user: string;
+    user: User;
 }
 
 type MyState = {
@@ -119,45 +121,49 @@ class HomeComponent extends Component<MyProps & RouteComponentProps<any>, MyStat
                 this.showAndHideAlert(err, Constants.waitShort);
             });
 
-        setInterval(async () => this.myfetchObjet.getHomeMovies()
-            .then(resp => {
-                if (resp.ok) {
-                    resp.json()
-                        .then((r: GetRecentRatesResponse | GetRecentRatesForSignedResponse) => {
-                            if ((r as GetRecentRatesForSignedResponse).result) {
-                                switch (r.result) {
-                                    case GetRecentRatesForSignedResponseResult.success:
-                                        if (this.state.suggestedMovies != r.suggests)
-                                            this.setState({
-                                                suggestedMovies: r.suggests
-                                            });
-                                        break;
-                                    case GetRecentRatesForSignedResponseResult.noSuggest:
-                                    case GetRecentRatesForSignedResponseResult.noMovie:
-                                    default:
-                                        break;
+        setInterval(async () => {
+            if (!this._isMounted)
+                return;
+            this.myfetchObjet.getHomeMovies()
+                .then(resp => {
+                    if (resp.ok) {
+                        resp.json()
+                            .then((r: GetRecentRatesResponse | GetRecentRatesForSignedResponse) => {
+                                if ((r as GetRecentRatesForSignedResponse).result) {
+                                    switch (r.result) {
+                                        case GetRecentRatesForSignedResponseResult.success:
+                                            if (this.state.suggestedMovies != r.suggests)
+                                                this.setState({
+                                                    suggestedMovies: r.suggests
+                                                });
+                                            break;
+                                        case GetRecentRatesForSignedResponseResult.noSuggest:
+                                        case GetRecentRatesForSignedResponseResult.noMovie:
+                                        default:
+                                            break;
+                                    }
                                 }
-                            }
-                            else if (r as GetRecentRatesResponse) {
-                                switch (r.result) {
-                                    case GetRecentRatesResponseResult.success:
-                                        if (this.state.recentMovies != r.movies)
-                                            this.setState({
-                                                recentMovies: r.movies
-                                            });
-                                        break;
-                                    case GetRecentRatesResponseResult.noMovie:
-                                    default:
-                                        break;
+                                else if (r as GetRecentRatesResponse) {
+                                    switch (r.result) {
+                                        case GetRecentRatesResponseResult.success:
+                                            if (this.state.recentMovies != r.movies)
+                                                this.setState({
+                                                    recentMovies: r.movies
+                                                });
+                                            break;
+                                        case GetRecentRatesResponseResult.noMovie:
+                                        default:
+                                            break;
+                                    }
                                 }
-                            }
 
-                        })
-                }
-            })
-            .catch(err => {
-                console.log(err);
-            })
+                            })
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
             , Constants.waitForNextFetch);
     }
 
@@ -190,56 +196,57 @@ class HomeComponent extends Component<MyProps & RouteComponentProps<any>, MyStat
 
     render(): JSX.Element {
         return (
-            <Fragment>
-                <h3 style={{ visibility: this.state.suggestedMovies.length > 0 ? "visible" : "hidden" }}>
-                    {this.props.tr("home-suggests-title")} {this.props.user}:
-                </h3>
-                {this.state.suggestedMovies.map((sug) => {
-                    return (
-                        <Row onClick={() => this.props.history.push("/movie/" + sug.movieId)}>
-                            <Col sm={3}></Col>
-                            <Col sm={3} className="list_movie">
-                                {sug.movieTitle}
-                            </Col>
-                            <Col sm={3}>
-                                {(Math.round(sug.likeability * 100) / 100).toFixed(0)}%
-                            </Col>
-                            <Col sm={3}></Col>
-                        </Row>
-                    );
-                })}
-                <h3>{this.props.tr("home-livelist-title")}</h3>
-                {this.state.recentMovies.map((mu) => {
-                    return (
-                        <Row>
-                            <Col sm={1}></Col>
-                            <Col sm={3} onClick={() => this.props.history.push("/user" + mu.userId)}
-                                className="list_user">
-                                {mu.userName}
-                            </Col>
-                            <Col sm={4} onClick={() => this.props.history.push("/movie/" + mu.movieId)}
-                                className="list_movie">
-                                {mu.movieTitle}
-                            </Col>
-                            <Col sm={3}>
-                                <span style={{ visibility: mu.rate > 0 ? "visible" : "hidden" }}
-                                    className={"filled_star fa fa-star"} />
-                                <span style={{ visibility: mu.rate > 1 ? "visible" : "hidden" }}
-                                    className={"filled_star fa fa-star"} />
-                                <span style={{ visibility: mu.rate > 2 ? "visible" : "hidden" }}
-                                    className={"filled_star fa fa-star"} />
-                                <span style={{ visibility: mu.rate > 3 ? "visible" : "hidden" }}
-                                    className={"filled_star fa fa-star"} />
-                                <span style={{ visibility: mu.rate > 4 ? "visible" : "hidden" }}
-                                    className={"filled_star fa fa-star"} />
-                            </Col>
-                            <Col sm={1}></Col>
-                        </Row>
-                    );
-                })}
+            <div className="bg" >
+                <Jumbotron className="my_jumbotron">
+                    <div>{this.props.tr("home-jumbo-title")}</div>
+                    <span>{this.props.tr("home-jumbo-subtitle")}</span>
+                </Jumbotron>
+                <div className="first_section"
+                    style={{ display: this.state.suggestedMovies?.length > 0 ? "block" : "none" }}>
+                    <h3>
+                        {this.props.tr("home-suggests-title")} {this.props.user.username}:
+                    </h3>
+                    <Row className="row_card">
+                        {this.state.suggestedMovies?.map((sug) => {
+                            return (
+                                <MY_CARD key={sug.movieId}
+                                    title={sug.movieTitle}
+                                    titleLink={"/movie/" + sug.movieId}
+                                    subtitle=""
+                                    rate={0}
+                                    imgUrl={sug.movieImg}
+                                    imgLink={"/movie/" + sug.movieId}
+                                    likebility={sug.likeability}
+                                    isPercent={true} />
+                            );
+                        })}
+                    </Row>
+                </div>
+                <div className="second_section">
+                    <h3>{this.props.tr("home-livelist-title")}:</h3>
+                    <Row className="row_card">
+                        {this.state.recentMovies.map((mu) => {
+                            return (
+                                <MY_CARD key={mu.movieId + mu.userId}
+                                    title={mu.userName}
+                                    titleLink={"/user/" + mu.userId}
+                                    subtitle={mu.movieTitle}
+                                    rate={mu.rate}
+                                    imgUrl={mu.movieImg}
+                                    imgLink={"/movie/" + mu.movieId}
+                                    isPercent={false}
+                                    likebility={0} />
+                            );
+                        })}
+                    </Row>
+                </div>
+                <div className="third_section">
+                    <h3>{this.props.tr("home-about-title")}</h3>
+                    <p>{this.props.tr("home-about-text")}</p>
+                </div>
                 <Alert isOpen={this.state.alertIsOpen} toggle={this.closeAlert}
                     color="danger" className="myAlert">{this.state.error?.message}</Alert>
-            </Fragment>
+            </div>
         );
     }
 }

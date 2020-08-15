@@ -7,13 +7,14 @@ import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import { Languages, Pages } from "../../shared/Enums";
 import i18n from "../../i18n";
 import './header.scss';
+import { User } from "../../shared/dto.models";
 
 type MyProps = {
     lan: Languages;
-    usertag: string;
+    user: User;
     isLoggedin?: boolean;
     changeLan: (l: Languages) => void;
-    changeUser: (u: string) => void;
+    changeUser: (u: User) => void;
     logout: () => void;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     translate: any;
@@ -118,7 +119,7 @@ class HeaderComponent extends Component<MyProps & RouteComponentProps<any>, MySt
                                 </NavItem>
                                 <NavItem>
                                     <Button className="button-right" onClick={() => this.onSignin()}>
-                                        {this.props.isLoggedin ? this.props.usertag : this.props.translate("header-signin-button")}
+                                        {this.props.isLoggedin ? this.props.user.username : this.props.translate("header-signin-button")}
                                     </Button>
                                 </NavItem>
                             </Nav>
