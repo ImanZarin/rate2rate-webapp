@@ -1,4 +1,5 @@
 import { Languages } from "./Enums";
+import { User } from "./dto.models";
 
 export interface SigninForm {
     username: string,
@@ -23,5 +24,5 @@ export interface SigninReducerState {
 
 export interface HeaderReducerState {
     lan: Languages,
-    user: string
+    user: User
 }

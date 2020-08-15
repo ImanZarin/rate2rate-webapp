@@ -38,5 +38,12 @@
     "profile-movie-maintext-nomovie": "You have not rated any movie yet.\n Start rating movies by searching their names.",
     "profile-buddy-maintext-nobuddy": "You have not rated anyone yet.\n Start rating people by searching their usertag or email.",
     "profile-logout-button": "logout",
-    "movie-fetchinfo-err-noparamid": "this is not an approprite address"
+    "home-livelist-title": "Recent Rates",
+    "movie-fetchinfo-err-noparamid": "this is not an approprite address",
+    "home-fetch-err-nomovie": "there are no rates to show at the moment",
+    "home-suggests-title": "Suggested movies for",
+    "home-about-title": "About",
+    "home-about-text": "Rate2Rate is a rating system which you rate people as well as movies.\n We believe when it comes to art, personal views matter more. \n In this approach you rate not only the people you agree most but also those you disagree alot according to our chart.\n Therfore everybody get a different rate for each movie.",
+    "home-jumbo-title": "Rate to Rate",
+    "home-jumbo-subtitle": "Rate Movies, Rate People, Get your personal Rate"  
 }

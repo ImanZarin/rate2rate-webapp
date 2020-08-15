@@ -8,6 +8,7 @@ export enum GetUserInfoForSignedResponseResult {
     success = "SUCCESS",
     userNotFound = "USER_NOT_FOUND",
     listEmpty = "EMPTY_LIST",
+    userHimself = "USER_IS_HIMSELF"
 }
 
 export enum LoginUserResponseResult {
@@ -55,4 +56,15 @@ export enum GetProfileInfoResponseResult {
     noBuddy = "EMPTY_BUDDY_LIST",
     noMovienoBuddy = "EMPTY_BOTH_LIST",
     noUser = "USER_NOT_FOUND"
+}
+
+export enum GetRecentRatesResponseResult {
+    success = "SUCCESS",
+    noMovie = "EMPTY_LIST",
+}
+
+export enum GetRecentRatesForSignedResponseResult{
+    noMovie = "EMPTY_MOVIE_LIST",
+    success = "SUCCESS",
+    noSuggest = "EMPTY_SUGGEST_LIST"
 }

@@ -8,7 +8,7 @@ export enum ActionTypes {
     signinSuccess = "SIGNIN_SUCCESS",
     signinFailed = "SIGNIN_FAILED",
     languageChange = "LANGUAGE_CHANGE",
-    userChange = "NAME_CHANGE",
+    userChange = "USER_CHANGE",
     tokenChange = "TOKEN_CHANGE",
     logout = "LOGOUT"
 }
@@ -30,7 +30,7 @@ export type ChangeLanguageAction = {
 
 export type ChangeUserAction = {
     type: ActionTypes;
-    payload: string;
+    payload: User;
 }
 
 export type ChangeTokenAction = {

@@ -12,7 +12,7 @@ import { RateModal, ModalTypes } from '../Rate/RateComponent';
 import './movie.scss';
 import { MyFetch } from '../../shared/my-fetch';
 import { GetMovieInfoForSignedResponseResult, GetMovieInfoResponseResult, UpdateMovieRateResponseResult, SearchMovieResponseResult } from '../../shared/result.enums';
-import { Movie, IMDBsearch, User, MovieRate } from '../../shared/dto.models';
+import { Movie, IMDBsearch, MovieRate } from '../../shared/dto.models';
 import { isNullOrUndefined } from 'util';
 
 type MyState = {

@@ -19,8 +19,9 @@ import { tokenChange, logout } from "./Signin/signin-action";
 import MovieComponent from "./Movie/MovieComponent";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import ProfileComponent from "./Profile/ProfileComponent";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import HomeComponent from "./Home/HomeComponent";
 import { User } from "../shared/dto.models";
-import { isUndefined } from "util";
 
 //interface StateProps extends RootState, ReactCookieProps {
 interface StateProps extends RootState {
@@ -35,7 +36,7 @@ const mapStateToProps = (state: StateProps) => ({
 
 interface DispatchProps {
     changeLanguage: (l: Languages) => void;
-    changeUser: (u: string) => void;
+    changeUser: (u: User) => void;
     changeToken: (t: string) => void;
     logout: () => void;
 }
@@ -43,7 +44,7 @@ interface DispatchProps {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, any, MyActions>): DispatchProps => ({
     changeLanguage: (l: Languages): MyActions => dispatch(languageChange(l)),
-    changeUser: (u: string): MyActions => dispatch(userChange(u)),
+    changeUser: (u: User): MyActions => dispatch(userChange(u)),
     changeToken: (t: string): MyActions => dispatch(tokenChange(t)),
     logout: (): MyActions => dispatch(logout())
 });
@@ -62,10 +63,13 @@ class MainComponent extends Component<MyProps> {
                 this.props.logout();
             else
                 this.props.changeToken(r);
-            if (localStorage.getItem(MyStorage.usertag))
-                this.props.changeUser(localStorage.getItem(MyStorage.usertag) || "");
+            if (localStorage.getItem(MyStorage.user)){
+                console.log(JSON.parse(localStorage.getItem(MyStorage.user) || ""));
+                this.props.changeUser(JSON.parse(localStorage.getItem(MyStorage.user) || "") as User);
+            }
         }
-
+        else
+            this.props.logout();
     }
 
     render(): JSX.Element {
@@ -75,7 +79,7 @@ class MainComponent extends Component<MyProps> {
             <div>
                 <HeaderComponent
                     lan={this.props.header.lan}
-                    usertag={this.props.header.user}
+                    user={this.props.header.user}
                     changeUser={this.props.changeUser}
                     changeLan={this.props.changeLanguage}
                     translate={this.props.translate}
@@ -93,15 +97,14 @@ class MainComponent extends Component<MyProps> {
                         changeUser={this.props.changeUser}
                         changeToken={this.props.changeToken}
                         isLoggedin={this.props.signin.isSignedin} />} />
-                <Route path="/home" component={(): JSX.Element => {
-                    return (<div>
-                        This is the test to make sure navigation works as expected!
-                    </div>);
-                }
-                } />
+                <Route path="/home" component={(): JSX.Element =>
+                    <HomeComponent
+                        user={this.props.header.user}
+                        tr={this.props.translate} />} />
                 <Route path="/user/:id" component={(): JSX.Element =>
                     <UserComponent
                         tr={this.props.translate}
+                        user={this.props.header.user}
                         isLoggedin={this.props.signin.isSignedin} />} />
                 <Route path="/movie/:id" component={(): JSX.Element =>
                     <MovieComponent
