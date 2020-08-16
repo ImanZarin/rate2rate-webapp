@@ -44,6 +44,7 @@ class HomeComponent extends Component<MyProps & RouteComponentProps<any>, MyStat
     }
 
     componentDidMount() {
+        window.scrollTo(0, 0);
         this._isMounted = true;
         this.setState({
             isLoading: true

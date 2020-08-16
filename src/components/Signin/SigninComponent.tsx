@@ -78,6 +78,7 @@ class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MySt
     });
 
     componentDidMount() {
+        window.scrollTo(0, 0);
         this._isMounted = true;
     }
 

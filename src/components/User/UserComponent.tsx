@@ -60,6 +60,7 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
     componentDidMount(): void {
         if (this.props.match.params.id.toString() == this.props.user.id)
             this.props.history.replace("/profile");
+        window.scrollTo(0, 0);
         this._isMounted = true;
         this.fetchList(this.props.match.params.id);
 
@@ -276,7 +277,9 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
                             <h5>Please Rate The User According To The Chart</h5>
                         </ModalHeader>
                         <ModalBody>
-                            <RateModal type={ModalTypes.people} changeRate={this.changeRate} />
+                            <RateModal type={ModalTypes.people}
+                                changeRate={this.changeRate}
+                                tr={this.props.tr} />
                         </ModalBody>
                     </Modal>
                     <h3>{this.props.tr("user-movies-title")}</h3>

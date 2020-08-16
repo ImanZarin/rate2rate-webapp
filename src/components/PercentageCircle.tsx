@@ -37,7 +37,7 @@ class PercnetageCircle extends Component<MyProps, MyState> {
     constructor(props: MyProps) {
         super(props);
         const percent = Math.floor(Math.max(Math.min(this.props.percent, 100), 0));
-        const percentText = this.props.duration === 0 ? percent : 0;
+        const percentText = percent;
         if (this.props.circleColor != "")
             this._circleColor = this.props.circleColor;
         if (this.props.circleInnerColor != "")

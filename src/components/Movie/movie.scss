@@ -12,9 +12,69 @@
     background-color: $bgstart;
 }
 
+.img_container {
+    padding: 25px;
+    @include phone {
+        padding: 5px;
+    }
+}
+
 .img_main {
-    margin-left: 25%;
-    margin-right: 25%;
-    width: 50%;
-    
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    margin: auto;
+    border: solid rgba(1, 1, 1, 0) 5px;
+    border-radius: 0.85rem;
+    @include phone {
+        padding: 5px;
+    }
+}
+
+.bg {
+    background-color: $bgstart;
+}
+
+.movie_header {
+    margin-top: 4rem;
+    padding-left: 1rem;
+    color: $secondary;
+    @include phone {
+        margin-top: 0.5rem;
+        padding-left: 0.5rem;
+    }
+}
+
+.movie_title {
+    font-size: 3rem;
+    line-height: 2.5rem;
+    @include phone {
+        font-size: 1.75rem;
+    }
+}
+
+.score_section {
+    padding-top: "1.5rem";
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+    margin-top: auto;
+    margin-bottom: auto;
+    @include phone {
+        padding-top: "0.5rem";
+        margin-left: 0rem;
+        margin-right: auto;   
+        width: 100%;      
+    }
+}
+
+.rates_section {
+    background-color: $bgend;
+    color: $secondary;
+    padding: 15px;
+    min-height: 200px;
+    @include phone {
+        padding: 5px;
+        min-height: 150px;
+    }
 }

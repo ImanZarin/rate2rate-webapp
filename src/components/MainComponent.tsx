@@ -64,7 +64,6 @@ class MainComponent extends Component<MyProps> {
             else
                 this.props.changeToken(r);
             if (localStorage.getItem(MyStorage.user)){
-                console.log(JSON.parse(localStorage.getItem(MyStorage.user) || ""));
                 this.props.changeUser(JSON.parse(localStorage.getItem(MyStorage.user) || "") as User);
             }
         }

@@ -1,3 +1,6 @@
+@import "../../colors.scss";
+@import "../../App.scss";
+
 .button {
     width: inherit;
 }
@@ -6,6 +9,10 @@
     width: fit-content;
     margin-left: 0rem;
     margin-right: auto;
+    @include phone {
+        width: 100%;
+        text-align: center !important;
+    }
 }
 
 .row {
@@ -17,7 +24,34 @@
     width: 100%;
 }
 
+.btn-secondary {
+    margin-top: 1rem;
+    color: $secondary !important;
+    font-size: 1rem !important;
+    background-color: $bgstart !important;
+    & :hover {
+        background-color: $bgend !important;
+    }
+    @include phone {
+        margin-top: 0.5rem;
+        font-size: 0.85rem !important;
+    }
+}
+
 .text {
     margin-left: auto;
     margin-right: 0rem;
+    @include phone {
+        margin-right: auto;
+    }
+}
+
+.modal-title {
+    color: $secondary;
+    text-align: center;
+}
+
+.btn-submit {
+    margin: auto;
+    margin-top: 1rem;
 }

@@ -79,6 +79,7 @@ class ProfileComponent extends Component<MyProps & RouteComponentProps<any>, MyS
     myFetch = new MyFetch();
 
     componentDidMount(): void {
+        window.scrollTo(0, 0);
         this._isMounted = true;
         if (localStorage.getItem(MyStorage.token))
             this.fetchInfo();
