@@ -10,7 +10,7 @@ import { Constants } from '../../shared/Constants';
 import { GetRecentRatesResponse, GetRecentRatesForSignedResponse } from '../../shared/ApiTypes';
 import { GetRecentRatesResponseResult, GetRecentRatesForSignedResponseResult } from '../../shared/result.enums';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { MY_CARD } from '../CardComponent';
+import { MY_CARD } from '../Card/CardComponent';
 
 type MyProps = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

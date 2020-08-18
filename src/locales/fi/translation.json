@@ -61,5 +61,6 @@
     "rate-user-3": "minulla on etuyhteydettömiä etuja",
     "rate-user-2": "olen usein eri mieltä hänen kanssaan",
     "rate-user-1": "en yleensä pidä hänen maustaan",
-    "rate-user-submit": "Lähetä Hinta"
+    "rate-user-submit": "Lähetä Hinta",
+    "user-modal-title": "Arvioi Käyttäjä Kaavion Mukaan"
 }

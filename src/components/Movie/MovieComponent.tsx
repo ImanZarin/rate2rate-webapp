@@ -386,7 +386,6 @@ class MovieComponent extends Component<RouteComponentProps<any> & MyProps, MySta
                         <h6>{this.props.tr("movie-actor-title")}: </h6>
                         <p>{this.state.movie?.actors?.join(" ,")}</p>
                     </Col>
-
                 </Row>
                 <div className="rates_section"
                     style={{ display: this.state.mainList.length > 0 ? "block" : "none" }}>

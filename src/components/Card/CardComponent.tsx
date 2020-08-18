@@ -2,10 +2,9 @@
 import React from 'react';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { CardImg, Card, CardBody, CardTitle, CardSubtitle } from 'reactstrap';
-import '../App.scss';
-import '../colors.scss';
+import './card.scss';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import PercnetageCircle from './PercentageCircle';
+import PercnetageCircle from '../PercentageCircle';
 import { useHistory } from 'react-router-dom';
 
 type MyProps = {
@@ -48,13 +47,15 @@ export const MY_CARD = (props: MyProps): JSX.Element => {
         </div>;
 
     return (
-        <Card style={{ width: "150px", height: "290px", marginLeft: "5px", marginRight: "5px", flexShrink: 0 }}>
+        <Card className="card-main"
+        style={{  }}>
             <CardImg src={props.imgUrl} top width="100%"
                 style={{ cursor: "pointer" }}
                 onClick={() => history.push(props.imgLink)} />
             <CardBody>
                 {scoringSection}
-                <CardTitle style={{ fontWeight: "bold", cursor: "pointer", marginLeft: "-10px" }}
+                <CardTitle style={{ fontWeight: "bold", cursor: "pointer", marginLeft: "-10px", fontSize: "14px" }}
+                    className="my_text_overflow"
                     onClick={() => history.push(props.titleLink)}>
                     {props.title}
                 </CardTitle>

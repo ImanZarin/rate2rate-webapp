@@ -46,7 +46,7 @@
   overflow: hidden;
   white-space: nowrap;
   &:hover {
-    white-space: normal;
+    overflow: visible;
   }
 }
 

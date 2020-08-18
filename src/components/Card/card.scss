@@ -1,0 +1,10 @@
+@import "../../App.scss";
+@import "../../colors.scss";
+
+.card-main {
+    width: 150px;
+    height: 290px;
+    margin-left: 5px;
+    margin-right: 5px;
+    flex-shrink: 0;
+}
