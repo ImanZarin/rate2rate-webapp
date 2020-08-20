@@ -359,7 +359,7 @@ class MovieComponent extends Component<RouteComponentProps<any> & MyProps, MySta
                                 <span> ({this.state.movie?.year})</span>
                             </div>
                             <div onClick={this.toggleModal} className="score_section">
-                                <div style={{ display: this.state.personRate < 1 && this.state.likebility > 0 ? "none" : "block", }}>
+                                <div style={{ display: !this.props.isLoggedin || (this.state.personRate < 1 && this.state.likebility > 0) ? "none" : "block", }}>
                                     <span className={this.state.personRate > 0 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
                                     <span className={this.state.personRate > 1 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
                                     <span className={this.state.personRate > 2 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
@@ -394,7 +394,22 @@ class MovieComponent extends Component<RouteComponentProps<any> & MyProps, MySta
                     </h3>
                     {this.state.mainList.map((userRated) => {
                         return (
-                            <div key={userRated.userId}>{userRated.userName} : {userRated.rate} </div>
+                            <Row key={userRated.userId} style={{ cursor: "pointer" }}
+                                onClick={() => this.props.history.push("/user/" + userRated.userId)}>
+                                <Col xs={6} md={3}>{userRated.userName}</Col>
+                                <Col xs={6} md={3}>
+                                    <span style={{ visibility: userRated.rate > 0 ? "visible" : "hidden" }}
+                                        className={"filled_star fa fa-star"} />
+                                    <span style={{ visibility: userRated.rate > 1 ? "visible" : "hidden" }}
+                                        className={"filled_star fa fa-star"} />
+                                    <span style={{ visibility: userRated.rate > 2 ? "visible" : "hidden" }}
+                                        className={"filled_star fa fa-star"} />
+                                    <span style={{ visibility: userRated.rate > 3 ? "visible" : "hidden" }}
+                                        className={"filled_star fa fa-star"} />
+                                    <span style={{ visibility: userRated.rate > 4 ? "visible" : "hidden" }}
+                                        className={"filled_star fa fa-star"} />
+                                </Col>
+                            </Row>
                         );
                     })}
                 </div>
@@ -404,9 +419,9 @@ class MovieComponent extends Component<RouteComponentProps<any> & MyProps, MySta
                         <h5>{this.props.tr("movie_modal_title")}</h5>
                     </ModalHeader>
                     <ModalBody>
-                        <RateModal type={ModalTypes.movies} 
-                        changeRate={this.changeRate} 
-                        tr={this.props.tr}/>
+                        <RateModal type={ModalTypes.movies}
+                            changeRate={this.changeRate}
+                            tr={this.props.tr} />
                     </ModalBody>
                 </Modal>
 

@@ -11,4 +11,44 @@
     text-decoration: underline;
     color: blue;
     margin-left: 1rem;
+    margin-top: 0.5rem;
 }
+
+.title {
+    color: $secondary;
+    margin-bottom: 1.5rem;
+}
+
+.my-form-row {
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+    @include phone {
+        width: 100%;
+    }
+}
+
+.my-last-row {
+    @extend .my-form-row;
+    display: flex;
+}
+
+.form-btn {
+    margin-top: 0rem !important;
+    background-color: $bgend !important;
+    border-color: gray !important;
+    color: $secondary !important;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.bg {
+    background-color: $bgstart;
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+    @include phone {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+}
+

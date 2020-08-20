@@ -62,5 +62,7 @@
     "rate-user-2": "olen usein eri mieltä hänen kanssaan",
     "rate-user-1": "en yleensä pidä hänen maustaan",
     "rate-user-submit": "Lähetä Hinta",
-    "user-modal-title": "Arvioi Käyttäjä Kaavion Mukaan"
+    "user-modal-title": "Arvioi Käyttäjä Kaavion Mukaan",
+    "profile-myself-username": "Käyttäjätunnus",
+    "profile-myself-email": "Sähköposti"
 }

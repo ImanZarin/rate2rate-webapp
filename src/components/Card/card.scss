@@ -2,9 +2,36 @@
 @import "../../colors.scss";
 
 .card-main {
-    width: 150px;
-    height: 290px;
+    width: 170px;
+    height: 360px;
     margin-left: 5px;
     margin-right: 5px;
     flex-shrink: 0;
+    margin-bottom: 1rem;
+    background-color: transparent !important;
+    border: 0px !important;
+    @include phone {
+        margin-bottom: 0.5rem;
+    }
+}
+
+.score-section {
+    margin-top: -30px;
+    margin-left: -10px;
+    font-size: 1rem;
+    text-align: left;
+}
+
+.card-title {
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: -10px;
+    font-size: 14px;
+    color: $secondary;
+}
+
+.card-subtitle {
+    margin-left: -10px;
+    width: auto;
+    font-size: small;
 }

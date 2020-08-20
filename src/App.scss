@@ -44,10 +44,11 @@
 .my_text_overflow {
   text-overflow: ellipsis;
   overflow: hidden;
-  white-space: nowrap;
-  &:hover {
-    overflow: visible;
-  }
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  
 }
 
 .App {

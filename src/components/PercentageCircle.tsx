@@ -98,7 +98,7 @@ class PercnetageCircle extends Component<MyProps, MyState> {
         const x = this._circleSize / 2;
         const y = (this._circleSize - diameter) / 2;
         const fontSize = this._circleSize / 3;
-        const textX = this._circleSize / 2 - fontSize / 1.8;
+        const textX = this._circleSize / 2 - fontSize / 1.3;
         const styleSheet = document.styleSheets[0];
         styleSheet.insertRule(
             `@-webkit-keyframes progress${this._circleSize}{0%{stroke-dasharray: 0 ${circumference};}}`,

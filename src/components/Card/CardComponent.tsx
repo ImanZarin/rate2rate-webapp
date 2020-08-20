@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import React from 'react';
+import React, { useState } from 'react';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { CardImg, Card, CardBody, CardTitle, CardSubtitle } from 'reactstrap';
+import { CardImg, Card, CardBody, CardTitle, CardSubtitle, Tooltip } from 'reactstrap';
 import './card.scss';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import PercnetageCircle from '../PercentageCircle';
@@ -20,9 +20,17 @@ type MyProps = {
 
 export const MY_CARD = (props: MyProps): JSX.Element => {
     const history = useHistory();
+    const [titleTooltipOpen, setTitleTooltipOpen] = useState(false);
+    const [subtitleTooltipOpen, setSubtitleTooltipOpen] = useState(false);
+    const titleTooltipToggle = () => {
+        setTitleTooltipOpen(!titleTooltipOpen);
+    };
+    const subtitleTooltipToggle = () => {
+        setSubtitleTooltipOpen(!subtitleTooltipOpen);
+    };
     let scoringSection;
     if (props.isPercent)
-        scoringSection = <div style={{ marginTop: "-30px", marginLeft: "-10px" }}>
+        scoringSection = <div className="score-section" >
             <PercnetageCircle circleSize={0}
                 percent={props.likebility}
                 duration={0}
@@ -33,7 +41,7 @@ export const MY_CARD = (props: MyProps): JSX.Element => {
             </PercnetageCircle>
         </div>;
     else
-        scoringSection = <div style={{ marginTop: "-30px", marginLeft: "-10px" }}>
+        scoringSection = <div className="score-section">
             <span style={{ visibility: props.rate > 0 ? "visible" : "hidden" }}
                 className={"filled_star fa fa-star"} />
             <span style={{ visibility: props.rate > 1 ? "visible" : "hidden" }}
@@ -48,23 +56,34 @@ export const MY_CARD = (props: MyProps): JSX.Element => {
 
     return (
         <Card className="card-main"
-        style={{  }}>
+            style={{}}>
             <CardImg src={props.imgUrl} top width="100%"
                 style={{ cursor: "pointer" }}
                 onClick={() => history.push(props.imgLink)} />
             <CardBody>
                 {scoringSection}
-                <CardTitle style={{ fontWeight: "bold", cursor: "pointer", marginLeft: "-10px", fontSize: "14px" }}
-                    className="my_text_overflow"
+                <CardTitle id={"title" + props.imgLink.substr(props.imgLink.lastIndexOf("/") + 1) + props.titleLink.substr(props.imgLink.lastIndexOf("/") + 1)}
+                    className="my_text_overflow card-title"
                     onClick={() => history.push(props.titleLink)}>
                     {props.title}
                 </CardTitle>
-                <CardSubtitle className="my_text_overflow" style={{
-                    marginLeft: "-10px",
-                    width: "auto",
-                    fontSize: "small",
-                }}>
+                <Tooltip placement="bottom"
+                    target={"title" + props.imgLink.substr(props.imgLink.lastIndexOf("/") + 1) + props.titleLink.substr(props.imgLink.lastIndexOf("/") + 1)}
+                    toggle={titleTooltipToggle}
+                    isOpen={titleTooltipOpen}
+                    delay={500}>
+                    {props.title}
+                </Tooltip>
+                <CardSubtitle className="my_text_overflow card-subtitle"
+                    id={"subtitle" + props.imgLink.substr(props.imgLink.lastIndexOf("/") + 1) + props.titleLink.substr(props.imgLink.lastIndexOf("/") + 1)}>
                     {props.subtitle}
+                    <Tooltip placement="bottom"
+                        target={"subtitle" + props.imgLink.substr(props.imgLink.lastIndexOf("/") + 1) + props.titleLink.substr(props.imgLink.lastIndexOf("/") + 1)}
+                        toggle={subtitleTooltipToggle}
+                        isOpen={subtitleTooltipOpen}
+                        delay={500}>
+                        {props.subtitle}
+                    </Tooltip>
                 </CardSubtitle>
             </CardBody>
         </Card>

@@ -54,7 +54,7 @@ class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MySt
             isLoading: false,
             error: new Error,
             alertIsOpen: false,
-            isSignUp: props.match.path.endsWith("up")
+            isSignUp: false
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleFormChange = this.handleFormChange.bind(this);
@@ -104,10 +104,10 @@ class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MySt
     }
 
     handleSubmit(values: SigninForm): void {
+        if (this.state.isLoading)
+            return;
         this.handleFormChange(values);
-        if (!this.state.isLoading) {
-            this.postSignin(values);
-        }
+        this.postSignin(values);
     }
 
     closeAlert(): void {
@@ -154,7 +154,7 @@ class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MySt
                                         localStorage.setItem(MyStorage.user, r.user.username);
                                         this.props.changeUser(r.user);
                                         this.props.changeToken(r.accessToken);
-                                        this.props.history.push("/profile");
+                                        this.props.history.goBack();
                                         break;
                                     default:
                                         break;
@@ -199,7 +199,7 @@ class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MySt
                                         localStorage.setItem(MyStorage.user, JSON.stringify(r.user));
                                         this.props.changeUser(r.user);
                                         this.props.changeToken(r.accessToken);
-                                        this.props.history.push("/profile");
+                                        this.props.history.goBack();
                                         break;
                                     default:
                                         break;
@@ -228,15 +228,16 @@ class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MySt
 
     render(): JSX.Element {
         return (
-            <div className="container">
-                <h1>{this.state.isSignUp ? this.props.translate("signup-title") : this.props.translate("signin-title")}</h1>
+            <div className="bg">
+                <h1 className="title">{this.state.isSignUp ? this.props.translate("signup-title") : this.props.translate("signin-title")}</h1>
                 <div>
                     <Formik initialValues={this.state.form} onSubmit={(values): void => {
                         this.handleSubmit(values);
                     }} validationSchema={this.mySchema}>
                         {({ handleSubmit, errors, touched }): JSX.Element => (
                             <Form onSubmit={handleSubmit}>
-                                <Row className="form-group" style={{ display: this.state.isSignUp ? "block" : "none" }}>
+                                <div className="form-group my-form-row"
+                                    style={{ display: this.state.isSignUp ? "block" : "none" }}>
                                     <Label htmlFor="usertag">{this.props.translate("signin-username-title")}</Label>
                                     <Field type="text" className="form-control"
                                         placeholder={this.props.translate("signin-username-placeholder")}
@@ -245,8 +246,8 @@ class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MySt
                                     <div style={{ visibility: errors.usertag && touched.usertag ? 'visible' : 'hidden' }}
                                         className="error-msg"> {errors.usertag}
                                     </div>
-                                </Row>
-                                <Row className="form-group" >
+                                </div>
+                                <div className="form-group my-form-row" >
                                     <Label htmlFor="username">{this.props.translate("signin-email-title")}</Label>
                                     <Field type="text" className="form-control"
                                         placeholder={this.props.translate("signin-email-placeholder")}
@@ -254,22 +255,24 @@ class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MySt
                                     <div style={{ visibility: errors.username && touched.username ? 'visible' : 'hidden' }}
                                         className="error-msg"> {errors.username}
                                     </div>
-                                </Row>
-                                <Row className="form-group" name="password">
+                                </div>
+                                <div className="form-group my-form-row">
                                     <Label htmlFor="password">{this.props.translate("signin-password-title")}</Label>
                                     <Field type="password" className="form-control" name="password"
                                         placeholder={this.props.translate("signin-password-placeholder")} id="password" />
                                     <div style={{ visibility: errors.password && touched.password ? 'visible' : 'hidden' }}
                                         className="error-msg"> {errors.password}
                                     </div>
-                                </Row>
-                                <Row>
-                                    <Button type="submit" className="btn">{this.props.translate("siginin-form-submit")}</Button>
-                                    <span className="offset-1">{this.state.isSignUp ? this.props.translate("signin-linkto-login") : this.props.translate("signin-linkto-signup")}</span>
+                                </div>
+                                <div className="my-last-row">
+                                    <div style={{ marginTop: "0.5rem" }}>
+                                        {this.state.isSignUp ? this.props.translate("signin-linkto-login") : this.props.translate("signin-linkto-signup")}
+                                    </div>
                                     <Label className="link" onClick={() => { this.setState({ isSignUp: !this.state.isSignUp }) }}>
                                         {this.state.isSignUp ? this.props.translate("signin-title") : this.props.translate("signup-title")}
                                     </Label>
-                                </Row>
+                                    <button type="submit" className="btn form-btn">{this.props.translate("siginin-form-submit")}</button>
+                                </div>
                             </Form>
                         )}
                     </Formik>

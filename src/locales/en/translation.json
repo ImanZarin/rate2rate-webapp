@@ -62,5 +62,7 @@
     "rate-user-2": "i often disagree with him/her",
     "rate-user-1": "i usually dislike his/her taste",
     "rate-user-submit": "Submit Rate",
-    "user-modal-title": "Please Rate The User According To The Chart"
+    "user-modal-title": "Please Rate The User According To The Chart",
+    "profile-myself-username": "Username",
+    "profile-myself-email": "Email"
 }

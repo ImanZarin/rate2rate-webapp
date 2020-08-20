@@ -84,12 +84,6 @@ class MainComponent extends Component<MyProps> {
                     translate={this.props.translate}
                     isLoggedin={this.props.signin.isSignedin}
                     logout={this.props.logout} />
-                <Route path="/signup" component={(): JSX.Element =>
-                    <SigninComponent
-                        translate={this.props.translate}
-                        changeUser={this.props.changeUser}
-                        changeToken={this.props.changeToken}
-                        isLoggedin={this.props.signin.isSignedin} />} />
                 <Route path="/signin" component={(): JSX.Element =>
                     <SigninComponent
                         translate={this.props.translate}

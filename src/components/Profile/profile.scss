@@ -1,20 +1,50 @@
 @import "../../App.scss";
+@import "../../colors.scss";
 
-.main_text {
+.bg {
+    background-color: $bgstart;
+}
+
+.tab-content {
+    margin-top: 4rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
     white-space: pre-line;
     text-align: center;
-}
-
-.row_text {
+    color: $secondary;
+    font-size: 2rem;
     text-overflow: ellipsis;
     overflow: hidden;
-    white-space: nowrap;
+    @include phone {
+        margin-top: 0.5rem;
+        font-size: 1.5rem;
+        margin-left: 0.25rem;
+        margin-right: 0.25rem;
+    }
 }
 
-.my_row {
-    cursor: pointer;
+.tabs {
+    background-color: white;
+}
+
+.active {
+    background-color: $bgstart !important;
+    border-color: $bgstart !important;
 }
 
 .my_tab {
     cursor: pointer;
+    color: $secondary !important;
+}
+
+.my-btn {
+    background-color: $bgend !important;
+    margin-top: 2.5rem;
+    @include phone {
+        margin-top: 1.5rem;
+    }
+}
+
+.profile-row {
+    text-align: left;
 }
