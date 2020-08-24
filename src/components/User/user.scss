@@ -1,14 +1,14 @@
 @import "../../colors.scss";
 @import "../../App.scss";
 
-.bg {
-    background-color: $bgstart;
+.user-bg {
+    background-color: $primary;
     min-height: 100vh;
 }
 
 .name {
     margin: auto;
-    color: $secondary;
+    color: $textP;
     font-size: 2.5rem;
     font-weight: bold;
     width: fit-content;
@@ -21,7 +21,7 @@
 }
 
 .movie-title {
-    color: $secondary;
+    color: $textP;
     font-size: 2rem;
 }
 

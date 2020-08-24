@@ -197,8 +197,8 @@ class HomeComponent extends Component<MyProps & RouteComponentProps<any>, MyStat
 
     render(): JSX.Element {
         return (
-            <div className="bg" >
-                <Jumbotron className="my_jumbotron">
+            <div className="home-bg" >
+                <Jumbotron className="my-jumbotron">
                     <div>{this.props.tr("home-jumbo-title")}</div>
                     <span>{this.props.tr("home-jumbo-subtitle")}</span>
                 </Jumbotron>

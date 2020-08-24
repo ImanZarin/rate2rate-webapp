@@ -27,11 +27,12 @@
     cursor: pointer;
     margin-left: -10px;
     font-size: 14px;
-    color: $secondary;
+    color: $textP;
+    width: fit-content;
 }
 
 .card-subtitle {
     margin-left: -10px;
-    width: auto;
+    width: fit-content;
     font-size: small;
 }

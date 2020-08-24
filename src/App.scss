@@ -1,5 +1,9 @@
 @import "./colors.scss";
 
+.btn-secondary {
+  background-color: transparent !important;
+}
+
 .myAlert {
   overflow: overlay;
   position: fixed !important;
@@ -10,7 +14,7 @@
 }
 
 .filled_star {
-  color: $secondary;
+  color: $gold;
 }
 
 .stars {
@@ -49,6 +53,16 @@
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   
+}
+
+.modal-header {
+  background-color: $primary;
+  color: $textP;
+}
+
+.modal-body {
+  background-color: $primary;
+  color: $textP;
 }
 
 .App {

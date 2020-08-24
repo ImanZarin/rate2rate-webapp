@@ -69,8 +69,8 @@ export class MyFetch {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    public async searchMovie(movieName: string): Promise<any> {
-        return this.myFetch(ReqTypes.post, "movies", { movie: movieName });
+    public async search(word: string): Promise<any> {
+        return this.myFetch(ReqTypes.post, "movieusers/search", { search: word });
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -26,12 +26,11 @@
 
 .btn-secondary {
     margin-top: 1rem;
-    color: $secondary !important;
+    color: $textP !important;
     font-size: 1rem !important;
-    background-color: $bgstart !important;
-    & :hover {
-        background-color: $bgend !important;
-    }
+    background-color: $secondary !important;
+    border-color: $teritary !important;
+    -webkit-tap-highlight-color: $teritary;
     @include phone {
         margin-top: 0.5rem;
         font-size: 0.85rem !important;
@@ -41,13 +40,14 @@
 .text {
     margin-left: auto;
     margin-right: 0rem;
+    color: $textP;
     @include phone {
         margin-right: auto;
     }
 }
 
 .modal-title {
-    color: $secondary;
+    color: $textP;
     text-align: center;
 }
 

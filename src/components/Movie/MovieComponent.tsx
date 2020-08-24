@@ -1,18 +1,18 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import React, { Component, Fragment, ChangeEvent } from 'react';
+import React, { Component } from 'react';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { LOADING } from '../LoadingComponent';
 import { Constants } from '../../shared/Constants';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Alert, Button, Modal, ModalHeader, ModalBody, InputGroup, InputGroupAddon, Input, Row, Col } from 'reactstrap';
-import { GetMovieInfoResponse, GetMovieInfoForSignedResponse, UpdateMovieRateResponse, SearchMovieResponse } from '../../shared/ApiTypes';
+import { Alert, Modal, ModalHeader, ModalBody, Row, Col, Table } from 'reactstrap';
+import { GetMovieInfoResponse, GetMovieInfoForSignedResponse, UpdateMovieRateResponse } from '../../shared/ApiTypes';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { RateModal, ModalTypes } from '../Rate/RateComponent';
 import './movie.scss';
 import { MyFetch } from '../../shared/my-fetch';
-import { GetMovieInfoForSignedResponseResult, GetMovieInfoResponseResult, UpdateMovieRateResponseResult, SearchMovieResponseResult } from '../../shared/result.enums';
-import { Movie, IMDBsearch, MovieRate } from '../../shared/dto.models';
+import { GetMovieInfoForSignedResponseResult, GetMovieInfoResponseResult, UpdateMovieRateResponseResult } from '../../shared/result.enums';
+import { Movie, MovieRate } from '../../shared/dto.models';
 import { isNullOrUndefined } from 'util';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import PercnetageCircle from '../PercentageCircle';
@@ -26,9 +26,6 @@ type MyState = {
     modalIsOpen: boolean;
     personRate: number;
     likebility: number;
-    searchText: string;
-    searchResult: IMDBsearch[];
-    //searchMode: boolean;
 }
 
 type MyProps = {
@@ -56,25 +53,17 @@ class MovieComponent extends Component<RouteComponentProps<any> & MyProps, MySta
             modalIsOpen: false,
             personRate: 0,
             likebility: 0,
-            searchText: "",
-            searchResult: [],
-            //searchMode: true
         }
         this.showAndHideAlert = this.showAndHideAlert.bind(this);
         this.closeAlert = this.closeAlert.bind(this);
         this.toggleModal = this.toggleModal.bind(this);
         this.changeRate = this.changeRate.bind(this);
-        this.onSearchSubmit = this.onSearchSubmit.bind(this);
-        this.onSearchChange = this.onSearchChange.bind(this);
     }
 
     componentDidMount(): void {
         window.scrollTo(0, 0);
         this._isMounted = true;
         if (!isNullOrUndefined(this.props.match.params.id)) {
-            // this.setState({
-            //     searchMode: false
-            // });
             this.fetchList(this.props.match.params.id);
         }
 
@@ -266,91 +255,15 @@ class MovieComponent extends Component<RouteComponentProps<any> & MyProps, MySta
 
     }
 
-    onSearchChange(e: ChangeEvent<HTMLInputElement>) {
-        this.setState({
-            searchText: e.target.value
-        })
-    }
-
-    onSearchSubmit = (): void => {
-        this.setState({
-            isLoading: true
-        });
-        this.myfetchObjet.searchMovie(this.state.searchText)
-            .then(resp => {
-                if (resp) {
-                    resp.json()
-                        .then((resp: SearchMovieResponse) => {
-                            switch (resp.result) {
-                                case SearchMovieResponseResult.failed:
-                                    {
-                                        const err = new Error(this.props.tr("movie-search-err-failed"));
-                                        this.showAndHideAlert(err, Constants.waitNormal);
-                                    }
-                                    break;
-                                case SearchMovieResponseResult.listEmpty:
-                                    {
-                                        const err = new Error(this.props.tr("movie-search-err-nomovie"));
-                                        this.showAndHideAlert(err, Constants.waitNormal);
-                                    }
-                                    break;
-                                case SearchMovieResponseResult.success:
-                                    this.setState({
-                                        isLoading: false,
-                                        searchText: "",
-                                        searchResult: resp.movies
-                                    });
-                                    break;
-                                default:
-                                    break;
-                            }
-                        })
-                }
-            })
-    }
-
-    onSelectMovie(imdbId: string) {
-        this.setState({
-            isLoading: true
-        });
-        this.myfetchObjet.getMovieId(imdbId)
-            .then(resp => {
-                if (resp) {
-                    resp.json()
-                        .then((resp: string) => {
-                            this.props.history.push("movie/" + resp);
-                            // switch (resp.result) {
-                            //     case SearchMovieResponseResult.failed:
-                            //         {
-                            //             const err = new Error(this.props.tr("movie-search-err-failed"));
-                            //             this.showAndHideAlert(err, Constants.waitNormal);
-                            //         }
-                            //         break;
-                            //     case SearchMovieResponseResult.listEmpty:
-                            //         {
-                            //             const err = new Error(this.props.tr("movie-search-err-nomovie"));
-                            //             this.showAndHideAlert(err, Constants.waitNormal);
-                            //         }
-                            //         break;
-                            //     case SearchMovieResponseResult.success:
-                            //         this.props.history.push(imdbId);
-                            //         break;
-                            //     default:
-                            //         break;
-                            // }
-                        })
-                }
-            });
-    }
-
     render(): JSX.Element {
         if (!this.state.movie)
             return <div></div>;
         return (
-            <div className="bg">
+            <div className="movie-bg">
                 <Row>
                     <Col xs={12} md={4} className="img_container">
-                        <img src={this.state.movie?.poster} className="img_main" />
+                        <img src={this.state.movie?.poster.length > 5 ? this.state.movie.poster : require("../../assets/jumbotron.jpg")}
+                            className="img_main" />
                     </Col>
                     <Col xs={12} md={8} className="movie_header">
                         <Row>
@@ -389,36 +302,43 @@ class MovieComponent extends Component<RouteComponentProps<any> & MyProps, MySta
                 </Row>
                 <div className="rates_section"
                     style={{ display: this.state.mainList.length > 0 ? "block" : "none" }}>
-                    <h3>
-                        {this.props.tr("movie-users-title")}
-                    </h3>
-                    {this.state.mainList.map((userRated) => {
-                        return (
-                            <Row key={userRated.userId} style={{ cursor: "pointer" }}
-                                onClick={() => this.props.history.push("/user/" + userRated.userId)}>
-                                <Col xs={6} md={3}>{userRated.userName}</Col>
-                                <Col xs={6} md={3}>
-                                    <span style={{ visibility: userRated.rate > 0 ? "visible" : "hidden" }}
-                                        className={"filled_star fa fa-star"} />
-                                    <span style={{ visibility: userRated.rate > 1 ? "visible" : "hidden" }}
-                                        className={"filled_star fa fa-star"} />
-                                    <span style={{ visibility: userRated.rate > 2 ? "visible" : "hidden" }}
-                                        className={"filled_star fa fa-star"} />
-                                    <span style={{ visibility: userRated.rate > 3 ? "visible" : "hidden" }}
-                                        className={"filled_star fa fa-star"} />
-                                    <span style={{ visibility: userRated.rate > 4 ? "visible" : "hidden" }}
-                                        className={"filled_star fa fa-star"} />
-                                </Col>
-                            </Row>
-                        );
-                    })}
+                    <Table striped className="movie-table" size="sm">
+                        <thead>
+                            <tr>
+                                <th>{this.props.tr("movie-rates-col1")}</th>
+                                <th>{this.props.tr("movie-rates-col2")}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {this.state.mainList?.map((userRated) => {
+                                return (
+                                    <tr key={userRated.userId} style={{ cursor: "pointer" }}
+                                        onClick={() => this.props.history.push("/user/" + userRated.userId)}>
+                                        <td>{userRated.userName}</td>
+                                        <td>
+                                            <span style={{ visibility: userRated.rate > 0 ? "visible" : "hidden" }}
+                                                className={"filled_star fa fa-star"} />
+                                            <span style={{ visibility: userRated.rate > 1 ? "visible" : "hidden" }}
+                                                className={"filled_star fa fa-star"} />
+                                            <span style={{ visibility: userRated.rate > 2 ? "visible" : "hidden" }}
+                                                className={"filled_star fa fa-star"} />
+                                            <span style={{ visibility: userRated.rate > 3 ? "visible" : "hidden" }}
+                                                className={"filled_star fa fa-star"} />
+                                            <span style={{ visibility: userRated.rate > 4 ? "visible" : "hidden" }}
+                                                className={"filled_star fa fa-star"} />
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </Table>
                 </div>
 
                 <Modal isOpen={this.state.modalIsOpen} toggle={this.toggleModal}>
-                    <ModalHeader>
+                    <ModalHeader className="modal-header">
                         <h5>{this.props.tr("movie_modal_title")}</h5>
                     </ModalHeader>
-                    <ModalBody>
+                    <ModalBody className="modal-body">
                         <RateModal type={ModalTypes.movies}
                             changeRate={this.changeRate}
                             tr={this.props.tr} />
@@ -437,28 +357,3 @@ class MovieComponent extends Component<RouteComponentProps<any> & MyProps, MySta
 
 
 export default withRouter(MovieComponent);
-
-{/* <InputGroup style={{ visibility: this.state.searchMode ? "visible" : "hidden" }}>
-                    <InputGroupAddon addonType="prepend">
-                        <Button className="fa fa-search fa-lg"
-                            onClick={this.onSearchSubmit}></Button>
-                    </InputGroupAddon>
-                    <Input
-                        onChange={this.onSearchChange}
-                        placeholder={this.props.tr("movie-search-placeholder")}
-                        onKeyPress={(event) => {
-                            if (event.key === "Enter") {
-                                this.onSearchSubmit();
-                            }
-                        }} />
-                </InputGroup> */}
-
-{/* <div style={{ visibility: this.state.searchMode ? "visible" : "hidden" }}>
-                    {this.state.searchResult.map((ms) => {
-                        return (
-                            <div key={ms.imdbID} onClick={() => this.onSelectMovie(ms.imdbID)}
-                                className="search_row">
-                                <img src={ms.Poster} className="search_img" />{ms.Title} ({ms.Year})</div>
-                        );
-                    })}
-                </div> */}

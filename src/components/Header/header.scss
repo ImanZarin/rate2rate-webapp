@@ -1,14 +1,64 @@
 @import "../../colors.scss";
+@import '../../App.scss';
+
+$my-heigth: 50px;
+
+.header {
+    background-color: $teritary;
+}
 
 .title {
-    color: $secondary;
+    color: $textS;
 }
 
 .my-navbar-toggler {
-    background-color: $secondary !important;
+    background-color: $teritary !important;
+    font-size: 0.85rem !important;
 }
 
-.button-right {
-    min-width: 70px;
-    height: 40px;
+.btn-right {
+    background-color: $teritary !important;
+    border: 0rem;
+    font-size: 2rem;
+    color: $textS;
+    border-radius: 0.25rem;
+    &:hover {
+        opacity: 0.5;
+    }
+}
+
+.dropdown {
+    border: 0rem !important;
+    padding: 0rem !important;
+    margin-top: auto !important;
+    margin-bottom: auto;
+    height: $my-heigth;
+    &:focus {
+        box-shadow: none !important;
+    }
+}
+
+.dropdown-container {
+    background-color: $teritary !important;
+    color: $textS;
+    border-radius: 0.25rem;
+    &:hover {
+        opacity: 0.5;
+    }
+}
+
+.my-nav-item {
+    margin-left: 1rem;
+    height: $my-heigth;
+    background-color: $teritary !important;
+    @include phone {
+        margin-left: 0rem;
+    }
+}
+
+.btn-search {
+    height: 100%;
+    margin-top: 0rem !important;
+    color: $textS !important;
+    border-color: $textS !important;
 }

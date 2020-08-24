@@ -16,9 +16,9 @@ const defaultProps: MyProps = {
     percent: 100,
     duration: 1000,
     offset: 100,
-    fontColor: 'rgba(204,72,209,.75)',
-    circleColor: '#cc48d1',
-    circleInnerColor: '#d9f5ea',
+    fontColor: 'rgba(75,56,50,.75)',
+    circleColor: '#4b3832',
+    circleInnerColor: '#fff4e6',
 };
 
 type MyState = {

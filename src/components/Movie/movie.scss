@@ -1,16 +1,12 @@
 @import "../../colors.scss";
 @import "../../App.scss";
 
-.search_img {
-    width: 150px;
-    height: 150px;
-}
 
-.search_row {
-    margin: 15px;
-    cursor: pointer;
-    background-color: $bgstart;
-}
+// .search_row {
+//     margin: 15px;
+//     cursor: pointer;
+//     background-color: $secondary;
+// }
 
 .img_container {
     padding: 25px;
@@ -22,7 +18,8 @@
 .img_main {
     width: 100%;
     max-width: 400px;
-    height: auto;
+    height: 100%;
+    object-fit: cover;//do not change ratio
     margin: auto;
     border: solid rgba(1, 1, 1, 0) 5px;
     border-radius: 0.85rem;
@@ -31,15 +28,15 @@
     }
 }
 
-.bg {
+.movie-bg {
     min-height: 100vh;
-    background-color: $bgstart;
+    background-color: $primary;
 }
 
 .movie_header {
     margin-top: 4rem;
     padding-left: 1rem;
-    color: $secondary;
+    color: $textP;
     @include phone {
         margin-top: 0.5rem;
         padding-left: 0.5rem;
@@ -70,12 +67,21 @@
 }
 
 .rates_section {
-    background-color: $bgend;
-    color: $secondary;
+    background-color: $secondary;
+    color: $textS;
     padding: 15px;
     min-height: 200px;
     @include phone {
         padding: 5px;
         min-height: 150px;
     }
+}
+
+.movie-table {
+    color: $textS !important;
+}
+
+.table td {
+    vertical-align: middle !important;
+    max-width: 150px;
 }

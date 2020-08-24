@@ -2,7 +2,7 @@
 export enum Pages {
     signin = "/signin",
     user = "/user",
-    home = "/"
+    home = "/home"
 
 }
 

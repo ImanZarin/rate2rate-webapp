@@ -188,22 +188,22 @@ class ProfileComponent extends Component<MyProps & RouteComponentProps<any>, MyS
 
     render(): JSX.Element {
         return (
-            <div className="bg">
+            <div className="profile-bg">
                 <Nav tabs className="tabs">
                     <NavItem>
-                        <NavLink className={this.state.activeTab === 1 ? 'active my_tab' : "my_tab"}
+                        <NavLink className={this.state.activeTab === 1 ? 'my-tab-active' : "my-tab"}
                             onClick={() => { this.onTabChange(1); }}>
                             {this.props.tr("profile-tabs-movies-title")}
                         </NavLink>
                     </NavItem>
                     <NavItem>
-                        <NavLink className={this.state.activeTab === 2 ? 'active my_tab' : 'my_tab'}
+                        <NavLink className={this.state.activeTab === 2 ? 'my-tab-active' : 'my-tab'}
                             onClick={() => { this.onTabChange(2); }}>
                             {this.props.tr("profile-tabs-bodies-title")}
                         </NavLink>
                     </NavItem>
                     <NavItem>
-                        <NavLink className={this.state.activeTab === 3 ? 'active my_tab' : 'my_tab'}
+                        <NavLink className={this.state.activeTab === 3 ? 'my-tab-active' : 'my-tab'}
                             onClick={() => { this.onTabChange(3); }}>
                             {this.props.tr("profile-tabs-me-title")}
                         </NavLink>
@@ -257,6 +257,7 @@ class ProfileComponent extends Component<MyProps & RouteComponentProps<any>, MyS
                         </h3>
                     </TabPane>
                     <TabPane tabId={3} className="tab-content">
+                        <span className="fa fa-user user-icon" />
                         <Row className="profile-row">
                             <Col xs={6} md={3}>{this.props.tr("profile-myself-username")}:</Col>
                             <Col xs={6} md={3}>{this.state.profile.username}</Col>

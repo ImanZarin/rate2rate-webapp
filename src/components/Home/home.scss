@@ -1,41 +1,27 @@
 @import "../../App.scss";
 
-.bg {
-    background-color: $bgstart;
+.home-bg {
+    background-color: $primary;
     min-height: 100vh;
-}
-
-.first_list {
-    color: $teritary;
-    font-size: 2rem;
-    cursor: pointer;
-    text-align: center;
-}
-
-.second_list {
-    color: black;
-    font-size: 1rem;
-    cursor: pointer;
-    text-align: left;
 }
 
 .first_section {
     @extend .side_paddings;
-    color: $secondary;
+    color: $textP;
     padding-top: 15px;
 }
 
 .second_section {
     @extend .side_paddings;
-    color: $secondary;
+    color: $textP;
     padding-top: 15px;
 }
 
 .third_section {
     @extend .side_paddings;
-    color: $secondary;
+    color: $textS;
     padding-top: 15px;
-    background-color: $bgend;
+    background-color: $secondary;
     white-space: pre-line;
     padding-bottom: 15px;
 }
@@ -50,15 +36,15 @@
         width: 10px; /* Chrome & Safari & Opera */
     }
     &::-webkit-scrollbar-track {
-        box-shadow: inset 0 0 5px $bgend;
-        background: whitesmoke;
+        box-shadow: inset 0 0 5px $secondary;
+        background: $textS;
     }
     &::-webkit-scrollbar-thumb {
         border-radius: 5px;
-        background: $bgend;
+        background: $secondary;
     }
     &::-webkit-scrollbar-thumb:hover {
-        background: blue;
+        background: $teritary;
     }
     scrollbar-width: 10px; /* Firefox */
     @include phone {
@@ -71,9 +57,9 @@
     }
 }
 
-.my_jumbotron {
+.my-jumbotron {
     background-size: contain; 
-    color: $bgstart;
+    color: $primary;
     background-image: url("../../assets/jumbotron.jpg");
     font-size: 2.5rem;
     @include phone {

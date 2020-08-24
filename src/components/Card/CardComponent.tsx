@@ -55,10 +55,9 @@ export const MY_CARD = (props: MyProps): JSX.Element => {
         </div>;
 
     return (
-        <Card className="card-main"
-            style={{}}>
+        <Card className="card-main">
             <CardImg src={props.imgUrl} top width="100%"
-                style={{ cursor: "pointer" }}
+                style={{ cursor: "pointer", height: "252px" }}
                 onClick={() => history.push(props.imgLink)} />
             <CardBody>
                 {scoringSection}

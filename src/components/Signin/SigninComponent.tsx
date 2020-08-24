@@ -228,7 +228,7 @@ class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MySt
 
     render(): JSX.Element {
         return (
-            <div className="bg">
+            <div className="signin-bg">
                 <h1 className="title">{this.state.isSignUp ? this.props.translate("signup-title") : this.props.translate("signin-title")}</h1>
                 <div>
                     <Formik initialValues={this.state.form} onSubmit={(values): void => {

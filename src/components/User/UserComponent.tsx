@@ -1,10 +1,10 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { LOADING } from '../LoadingComponent';
 import { Constants } from '../../shared/Constants';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Alert, Button, Modal, ModalHeader, ModalBody, Row, Col } from 'reactstrap';
+import { Alert, Modal, ModalHeader, ModalBody, Row, Col } from 'reactstrap';
 import { GetUserInfoResponse, GetUserInfoForSignedResponse, UpdateBuddyResponse } from '../../shared/ApiTypes';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -263,7 +263,7 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
     render(): JSX.Element {
 
         return (
-            <div className="bg">
+            <div className="user-bg">
                 <Row>
                     <Col xs={12} md={4}>
                         <div className="name">{this.state.name}</div>
@@ -300,10 +300,10 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
                     </Row>
                 </div>
                 <Modal isOpen={this.state.modalIsOpen} toggle={this.toggleModal}>
-                    <ModalHeader>
+                    <ModalHeader className="modal-header">
                     <h5>{this.props.tr("user-modal-title")}</h5>
                     </ModalHeader>
-                    <ModalBody>
+                    <ModalBody className="modal-body">
                         <RateModal type={ModalTypes.people}
                             changeRate={this.changeRate}
                             tr={this.props.tr} />
