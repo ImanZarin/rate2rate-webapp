@@ -32,7 +32,7 @@ export class MyFetch {
         if (mBody) {
             reqObj.body = JSON.stringify(mBody);
         }
-        return fetch(Constants.baseUrl + address, reqObj);
+        return fetch(Constants.apiBaseUrl + address, reqObj);
     }
 
     public abort(): void {
@@ -55,17 +55,17 @@ export class MyFetch {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public async getMovieInfo(movieId: string): Promise<any> {
-        return this.myFetch(ReqTypes.get, process.env.REACT_APP_ENDPOINTS_MOVIE_GET_DB || '' + movieId, null);
+        return this.myFetch(ReqTypes.get, (process.env.REACT_APP_ENDPOINTS_MOVIE_GET_DB || '') + movieId, null);
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public async rateUser(newRate: number, userId: string): Promise<any> {
-        return this.myFetch(ReqTypes.put, process.env.REACT_APP_ENDPOINTS_USER_RATE || "" + userId, { rate: newRate });
+        return this.myFetch(ReqTypes.put, (process.env.REACT_APP_ENDPOINTS_USER_RATE || "") + userId, { rate: newRate });
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public async rateMovie(newRate: number, movieId: string): Promise<any> {
-        return this.myFetch(ReqTypes.put, process.env.REACT_APP_ENDPOINTS_MOVIE_RATE || "" + movieId, { rate: newRate });
+        return this.myFetch(ReqTypes.put, (process.env.REACT_APP_ENDPOINTS_MOVIE_RATE || "") + movieId, { rate: newRate });
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
