@@ -1,5 +1,5 @@
-FROM node:alpine
-WORKDIR '/rate2rate-webapp'
+FROM node:12-alpine
+WORKDIR '/app'
 COPY package.json .
 RUN npm install
 COPY . .

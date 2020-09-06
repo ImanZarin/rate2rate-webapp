@@ -1,0 +1,29 @@
+version: "3.7"
+services:
+    app-front:
+        container_name: docker-frontend
+        restart: always
+        build: .
+        entrypoint: ["npm","start"]
+        networks:
+            - rate2rate
+        environment:
+            - REACT_APP_BASE_URL=http://localhost:3005/
+            - REACT_APP_ENDPOINT_HOME=movieusers/home
+            - REACT_APP_ENDPOINT_PROFILE=movieusers/profile
+            - REACT_APP_ENDPOINT_MOVIE_GET_IMDB=movies
+            - REACT_APP_ENDPOINTS_SEARCH=movieusers/search
+            - REACT_APP_ENDPOINTS_MOVIE_RATE=movieusers/
+            - REACT_APP_ENDPOINTS_USER_RATE=users/
+            - REACT_APP_ENDPOINTS_MOVIE_GET_DB=movieusers/movie/
+            - REACT_APP_ENDPOINTS_USER_GET=movieusers/user/
+            - REACT_APP_ENDPOINTS_USER_SIGNUP=auth/signup
+            - REACT_APP_ENDPOINT_USER_LOGIN=auth/login
+        ports:
+            - "8080:3000"
+        volumes:
+            - ./src:/app/src
+            - ./node_modules:/app/node_modules
+networks:
+    rate2rate:
+        name: r2r
