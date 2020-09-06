@@ -1,0 +1,46 @@
+@import "../../colors.scss";
+@import "../../App.scss";
+
+.search-bg {
+    background-color: $primary;
+    min-height: 100vh;
+    padding-left: 3rem;
+    padding-right: 3rem;
+    padding-top: 3rem;
+    color: $textP;
+    @include phone {
+        padding-right: 0.5rem;
+        padding-left: 0.5rem;
+        padding-top: 0.5rem;
+    }
+}
+
+.section-movie {
+    margin-bottom: 2rem;
+    @include phone {
+        margin-bottom: 0.5rem;
+    }
+}
+
+.section-user {
+    padding-bottom: 4rem;
+    @include phone {
+        padding-bottom: 1rem;
+    }
+}
+
+.search-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 0.25rem;
+    font-size: 6.5vh !important;
+}
+
+.my-table {
+    color: $textP !important;
+}
+
+.table td {
+    vertical-align: middle !important;
+    max-width: 150px;
+}

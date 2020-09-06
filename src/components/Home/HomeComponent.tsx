@@ -10,7 +10,7 @@ import { Constants } from '../../shared/Constants';
 import { GetRecentRatesResponse, GetRecentRatesForSignedResponse } from '../../shared/ApiTypes';
 import { GetRecentRatesResponseResult, GetRecentRatesForSignedResponseResult } from '../../shared/result.enums';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { MY_CARD } from '../CardComponent';
+import { MY_CARD } from '../Card/CardComponent';
 
 type MyProps = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -44,6 +44,7 @@ class HomeComponent extends Component<MyProps & RouteComponentProps<any>, MyStat
     }
 
     componentDidMount() {
+        window.scrollTo(0, 0);
         this._isMounted = true;
         this.setState({
             isLoading: true
@@ -196,8 +197,8 @@ class HomeComponent extends Component<MyProps & RouteComponentProps<any>, MyStat
 
     render(): JSX.Element {
         return (
-            <div className="bg" >
-                <Jumbotron className="my_jumbotron">
+            <div className="home-bg" >
+                <Jumbotron className="my-jumbotron">
                     <div>{this.props.tr("home-jumbo-title")}</div>
                     <span>{this.props.tr("home-jumbo-subtitle")}</span>
                 </Jumbotron>

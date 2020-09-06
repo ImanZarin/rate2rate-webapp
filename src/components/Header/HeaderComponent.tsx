@@ -1,13 +1,16 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React, { Component, EventHandler, ChangeEvent } from "react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Nav, Navbar, NavbarToggler, NavbarBrand, Collapse, NavItem, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Button, Input, InputGroup, InputGroupAddon, InputGroupText } from "reactstrap";
+import { Nav, Navbar, NavbarToggler, NavbarBrand, Collapse, NavItem, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Button, Input, InputGroup, InputGroupAddon, InputGroupText, Alert } from "reactstrap";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
-import { Languages, Pages } from "../../shared/Enums";
+import { Languages } from "../../shared/Enums";
 import i18n from "../../i18n";
 import './header.scss';
-import { User } from "../../shared/dto.models";
+import { User, IMDBsearch } from "../../shared/dto.models";
+import { MyFetch } from "../../shared/my-fetch";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { LOADING } from "../LoadingComponent";
 
 type MyProps = {
     lan: Languages;
@@ -23,11 +26,16 @@ type MyProps = {
 type MyState = {
     isNavOpen: boolean;
     isDropdownOpen: boolean;
+    searchText: string;
+    isLoading: boolean;
+    searchResult: IMDBsearch[];
+    alertIsOpen: boolean;
+    error: Error;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 class HeaderComponent extends Component<MyProps & RouteComponentProps<any>, MyState> {
-
+    myfetchObjet = new MyFetch();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(props: MyProps & RouteComponentProps<any>) {
         super(props);
@@ -35,9 +43,16 @@ class HeaderComponent extends Component<MyProps & RouteComponentProps<any>, MySt
         this.state = {
             isNavOpen: false,
             isDropdownOpen: false,
+            searchText: "",
+            isLoading: false,
+            searchResult: [],
+            error: new Error,
+            alertIsOpen: false
         };
         this.toggleNav = this.toggleNav.bind(this);
         this.toggleDrop = this.toggleDrop.bind(this);
+        this.onSearchSubmit = this.onSearchSubmit.bind(this);
+        this.onSearchChange = this.onSearchChange.bind(this);
     }
 
     toggleNav = (): void => {
@@ -71,22 +86,37 @@ class HeaderComponent extends Component<MyProps & RouteComponentProps<any>, MySt
 
     onSignin = (): void => {
         if (this.props.isLoggedin)
-            this.props.logout();
+            this.props.history.push("profile");
         else
-            this.props.history.push("/signin")
+            this.props.history.push("/signin");
     }
+
+    onSearchChange(e: ChangeEvent<HTMLInputElement>) {
+        this.setState({
+            searchText: e.target.value
+        })
+    }
+
+    onSearchSubmit = (): void => {
+        this.setState({
+            isLoading: true
+        });
+        this.props.history.push("/search/" + this.state.searchText);
+    }
+
 
     render(): JSX.Element {
         return (
             <React.Fragment>
-                <Navbar dark expand="md">
+                <Navbar dark expand="md" className="header">
                     <div className="container">
                         <NavbarToggler onClick={this.toggleNav} className="my-navbar-toggler" />
                         <NavbarBrand className="mr-auto " href="/">
-                            <img src='assets/images/logo.png' alt="logo" height="30" width="41" />
+                            <img src='/assets/images/logo.png' alt="logo" height="30" width="41"
+                                onClick={() => this.props.history.push("/home")} />
                         </NavbarBrand>
                         <Collapse isOpen={this.state.isNavOpen} navbar>
-                            <Nav navbar>
+                            {/* <Nav navbar>
                                 <NavItem>
                                     <NavLink className="nav-link" to={Pages.home}>
                                         <span className="fa fa-home fa-lg title">Home</span>
@@ -102,12 +132,32 @@ class HeaderComponent extends Component<MyProps & RouteComponentProps<any>, MySt
                                         <span className="fa fa-list fa-lg title">Menu</span>
                                     </NavLink>
                                 </NavItem>
-                            </Nav>
+                            </Nav> */}
                             <Nav className="ml-auto" navbar>
-                                <NavItem >
+                                <NavItem className="my-nav-item">
+                                    <InputGroup style={{ marginTop: "0.5rem" }}>
+                                        <InputGroupAddon addonType="prepend">
+                                            <button className="fa fa-search btn btn-search"
+                                                onClick={this.onSearchSubmit}>
+                                            </button>
+                                        </InputGroupAddon>
+                                        <Input
+                                            onChange={this.onSearchChange}
+                                            placeholder={this.props.translate("header-search-placeholder")}
+                                            onKeyPress={(event) => {
+                                                if (event.key === "Enter") {
+                                                    this.onSearchSubmit();
+                                                }
+                                            }} />
+                                    </InputGroup>
+                                </NavItem>
+                                <NavItem className="my-nav-item">
                                     <Dropdown isOpen={this.state.isDropdownOpen} toggle={this.toggleDrop}>
-                                        <DropdownToggle>
-                                            <span className="fa fa-globe fa-lg">Language</span>
+                                        <DropdownToggle className="dropdown">
+                                            <div className="dropdown-container">
+                                                <span className="fa fa-globe fa-2x" />
+                                                <span style={{ verticalAlign: "super" }}>  Language</span>
+                                            </div>
                                         </DropdownToggle>
                                         <DropdownMenu>
                                             <DropdownItem onClick={(): void => this.myChangeLanguage(Languages.en)}>
@@ -117,10 +167,10 @@ class HeaderComponent extends Component<MyProps & RouteComponentProps<any>, MySt
                                         </DropdownMenu>
                                     </Dropdown>
                                 </NavItem>
-                                <NavItem>
-                                    <Button className="button-right" onClick={() => this.onSignin()}>
+                                <NavItem className="my-nav-item">
+                                    <button className="btn-right" onClick={() => this.onSignin()}>
                                         {this.props.isLoggedin ? this.props.user.username : this.props.translate("header-signin-button")}
-                                    </Button>
+                                    </button>
                                 </NavItem>
                             </Nav>
                         </Collapse>

@@ -16,9 +16,9 @@ const defaultProps: MyProps = {
     percent: 100,
     duration: 1000,
     offset: 100,
-    fontColor: 'rgba(204,72,209,.75)',
-    circleColor: '#cc48d1',
-    circleInnerColor: '#d9f5ea',
+    fontColor: 'rgba(75,56,50,.75)',
+    circleColor: '#4b3832',
+    circleInnerColor: '#fff4e6',
 };
 
 type MyState = {
@@ -37,7 +37,7 @@ class PercnetageCircle extends Component<MyProps, MyState> {
     constructor(props: MyProps) {
         super(props);
         const percent = Math.floor(Math.max(Math.min(this.props.percent, 100), 0));
-        const percentText = this.props.duration === 0 ? percent : 0;
+        const percentText = percent;
         if (this.props.circleColor != "")
             this._circleColor = this.props.circleColor;
         if (this.props.circleInnerColor != "")
@@ -98,7 +98,7 @@ class PercnetageCircle extends Component<MyProps, MyState> {
         const x = this._circleSize / 2;
         const y = (this._circleSize - diameter) / 2;
         const fontSize = this._circleSize / 3;
-        const textX = this._circleSize / 2 - fontSize / 1.8;
+        const textX = this._circleSize / 2 - fontSize / 1.3;
         const styleSheet = document.styleSheets[0];
         styleSheet.insertRule(
             `@-webkit-keyframes progress${this._circleSize}{0%{stroke-dasharray: 0 ${circumference};}}`,

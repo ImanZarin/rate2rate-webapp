@@ -2,7 +2,7 @@
 @import '../../App.scss';
 
 .error-msg {
-    color: $danger;
+    color: red;
     height: 30px;
     min-width: 5px;
 }
@@ -11,4 +11,45 @@
     text-decoration: underline;
     color: blue;
     margin-left: 1rem;
+    margin-top: 0.5rem;
 }
+
+.title {
+    color: $textP !important;
+    margin-bottom: 1.5rem;
+}
+
+.my-form-row {
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+    @include phone {
+        width: 100%;
+    }
+}
+
+.my-last-row {
+    @extend .my-form-row;
+    display: flex;
+}
+
+.form-btn {
+    margin-top: 0rem !important;
+    background-color: $secondary !important;
+    border-color: $teritary !important;
+    color: $textS !important;
+    margin-left: auto;
+    margin-right: 0rem;
+}
+
+.signin-bg {
+    min-height: 100vh;
+    background-color: $primary;
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+    @include phone {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+}
+

@@ -1,10 +1,10 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { LOADING } from '../LoadingComponent';
 import { Constants } from '../../shared/Constants';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Alert, Button, Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Alert, Modal, ModalHeader, ModalBody, Row, Col } from 'reactstrap';
 import { GetUserInfoResponse, GetUserInfoForSignedResponse, UpdateBuddyResponse } from '../../shared/ApiTypes';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -13,6 +13,8 @@ import './user.scss';
 import { MyFetch } from '../../shared/my-fetch';
 import { GetUserInfoResponseResult, GetUserInfoForSignedResponseResult, UpdateBuddyResponseResult } from '../../shared/result.enums';
 import { MovieRate, User } from '../../shared/dto.models';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { MY_CARD } from '../Card/CardComponent';
 
 type RouteParams = {
     id: string;
@@ -60,6 +62,7 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
     componentDidMount(): void {
         if (this.props.match.params.id.toString() == this.props.user.id)
             this.props.history.replace("/profile");
+        window.scrollTo(0, 0);
         this._isMounted = true;
         this.fetchList(this.props.match.params.id);
 
@@ -260,39 +263,58 @@ class UserComponent extends Component<RouteComponentProps<RouteParams> & MyProps
     render(): JSX.Element {
 
         return (
-            <Fragment>
-                <div style={{ visibility: this.props.isLoggedin ? "visible" : "hidden", margin: "auto" }}
-                    onClick={this.toggleModal}>
-                    <span className={this.state.personRate > 0 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
-                    <span className={this.state.personRate > 1 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
-                    <span className={this.state.personRate > 2 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
-                    <span className={this.state.personRate > 3 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
-                    <span className={this.state.personRate > 4 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
+            <div className="user-bg">
+                <Row>
+                    <Col xs={12} md={4}>
+                        <div className="name">{this.state.name}</div>
+                    </Col>
+                    <Col xs={12} md={4}
+                        style={{ visibility: this.props.isLoggedin ? "visible" : "hidden" }}
+                        onClick={this.toggleModal}
+                        className="star-section">
+                        <span className={this.state.personRate > 0 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
+                        <span className={this.state.personRate > 1 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
+                        <span className={this.state.personRate > 2 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
+                        <span className={this.state.personRate > 3 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
+                        <span className={this.state.personRate > 4 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
+                    </Col>
+                </Row>
+                <br />
+                <div style={{ display: this.state.mainList.length > 0 ? "block" : "none" }}
+                    className="second-section">
+                    <div className="movie-title">{this.props.tr("user-movies-title")}:</div>
+                    <Row>
+                        {this.state.mainList.map((ratedmovie) => {
+                            return (
+                                <MY_CARD key={ratedmovie.movieId}
+                                    imgUrl={ratedmovie.movieImg}
+                                    imgLink={"/movie/" + ratedmovie.movieId}
+                                    title={ratedmovie.movieTitle}
+                                    rate={ratedmovie.rate}
+                                    titleLink={"/movie/" + ratedmovie.movieId}
+                                    subtitle=""
+                                    isPercent={false}
+                                    likebility={0} />
+                            );
+                        })}
+                    </Row>
                 </div>
-                <div>
-                    <h1 style={{ margin: "auto" }}>{this.state.name}</h1>
-                    <Modal isOpen={this.state.modalIsOpen} toggle={this.toggleModal}>
-                        <ModalHeader>
-                            <h5>Please Rate The User According To The Chart</h5>
-                        </ModalHeader>
-                        <ModalBody>
-                            <RateModal type={ModalTypes.people} changeRate={this.changeRate} />
-                        </ModalBody>
-                    </Modal>
-                    <h3>{this.props.tr("user-movies-title")}</h3>
-                    {this.state.mainList.map((ratedmovie) => {
-                        return (
-                            <div key={ratedmovie.movieId}>{ratedmovie.movieTitle} : {ratedmovie.rate} </div>
-                        );
-                    }
-                    )}
-                </div>
+                <Modal isOpen={this.state.modalIsOpen} toggle={this.toggleModal}>
+                    <ModalHeader className="modal-header">
+                    <h5>{this.props.tr("user-modal-title")}</h5>
+                    </ModalHeader>
+                    <ModalBody className="modal-body">
+                        <RateModal type={ModalTypes.people}
+                            changeRate={this.changeRate}
+                            tr={this.props.tr} />
+                    </ModalBody>
+                </Modal>
                 <Alert isOpen={this.state.alertIsOpen} toggle={this.closeAlert}
                     color="danger" className="myAlert">{this.state.error?.message}</Alert>
                 <div style={{ visibility: this.state.isLoading ? 'visible' : 'hidden' }}>
                     <LOADING tr={this.props.tr} />
                 </div>
-            </Fragment>
+            </div>
         );
     }
 }

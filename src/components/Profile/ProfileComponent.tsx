@@ -10,6 +10,8 @@ import './profile.scss';
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { MyStorage } from "../../shared/Enums";
 import { MovieRate, User, UserRate } from "../../shared/dto.models";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { MY_CARD } from "../Card/CardComponent";
 
 type MyState = {
     activeTab: number;
@@ -79,6 +81,7 @@ class ProfileComponent extends Component<MyProps & RouteComponentProps<any>, MyS
     myFetch = new MyFetch();
 
     componentDidMount(): void {
+        window.scrollTo(0, 0);
         this._isMounted = true;
         if (localStorage.getItem(MyStorage.token))
             this.fetchInfo();
@@ -185,65 +188,55 @@ class ProfileComponent extends Component<MyProps & RouteComponentProps<any>, MyS
 
     render(): JSX.Element {
         return (
-            <Fragment>
-                <Nav tabs>
+            <div className="profile-bg">
+                <Nav tabs className="tabs">
                     <NavItem>
-                        <NavLink className={this.state.activeTab === 1 ? 'active my_tab' : "my_tab"}
+                        <NavLink className={this.state.activeTab === 1 ? 'my-tab-active' : "my-tab"}
                             onClick={() => { this.onTabChange(1); }}>
                             {this.props.tr("profile-tabs-movies-title")}
                         </NavLink>
                     </NavItem>
                     <NavItem>
-                        <NavLink className={this.state.activeTab === 2 ? 'active my_tab' : 'my_tab'}
+                        <NavLink className={this.state.activeTab === 2 ? 'my-tab-active' : 'my-tab'}
                             onClick={() => { this.onTabChange(2); }}>
                             {this.props.tr("profile-tabs-bodies-title")}
                         </NavLink>
                     </NavItem>
                     <NavItem>
-                        <NavLink className={this.state.activeTab === 3 ? 'active my_tab' : 'my_tab'}
+                        <NavLink className={this.state.activeTab === 3 ? 'my-tab-active' : 'my-tab'}
                             onClick={() => { this.onTabChange(3); }}>
                             {this.props.tr("profile-tabs-me-title")}
                         </NavLink>
                     </NavItem>
                 </Nav>
                 <TabContent activeTab={this.state.activeTab}>
-                    <TabPane tabId={1}>
-                        {this.state.myMovies.map((movie) => {
-                            return (
-                                <Row key={movie.movieId} className="my_row"
-                                    onClick={() => this.props.history.push("movie/" + movie.movieId)}>
-                                    <Col sm="3">
-                                        <div className="row_text">
-                                            {movie.movieTitle}
-                                        </div>
-                                    </Col>
-                                    <Col sm="3">
-                                        <span style={{ visibility: movie.rate > 0 ? "visible" : "hidden" }}
-                                            className={"filled_star fa fa-star"} />
-                                        <span style={{ visibility: movie.rate > 1 ? "visible" : "hidden" }}
-                                            className={"filled_star fa fa-star"} />
-                                        <span style={{ visibility: movie.rate > 2 ? "visible" : "hidden" }}
-                                            className={"filled_star fa fa-star"} />
-                                        <span style={{ visibility: movie.rate > 3 ? "visible" : "hidden" }}
-                                            className={"filled_star fa fa-star"} />
-                                        <span style={{ visibility: movie.rate > 4 ? "visible" : "hidden" }}
-                                            className={"filled_star fa fa-star"} />
-                                    </Col>
-                                </Row>
-                            );
-                        })}
-                        <h3 className="main_text"
-                            style={{ visibility: this.state.myMovies.length < 1 ? "visible" : "hidden" }}>
+                    <TabPane tabId={1} className="tab-content">
+                        <Row>
+                            {this.state.myMovies.map((movie) => {
+                                return (
+                                    <MY_CARD key={movie.movieId}
+                                        imgLink={"/movie/" + movie.movieId}
+                                        imgUrl={movie.movieImg}
+                                        title={movie.movieTitle}
+                                        subtitle=""
+                                        titleLink={"/movie/" + movie.movieId}
+                                        rate={movie.rate}
+                                        isPercent={false}
+                                        likebility={0} />
+                                );
+                            })}
+                        </Row>
+                        <h3 style={{ visibility: this.state.myMovies.length < 1 ? "visible" : "hidden" }}>
                             {this.props.tr("profile-movie-maintext-nomovie")}
                         </h3>
                     </TabPane>
-                    <TabPane tabId={2}>
+                    <TabPane tabId={2} className="tab-content">
                         {this.state.myBuddies.map((buddy) => {
                             return (
                                 <Row key={buddy.buddyId} className="my_row"
-                                    onClick={() => this.props.history.push("user/" + buddy.buddyId)}>
-                                    <Col sm="3" className="row_text">{buddy.buddyName}</Col>
-                                    <Col sm="3">
+                                    onClick={() => this.props.history.push("/user/" + buddy.buddyId)}>
+                                    <Col xs={12} md={3} className="row_text">{buddy.buddyName}</Col>
+                                    <Col xs={12} md={3}>
                                         <span style={{ visibility: buddy.rate > 0 ? "visible" : "hidden" }}
                                             className={"filled_star fa fa-star"} />
                                         <span style={{ visibility: buddy.rate > 1 ? "visible" : "hidden" }}
@@ -263,16 +256,25 @@ class ProfileComponent extends Component<MyProps & RouteComponentProps<any>, MyS
                             {this.props.tr("profile-buddy-maintext-nobuddy")}
                         </h3>
                     </TabPane>
-                    <TabPane tabId={3}>
-                        <h3 className="main_text">{this.state.profile.username}</h3>
-                        <Button onClick={() => { this.props.logout(); this.props.history.push("/home"); }}>
+                    <TabPane tabId={3} className="tab-content">
+                        <span className="fa fa-user user-icon" />
+                        <Row className="profile-row">
+                            <Col xs={6} md={3}>{this.props.tr("profile-myself-username")}:</Col>
+                            <Col xs={6} md={3}>{this.state.profile.username}</Col>
+                        </Row>
+                        <Row className="profile-row">
+                            <Col xs={6} md={3}>{this.props.tr("profile-myself-email")}:</Col>
+                            <Col xs={6} md={3}>{this.state.profile.email}</Col>
+                        </Row>
+                        <Button className="my-btn"
+                            onClick={() => { this.props.logout(); this.props.history.push("/home"); }}>
                             {this.props.tr("profile-logout-button")}
                         </Button>
                     </TabPane>
                 </TabContent>
                 <Alert isOpen={this.state.alertIsOpen} toggle={this.closeAlert}
                     color="danger" className="myAlert">{this.state.error?.message}</Alert>
-            </Fragment>
+            </div>
         );
     }
 }

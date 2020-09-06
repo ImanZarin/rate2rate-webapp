@@ -1,2 +1,33 @@
 @import "../../colors.scss";
 @import "../../App.scss";
+
+.user-bg {
+    background-color: $primary;
+    min-height: 100vh;
+}
+
+.name {
+    margin: auto;
+    color: $textP;
+    font-size: 2.5rem;
+    font-weight: bold;
+    width: fit-content;
+}
+
+.star-section {
+    font-size: 1.5rem;
+    text-align: center;
+    margin: auto;
+}
+
+.movie-title {
+    color: $textP;
+    font-size: 2rem;
+}
+
+.second-section {
+    margin: 1rem;
+    @include phone {
+        margin: 5px;
+    }
+}

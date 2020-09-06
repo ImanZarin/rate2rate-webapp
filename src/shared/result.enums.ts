@@ -28,7 +28,6 @@ export enum GetMovieInfoResponseResult {
     success = "SUCCESS",
     movieNotFound = "MOVIE_NOT_FOUND",
     listEmpty = "EMPTY_LIST",
-    wrongUrl = "UNDEFINED_URL"
 }
 
 export enum GetMovieInfoForSignedResponseResult {
@@ -36,7 +35,7 @@ export enum GetMovieInfoForSignedResponseResult {
     movieNotFound = "MOVIE_NOT_FOUND",
     listEmpty = "EMPTY_LIST",
     userFake = "User_NOT_RECOGNIZED",
-    wrongUrl = "UNDEFINED_URL"
+    noRate = "USER_HAS_NOT_RATED"
 }
 
 export enum UpdateMovieRateResponseResult {
@@ -44,9 +43,11 @@ export enum UpdateMovieRateResponseResult {
     movieuserNotFound = "MOVIEUSER_NOT_FOUND"
 }
 
-export enum SearchMovieResponseResult {
+export enum SearchResponseResult {
     success = "SUCCESS",
-    listEmpty = "EMPTY_LIST",
+    bothEmpty = "EMPTY_LISTS",
+    noMovie = "NO_MOVIE",
+    noUser = "NO_USER",
     failed = "FAIL"
 }
 

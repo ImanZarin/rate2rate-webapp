@@ -12,6 +12,8 @@ export enum ModalTypes {
 type MyProps = {
     type: ModalTypes;
     changeRate: (r: number) => void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    tr: any;
 }
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -29,13 +31,13 @@ export function RateModal(props: MyProps): JSX.Element {
                                 <Button className="fullwidth" onClick={() => setRate(5)}>
                                     <Row>
                                         <div className="stars">
-                                            <span className="fa fa-star fa-lg" />
-                                            <span className="fa fa-star fa-lg" />
-                                            <span className="fa fa-star fa-lg" />
-                                            <span className="fa fa-star fa-lg" />
-                                            <span className="fa fa-star fa-lg" />
+                                            <span className="fa fa-star fa-lg filled_star" />
+                                            <span className="fa fa-star fa-lg filled_star" />
+                                            <span className="fa fa-star fa-lg filled_star" />
+                                            <span className="fa fa-star fa-lg filled_star" />
+                                            <span className="fa fa-star fa-lg filled_star" />
                                         </div>
-                                        <text className="text">i usually like his/her taste</text>
+                                        <text className="text">{props.tr("rate-user-5")}</text>
                                     </Row>
                                 </Button>
                             </Row>
@@ -43,12 +45,12 @@ export function RateModal(props: MyProps): JSX.Element {
                                 <Button className="fullwidth" onClick={() => setRate(4)}>
                                     <Row>
                                         <div className="stars">
-                                            <span className="fa fa-star fa-lg" />
-                                            <span className="fa fa-star fa-lg" />
-                                            <span className="fa fa-star fa-lg" />
-                                            <span className="fa fa-star fa-lg" />
+                                            <span className="fa fa-star fa-lg filled_star" />
+                                            <span className="fa fa-star fa-lg filled_star" />
+                                            <span className="fa fa-star fa-lg filled_star" />
+                                            <span className="fa fa-star fa-lg filled_star" />
                                         </div>
-                                        <text className="text">i often agree with him/her</text>
+                                        <text className="text">{props.tr("rate-user-4")}</text>
                                     </Row>
                                 </Button>
                             </Row>
@@ -56,11 +58,11 @@ export function RateModal(props: MyProps): JSX.Element {
                                 <Button className="fullwidth" onClick={() => setRate(3)}>
                                     <Row>
                                         <div className="stars">
-                                            <span className="fa fa-star fa-lg" />
-                                            <span className="fa fa-star fa-lg" />
-                                            <span className="fa fa-star fa-lg" />
+                                            <span className="fa fa-star fa-lg filled_star" />
+                                            <span className="fa fa-star fa-lg filled_star" />
+                                            <span className="fa fa-star fa-lg filled_star" />
                                         </div>
-                                        <text className="text">i have unrelated interests</text>
+                                        <text className="text">{props.tr("rate-user-3")}</text>
                                     </Row>
                                 </Button>
                             </Row>
@@ -68,10 +70,10 @@ export function RateModal(props: MyProps): JSX.Element {
                                 <Button className="fullwidth" onClick={() => setRate(2)}>
                                     <Row>
                                         <div className="stars">
-                                            <span className="fa fa-star fa-lg" />
-                                            <span className="fa fa-star fa-lg" />
+                                            <span className="fa fa-star fa-lg filled_star" />
+                                            <span className="fa fa-star fa-lg filled_star" />
                                         </div>
-                                        <text className="text">i often disagree with him/her</text>
+                                        <text className="text">{props.tr("rate-user-2")}</text>
                                     </Row>
                                 </Button>
                             </Row>
@@ -79,16 +81,18 @@ export function RateModal(props: MyProps): JSX.Element {
                                 <Button className="fullwidth" onClick={() => setRate(1)}>
                                     <Row>
                                         <div className="stars">
-                                            <span className="fa fa-star fa-lg" />
+                                            <span className="fa fa-star fa-lg filled_star" />
                                         </div>
-                                        <text className="text">i usually dislike his/her taste</text>
+                                        <text className="text">{props.tr("rate-user-1")}</text>
                                     </Row>
                                 </Button>
                             </Row>
                         </Container>
                     </ButtonGroup>
                     <Row>
-                        <Button onClick={() => props.changeRate(rate)} className="button2">Submit Rate</Button>
+                        <Button onClick={() => props.changeRate(rate)} className="btn-submit">
+                            {props.tr("rate-user-submit")}
+                        </Button>
                     </Row>
                 </Fragment>
 
@@ -97,19 +101,19 @@ export function RateModal(props: MyProps): JSX.Element {
         default:
             return (
                 <Fragment>
-                     <ButtonGroup className="fullwidth">
+                    <ButtonGroup className="fullwidth">
                         <Container>
                             <Row className="fullwidth">
                                 <Button className="fullwidth" onClick={() => setRate(5)}>
                                     <Row>
                                         <div className="stars">
-                                            <span className="fa fa-star fa-lg" />
-                                            <span className="fa fa-star fa-lg" />
-                                            <span className="fa fa-star fa-lg" />
-                                            <span className="fa fa-star fa-lg" />
-                                            <span className="fa fa-star fa-lg" />
+                                            <span className="fa fa-star fa-lg filled_star" />
+                                            <span className="fa fa-star fa-lg filled_star" />
+                                            <span className="fa fa-star fa-lg filled_star" />
+                                            <span className="fa fa-star fa-lg filled_star" />
+                                            <span className="fa fa-star fa-lg filled_star" />
                                         </div>
-                                        <text className="text">must watch movie before death</text>
+                                        <text className="text">{props.tr("rate-movie-5")}</text>
                                     </Row>
                                 </Button>
                             </Row>
@@ -117,12 +121,12 @@ export function RateModal(props: MyProps): JSX.Element {
                                 <Button className="fullwidth" onClick={() => setRate(4)}>
                                     <Row>
                                         <div className="stars">
-                                            <span className="fa fa-star fa-lg" />
-                                            <span className="fa fa-star fa-lg" />
-                                            <span className="fa fa-star fa-lg" />
-                                            <span className="fa fa-star fa-lg" />
+                                            <span className="fa fa-star fa-lg filled_star" />
+                                            <span className="fa fa-star fa-lg filled_star" />
+                                            <span className="fa fa-star fa-lg filled_star" />
+                                            <span className="fa fa-star fa-lg filled_star" />
                                         </div>
-                                        <text className="text">highly recommended</text>
+                                        <text className="text">{props.tr("rate-movie-4")}</text>
                                     </Row>
                                 </Button>
                             </Row>
@@ -130,11 +134,11 @@ export function RateModal(props: MyProps): JSX.Element {
                                 <Button className="fullwidth" onClick={() => setRate(3)}>
                                     <Row>
                                         <div className="stars">
-                                            <span className="fa fa-star fa-lg" />
-                                            <span className="fa fa-star fa-lg" />
-                                            <span className="fa fa-star fa-lg" />
+                                            <span className="fa fa-star fa-lg filled_star" />
+                                            <span className="fa fa-star fa-lg filled_star" />
+                                            <span className="fa fa-star fa-lg filled_star" />
                                         </div>
-                                        <text className="text">not a bad movie</text>
+                                        <text className="text">{props.tr("rate-movie-3")}</text>
                                     </Row>
                                 </Button>
                             </Row>
@@ -142,10 +146,10 @@ export function RateModal(props: MyProps): JSX.Element {
                                 <Button className="fullwidth" onClick={() => setRate(2)}>
                                     <Row>
                                         <div className="stars">
-                                            <span className="fa fa-star fa-lg" />
-                                            <span className="fa fa-star fa-lg" />
+                                            <span className="fa fa-star fa-lg filled_star" />
+                                            <span className="fa fa-star fa-lg filled_star" />
                                         </div>
-                                        <text className="text">waste of money</text>
+                                        <text className="text">{props.tr("rate-movie-2")}</text>
                                     </Row>
                                 </Button>
                             </Row>
@@ -153,16 +157,16 @@ export function RateModal(props: MyProps): JSX.Element {
                                 <Button className="fullwidth" onClick={() => setRate(1)}>
                                     <Row>
                                         <div className="stars">
-                                            <span className="fa fa-star fa-lg" />
+                                            <span className="fa fa-star fa-lg filled_star" />
                                         </div>
-                                        <text className="text">waste of time</text>
+                                        <text className="text">{props.tr("rate-movie-1")}</text>
                                     </Row>
                                 </Button>
                             </Row>
                         </Container>
                     </ButtonGroup>
                     <Row>
-                        <Button onClick={() => props.changeRate(rate)} className="button2">Submit Rate</Button>
+                        <Button onClick={() => props.changeRate(rate)} className="btn-submit">{props.tr("rate-movie-submit")}</Button>
                     </Row>
                 </Fragment>
             );

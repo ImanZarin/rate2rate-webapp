@@ -1,20 +1,87 @@
 @import "../../colors.scss";
 @import "../../App.scss";
 
-.search_img {
-    width: 150px;
-    height: 150px;
-}
 
-.search_row {
-    margin: 15px;
-    cursor: pointer;
-    background-color: $bgstart;
+// .search_row {
+//     margin: 15px;
+//     cursor: pointer;
+//     background-color: $secondary;
+// }
+
+.img_container {
+    padding: 25px;
+    @include phone {
+        padding: 5px;
+    }
 }
 
 .img_main {
-    margin-left: 25%;
-    margin-right: 25%;
-    width: 50%;
-    
+    width: 100%;
+    max-width: 400px;
+    height: 100%;
+    object-fit: cover;//do not change ratio
+    margin: auto;
+    border: solid rgba(1, 1, 1, 0) 5px;
+    border-radius: 0.85rem;
+    @include phone {
+        padding: 5px;
+    }
+}
+
+.movie-bg {
+    min-height: 100vh;
+    background-color: $primary;
+}
+
+.movie_header {
+    margin-top: 4rem;
+    padding-left: 1rem;
+    color: $textP;
+    @include phone {
+        margin-top: 0.5rem;
+        padding-left: 0.5rem;
+    }
+}
+
+.movie_title {
+    font-size: 3rem;
+    line-height: 2.5rem;
+    @include phone {
+        font-size: 1.75rem;
+    }
+}
+
+.score_section {
+    padding-top: "1.5rem";
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+    margin-top: auto;
+    margin-bottom: auto;
+    @include phone {
+        padding-top: "0.5rem";
+        margin-left: 0rem;
+        margin-right: auto;   
+        width: 100%;      
+    }
+}
+
+.rates_section {
+    background-color: $secondary;
+    color: $textS;
+    padding: 15px;
+    min-height: 200px;
+    @include phone {
+        padding: 5px;
+        min-height: 150px;
+    }
+}
+
+.movie-table {
+    color: $textS !important;
+}
+
+.table td {
+    vertical-align: middle !important;
+    max-width: 150px;
 }

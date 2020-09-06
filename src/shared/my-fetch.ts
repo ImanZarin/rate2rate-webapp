@@ -28,63 +28,63 @@ export class MyFetch {
             credentials: "omit",
             signal: this.abortController.signal
         };
-        
+
         if (mBody) {
             reqObj.body = JSON.stringify(mBody);
         }
-        return fetch(Constants.baseUrl + address, reqObj);
+        return fetch(Constants.apiBaseUrl + address, reqObj);
     }
 
-    public abort(): void{
+    public abort(): void {
         this.abortController.abort();
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public async login(values: SigninForm): Promise<any> {
-        return this.myFetch(ReqTypes.post, "auth/login", values);
+        return this.myFetch(ReqTypes.post, process.env.REACT_APP_ENDPOINT_USER_LOGIN || "", values);
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public async signup(values: SignupForm): Promise<any> {
-        return this.myFetch(ReqTypes.post, "auth/signup", values);
+        return this.myFetch(ReqTypes.post, process.env.REACT_APP_ENDPOINTS_USER_SIGNUP || "", values);
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public async getUserInfo(userId: string): Promise<any> {
-        return this.myFetch(ReqTypes.get, 'movieusers/user/' + userId, null);
+        return this.myFetch(ReqTypes.get, process.env.REACT_APP_ENDPOINTS_USER_GET || '' + userId, null);
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public async getMovieInfo(movieId: string): Promise<any> {
-        return this.myFetch(ReqTypes.get, 'movieusers/movie/' + movieId, null);
+        return this.myFetch(ReqTypes.get, (process.env.REACT_APP_ENDPOINTS_MOVIE_GET_DB || '') + movieId, null);
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public async rateUser(newRate: number, userId: string): Promise<any> {
-        return this.myFetch(ReqTypes.put, "users/" + userId, { rate: newRate });
+        return this.myFetch(ReqTypes.put, (process.env.REACT_APP_ENDPOINTS_USER_RATE || "") + userId, { rate: newRate });
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public async rateMovie(newRate: number, movieId: string): Promise<any> {
-        return this.myFetch(ReqTypes.put, "movieusers/" + movieId, { rate: newRate });
+        return this.myFetch(ReqTypes.put, (process.env.REACT_APP_ENDPOINTS_MOVIE_RATE || "") + movieId, { rate: newRate });
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    public async searchMovie(movieName: string): Promise<any> {
-        return this.myFetch(ReqTypes.post, "movies", { movie: movieName });
+    public async search(word: string): Promise<any> {
+        return this.myFetch(ReqTypes.post, process.env.REACT_APP_ENDPOINTS_SEARCH || "", { search: word });
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public async getMovieId(imdbId: string): Promise<any> {
-        return this.myFetch(ReqTypes.put, "movies", { imdbId: imdbId });
+        return this.myFetch(ReqTypes.put, process.env.REACT_APP_ENDPOINT_MOVIE_GET_IMDB || "", { imdbId: imdbId });
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public async getProfileInfo(): Promise<any> {
-        return this.myFetch(ReqTypes.get, "movieusers/profile", null);
+        return this.myFetch(ReqTypes.get, process.env.REACT_APP_ENDPOINT_PROFILE || "", null);
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public async getHomeMovies(): Promise<any> {
-        return this.myFetch(ReqTypes.get, "movieusers/home", null);
+        return this.myFetch(ReqTypes.get, process.env.REACT_APP_ENDPOINT_HOME || "", null);
     }
 }

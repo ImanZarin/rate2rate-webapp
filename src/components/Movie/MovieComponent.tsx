@@ -1,31 +1,31 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import React, { Component, Fragment, ChangeEvent } from 'react';
+import React, { Component } from 'react';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { LOADING } from '../LoadingComponent';
 import { Constants } from '../../shared/Constants';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Alert, Button, Modal, ModalHeader, ModalBody, InputGroup, InputGroupAddon, Input } from 'reactstrap';
-import { GetMovieInfoResponse, GetMovieInfoForSignedResponse, UpdateMovieRateResponse, SearchMovieResponse } from '../../shared/ApiTypes';
+import { Alert, Modal, ModalHeader, ModalBody, Row, Col, Table } from 'reactstrap';
+import { GetMovieInfoResponse, GetMovieInfoForSignedResponse, UpdateMovieRateResponse } from '../../shared/ApiTypes';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { RateModal, ModalTypes } from '../Rate/RateComponent';
 import './movie.scss';
 import { MyFetch } from '../../shared/my-fetch';
-import { GetMovieInfoForSignedResponseResult, GetMovieInfoResponseResult, UpdateMovieRateResponseResult, SearchMovieResponseResult } from '../../shared/result.enums';
-import { Movie, IMDBsearch, MovieRate } from '../../shared/dto.models';
+import { GetMovieInfoForSignedResponseResult, GetMovieInfoResponseResult, UpdateMovieRateResponseResult } from '../../shared/result.enums';
+import { Movie, MovieRate } from '../../shared/dto.models';
 import { isNullOrUndefined } from 'util';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import PercnetageCircle from '../PercentageCircle';
 
 type MyState = {
     isLoading: boolean;
     mainList: MovieRate[];
     alertIsOpen: boolean;
     error: Error;
-    movie: Movie;
+    movie?: Movie;
     modalIsOpen: boolean;
     personRate: number;
-    searchText: string;
-    searchResult: IMDBsearch[];
-    searchMode: boolean;
+    likebility: number;
 }
 
 type MyProps = {
@@ -47,37 +47,23 @@ class MovieComponent extends Component<RouteComponentProps<any> & MyProps, MySta
         this.state = {
             isLoading: false,
             alertIsOpen: false,
-            movie: {
-                title: "",
-                genre: [],
-                actors: [],
-                director: [],
-                plot: "",
-                poster: "",
-                year: 0,
-            },
+            movie: undefined,
             error: new Error,
             mainList: [],
             modalIsOpen: false,
             personRate: 0,
-            searchText: "",
-            searchResult: [],
-            searchMode: true
+            likebility: 0,
         }
         this.showAndHideAlert = this.showAndHideAlert.bind(this);
         this.closeAlert = this.closeAlert.bind(this);
         this.toggleModal = this.toggleModal.bind(this);
         this.changeRate = this.changeRate.bind(this);
-        this.onSearchSubmit = this.onSearchSubmit.bind(this);
-        this.onSearchChange = this.onSearchChange.bind(this);
     }
 
     componentDidMount(): void {
+        window.scrollTo(0, 0);
         this._isMounted = true;
         if (!isNullOrUndefined(this.props.match.params.id)) {
-            this.setState({
-                searchMode: false
-            });
             this.fetchList(this.props.match.params.id);
         }
 
@@ -184,9 +170,10 @@ class MovieComponent extends Component<RouteComponentProps<any> & MyProps, MySta
                                         {
                                             this.setState({
                                                 movie: r2.movie,
-                                                personRate: r2.myRate.rate
+                                                personRate: r2.myRate.rate,
+                                                likebility: r2.myLikebility
                                             });
-                                            const err = new Error(this.props.tr("movie-fetchinfo-err-emptyusers"));
+                                            const err = new Error(this.props.tr("movie-fetchinfo-err-emptybuddies"));
                                             this.showAndHideAlert(err, Constants.waitNormal);
                                         }
                                         break;
@@ -195,7 +182,8 @@ class MovieComponent extends Component<RouteComponentProps<any> & MyProps, MySta
                                             isLoading: false,
                                             mainList: r2.users,
                                             movie: r2.movie,
-                                            personRate: r2.myRate.rate
+                                            personRate: r2.myRate.rate,
+                                            likebility: r2.myLikebility
                                         });
                                         break;
                                     case GetMovieInfoForSignedResponseResult.userFake:
@@ -206,11 +194,13 @@ class MovieComponent extends Component<RouteComponentProps<any> & MyProps, MySta
                                             movie: r2.movie,
                                         });
                                         break;
-                                    case GetMovieInfoForSignedResponseResult.wrongUrl:
-                                        {
-                                            const err = new Error(this.props.tr("movie-fetchinfo-err-noparamid"));
-                                            this.showAndHideAlert(err, Constants.waitNormal);
-                                        }
+                                    case GetMovieInfoForSignedResponseResult.noRate:
+                                        this.setState({
+                                            isLoading: false,
+                                            mainList: r2.users,
+                                            movie: r2.movie,
+                                            likebility: r2.myLikebility
+                                        });
                                         break;
                                     default:
                                         break;
@@ -241,12 +231,7 @@ class MovieComponent extends Component<RouteComponentProps<any> & MyProps, MySta
                                             movie: r3.movie
                                         });
                                         break;
-                                    case GetMovieInfoResponseResult.wrongUrl:
-                                        {
-                                            const err = new Error(this.props.tr("movie-fetchinfo-err-noparamid"));
-                                            this.showAndHideAlert(err, Constants.waitNormal);
-                                        }
-                                        break; default:
+                                    default:
                                         break;
                                 }
                             }
@@ -270,150 +255,102 @@ class MovieComponent extends Component<RouteComponentProps<any> & MyProps, MySta
 
     }
 
-    onSearchChange(e: ChangeEvent<HTMLInputElement>) {
-        this.setState({
-            searchText: e.target.value
-        })
-    }
-
-    onSearchSubmit = (): void => {
-        this.setState({
-            isLoading: true
-        });
-        this.myfetchObjet.searchMovie(this.state.searchText)
-            .then(resp => {
-                if (resp) {
-                    resp.json()
-                        .then((resp: SearchMovieResponse) => {
-                            switch (resp.result) {
-                                case SearchMovieResponseResult.failed:
-                                    {
-                                        const err = new Error(this.props.tr("movie-search-err-failed"));
-                                        this.showAndHideAlert(err, Constants.waitNormal);
-                                    }
-                                    break;
-                                case SearchMovieResponseResult.listEmpty:
-                                    {
-                                        const err = new Error(this.props.tr("movie-search-err-nomovie"));
-                                        this.showAndHideAlert(err, Constants.waitNormal);
-                                    }
-                                    break;
-                                case SearchMovieResponseResult.success:
-                                    this.setState({
-                                        isLoading: false,
-                                        searchText: "",
-                                        searchResult: resp.movies
-                                    });
-                                    break;
-                                default:
-                                    break;
-                            }
-                        })
-                }
-            })
-    }
-
-    onSelectMovie(imdbId: string) {
-        this.setState({
-            isLoading: true
-        });
-        this.myfetchObjet.getMovieId(imdbId)
-            .then(resp => {
-                if (resp) {
-                    resp.json()
-                        .then((resp: string) => {
-                            this.props.history.push("movie/" + resp);
-                            // switch (resp.result) {
-                            //     case SearchMovieResponseResult.failed:
-                            //         {
-                            //             const err = new Error(this.props.tr("movie-search-err-failed"));
-                            //             this.showAndHideAlert(err, Constants.waitNormal);
-                            //         }
-                            //         break;
-                            //     case SearchMovieResponseResult.listEmpty:
-                            //         {
-                            //             const err = new Error(this.props.tr("movie-search-err-nomovie"));
-                            //             this.showAndHideAlert(err, Constants.waitNormal);
-                            //         }
-                            //         break;
-                            //     case SearchMovieResponseResult.success:
-                            //         this.props.history.push(imdbId);
-                            //         break;
-                            //     default:
-                            //         break;
-                            // }
-                        })
-                }
-            });
-    }
-
     render(): JSX.Element {
-
+        if (!this.state.movie)
+            return <div></div>;
         return (
-            <Fragment>
-                <InputGroup style={{ visibility: this.state.searchMode ? "visible" : "hidden" }}>
-                    <InputGroupAddon addonType="prepend">
-                        <Button className="fa fa-search fa-lg"
-                            onClick={this.onSearchSubmit}></Button>
-                    </InputGroupAddon>
-                    <Input
-                        onChange={this.onSearchChange}
-                        placeholder={this.props.tr("movie-search-placeholder")}
-                        onKeyPress={(event) => {
-                            if (event.key === "Enter") {
-                                this.onSearchSubmit();
-                            }
-                        }} />
-                </InputGroup>
-                <div style={{ visibility: this.props.isLoggedin && !this.state.searchMode ? "visible" : "hidden", margin: "auto" }}
-                    onClick={this.toggleModal}>
-                    <span className={this.state.personRate > 0 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
-                    <span className={this.state.personRate > 1 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
-                    <span className={this.state.personRate > 2 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
-                    <span className={this.state.personRate > 3 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
-                    <span className={this.state.personRate > 4 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
+            <div className="movie-bg">
+                <Row>
+                    <Col xs={12} md={4} className="img_container">
+                        <img src={this.state.movie?.poster.length > 5 ? this.state.movie.poster : require("../../assets/jumbotron.jpg")}
+                            className="img_main" />
+                    </Col>
+                    <Col xs={12} md={8} className="movie_header">
+                        <Row>
+                            <div>
+                                <span className="movie_title">{this.state.movie?.title}</span>
+                                <span> ({this.state.movie?.year})</span>
+                            </div>
+                            <div onClick={this.toggleModal} className="score_section">
+                                <div style={{ display: !this.props.isLoggedin || (this.state.personRate < 1 && this.state.likebility > 0) ? "none" : "block", }}>
+                                    <span className={this.state.personRate > 0 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
+                                    <span className={this.state.personRate > 1 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
+                                    <span className={this.state.personRate > 2 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
+                                    <span className={this.state.personRate > 3 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
+                                    <span className={this.state.personRate > 4 ? "filled_star fa fa-star" : "empty_star fa fa-star"} />
+                                </div>
+                                <div style={{ display: this.state.personRate < 1 && this.state.likebility > 0 ? "block" : "none", }}>
+                                    <PercnetageCircle
+                                        circleColor=""
+                                        circleInnerColor=""
+                                        circleSize={65}
+                                        duration={2500}
+                                        offset={0}
+                                        percent={this.state.likebility}
+                                        fontColor="" />
+
+                                </div>
+                            </div>
+                        </Row>
+                        <p>{this.state.movie?.genre?.join(" ,")}</p>
+                        <p>{this.state.movie?.plot}</p>
+                        <h6>{this.props.tr("movie-director-title")}: </h6>
+                        <p>{this.state.movie?.director?.join(" ,")}</p>
+                        <h6>{this.props.tr("movie-actor-title")}: </h6>
+                        <p>{this.state.movie?.actors?.join(" ,")}</p>
+                    </Col>
+                </Row>
+                <div className="rates_section"
+                    style={{ display: this.state.mainList.length > 0 ? "block" : "none" }}>
+                    <Table striped className="movie-table" size="sm">
+                        <thead>
+                            <tr>
+                                <th>{this.props.tr("movie-rates-col1")}</th>
+                                <th>{this.props.tr("movie-rates-col2")}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {this.state.mainList?.map((userRated) => {
+                                return (
+                                    <tr key={userRated.userId} style={{ cursor: "pointer" }}
+                                        onClick={() => this.props.history.push("/user/" + userRated.userId)}>
+                                        <td>{userRated.userName}</td>
+                                        <td>
+                                            <span style={{ visibility: userRated.rate > 0 ? "visible" : "hidden" }}
+                                                className={"filled_star fa fa-star"} />
+                                            <span style={{ visibility: userRated.rate > 1 ? "visible" : "hidden" }}
+                                                className={"filled_star fa fa-star"} />
+                                            <span style={{ visibility: userRated.rate > 2 ? "visible" : "hidden" }}
+                                                className={"filled_star fa fa-star"} />
+                                            <span style={{ visibility: userRated.rate > 3 ? "visible" : "hidden" }}
+                                                className={"filled_star fa fa-star"} />
+                                            <span style={{ visibility: userRated.rate > 4 ? "visible" : "hidden" }}
+                                                className={"filled_star fa fa-star"} />
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </Table>
                 </div>
-                <div style={{ visibility: this.state.searchMode ? "hidden" : "visible" }}>
-                    <img src={this.state.movie.poster} className="img_main" />
-                    <h1 style={{ margin: "auto" }}>{this.state.movie.title}</h1>
-                    <h3>{this.state.movie.year}</h3>
-                    <h2>{this.state.movie.genre?.join(" ,")}</h2>
-                    <h2>{this.state.movie.actors?.join(" ,")}</h2>
-                    <h2>{this.state.movie.director?.join(" ,")}</h2>
-                    <h5>{this.state.movie.plot}</h5>
-                    <Modal isOpen={this.state.modalIsOpen} toggle={this.toggleModal}>
-                        <ModalHeader>
-                            <h5>Please Rate The Movies According To The Chart</h5>
-                        </ModalHeader>
-                        <ModalBody>
-                            <RateModal type={ModalTypes.movies} changeRate={this.changeRate} />
-                        </ModalBody>
-                    </Modal>
-                    <h3 style={{ visibility: this.state.mainList.length > 0 ? "visible" : "hidden" }}>
-                        {this.props.tr("movie-users-title")}
-                    </h3>
-                    {this.state.mainList.map((userRated) => {
-                        return (
-                            <div key={userRated.userId}>{userRated.userName} : {userRated.rate} </div>
-                        );
-                    }
-                    )}
-                </div>
-                <div style={{ visibility: this.state.searchMode ? "visible" : "hidden" }}>
-                    {this.state.searchResult.map((ms) => {
-                        return (
-                            <div key={ms.imdbID} onClick={() => this.onSelectMovie(ms.imdbID)}
-                                className="search_row">
-                                <img src={ms.Poster} className="search_img" />{ms.Title} ({ms.Year})</div>
-                        );
-                    })}
-                </div>
+
+                <Modal isOpen={this.state.modalIsOpen} toggle={this.toggleModal}>
+                    <ModalHeader className="modal-header">
+                        <h5>{this.props.tr("movie_modal_title")}</h5>
+                    </ModalHeader>
+                    <ModalBody className="modal-body">
+                        <RateModal type={ModalTypes.movies}
+                            changeRate={this.changeRate}
+                            tr={this.props.tr} />
+                    </ModalBody>
+                </Modal>
+
                 <Alert isOpen={this.state.alertIsOpen} toggle={this.closeAlert}
-                    color="danger" className="myAlert">{this.state.error?.message}</Alert>
+                    color="warning" className="myAlert">{this.state.error?.message}</Alert>
                 <div style={{ visibility: this.state.isLoading ? 'visible' : 'hidden' }}>
                     <LOADING tr={this.props.tr} />
                 </div>
-            </Fragment>
+            </div>
         );
     }
 }
