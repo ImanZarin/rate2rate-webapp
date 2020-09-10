@@ -86,7 +86,7 @@ class HeaderComponent extends Component<MyProps & RouteComponentProps<any>, MySt
 
     onSignin = (): void => {
         if (this.props.isLoggedin)
-            this.props.history.push("profile");
+            this.props.history.push("/profile");
         else
             this.props.history.push("/signin");
     }

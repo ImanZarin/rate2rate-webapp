@@ -112,7 +112,17 @@ class SearchComponent extends Component<RouteComponentProps<any> & MyProps, MySt
                                 default:
                                     break;
                             }
-                        })
+                        },
+                            (error: Error) => {
+                                if (!this._isMounted)
+                                    return;
+                                this.showAndHideAlert(error, Constants.waitNormal);
+                            })
+                        .catch((error: Error) => {
+                            if (!this._isMounted)
+                                return;
+                            this.showAndHideAlert(error, Constants.waitNormal);
+                        });
                 }
             })
     }
