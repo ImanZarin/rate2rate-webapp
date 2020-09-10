@@ -50,7 +50,7 @@ export class MyFetch {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public async getUserInfo(userId: string): Promise<any> {
-        return this.myFetch(ReqTypes.get, process.env.REACT_APP_ENDPOINTS_USER_GET || '' + userId, null);
+        return this.myFetch(ReqTypes.get, (process.env.REACT_APP_ENDPOINTS_USER_GET || '') + userId, null);
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -9,7 +9,7 @@ services:
             - rate2rate
         stdin_open: true
         environment:
-            - REACT_APP_BASE_URL=http://127.0.0.1:3005/
+            - REACT_APP_BASE_URL=http://localhost:3005/
             - REACT_APP_ENDPOINT_HOME=movieusers/home
             - REACT_APP_ENDPOINT_PROFILE=movieusers/profile
             - REACT_APP_ENDPOINT_MOVIE_GET_IMDB=movies
