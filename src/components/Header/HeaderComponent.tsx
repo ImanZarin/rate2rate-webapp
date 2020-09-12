@@ -11,6 +11,7 @@ import { User, IMDBsearch } from "../../shared/dto.models";
 import { MyFetch } from "../../shared/my-fetch";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { LOADING } from "../LoadingComponent";
+import { withNamespaces } from "react-i18next";
 
 type MyProps = {
     lan: Languages;
@@ -112,7 +113,7 @@ class HeaderComponent extends Component<MyProps & RouteComponentProps<any>, MySt
                     <div className="container">
                         <NavbarToggler onClick={this.toggleNav} className="my-navbar-toggler" />
                         <NavbarBrand className="mr-auto " href="/">
-                            <img src='/assets/images/logo.png' alt="logo" height="30" width="41"
+                            <img src='/assets/images/logo.png' alt="logo" height="42" width="42"
                                 onClick={() => this.props.history.push("/home")} />
                         </NavbarBrand>
                         <Collapse isOpen={this.state.isNavOpen} navbar>
