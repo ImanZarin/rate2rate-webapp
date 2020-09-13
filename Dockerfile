@@ -1,8 +1,11 @@
-FROM node:12-alpine
+FROM node:12-alpine as npm-packages
 WORKDIR '/app'
 COPY package.json .
+COPY package-lock.json .
 RUN npm install
+
+FROM npm-packages as final
 COPY . .
 RUN npm run build
-RUN npm install -g serve
-CMD ["serve","-s","build","-l","3000"]
+EXPOSE 3005
+CMD ["npm","run","start:prod"]
