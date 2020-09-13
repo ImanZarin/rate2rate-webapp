@@ -10,7 +10,8 @@ export enum ActionTypes {
     languageChange = "LANGUAGE_CHANGE",
     userChange = "USER_CHANGE",
     tokenChange = "TOKEN_CHANGE",
-    logout = "LOGOUT"
+    logout = "LOGOUT",
+    pageChange = "PAGE_CHANGE"
 }
 
 export type SigninSuccessAction = {
@@ -42,5 +43,10 @@ export type Logout = {
     type: ActionTypes;
 }
 
+export type ChangePageAction = {
+    type: ActionTypes;
+    payload: string;
+}
+
 export type MyActions = SigninSuccessAction | FailedAction | ChangeLanguageAction | ChangeUserAction
-    | ChangeTokenAction | Logout;
+    | ChangeTokenAction | Logout | ChangePageAction;

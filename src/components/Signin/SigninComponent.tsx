@@ -22,6 +22,7 @@ interface MyProps {
     changeUser: (u: User) => void;
     changeToken: (t: string) => void;
     isLoggedin?: boolean;
+    prePage: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     translate: any;
 }
@@ -154,7 +155,10 @@ class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MySt
                                         localStorage.setItem(MyStorage.user, r.user.username);
                                         this.props.changeUser(r.user);
                                         this.props.changeToken(r.accessToken);
-                                        this.props.history.goBack();
+                                        if (this.props.prePage != "")
+                                            this.props.history.push(this.props.prePage);
+                                        else
+                                            this.props.history.push("/home")
                                         break;
                                     default:
                                         break;
