@@ -1,4 +1,4 @@
-import { MyActions, ActionTypes, ChangeLanguageAction, ChangeUserAction } from "../../shared/ActionTypes";
+import { MyActions, ActionTypes, ChangeLanguageAction, ChangeUserAction, ChangePageAction } from "../../shared/ActionTypes";
 import { Languages } from '../../shared/Enums';
 import { HeaderReducerState } from "../../shared/StateTypes";
 
@@ -9,7 +9,8 @@ const initialState: HeaderReducerState = {
         username: "",
         email: "",
         buddies: []
-    }
+    },
+    prePage: ""
 }
 
 export const HEADER_REDUCER = (state = initialState, action: MyActions): HeaderReducerState => {
@@ -25,6 +26,12 @@ export const HEADER_REDUCER = (state = initialState, action: MyActions): HeaderR
             const a = action as ChangeUserAction;
             return {
                 ...state, user: a.payload
+            }
+        }
+        case ActionTypes.pageChange: {
+            const a = action as ChangePageAction;
+            return {
+                ...state, prePage: a.payload
             }
         }
         default:

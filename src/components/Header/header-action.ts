@@ -15,3 +15,10 @@ export const userChange = (u: User): MyActions => {
         payload: u
     }
 }
+
+export const prePageChange = (p: string): MyActions => {
+    return {
+        type: ActionTypes.pageChange,
+        payload: p
+    }
+}

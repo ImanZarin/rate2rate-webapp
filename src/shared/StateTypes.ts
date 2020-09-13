@@ -24,5 +24,6 @@ export interface SigninReducerState {
 
 export interface HeaderReducerState {
     lan: Languages,
-    user: User
+    user: User,
+    prePage: string
 }

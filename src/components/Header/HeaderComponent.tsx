@@ -9,9 +9,6 @@ import i18n from "../../i18n";
 import './header.scss';
 import { User, IMDBsearch } from "../../shared/dto.models";
 import { MyFetch } from "../../shared/my-fetch";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { LOADING } from "../LoadingComponent";
-import { withNamespaces } from "react-i18next";
 
 type MyProps = {
     lan: Languages;
@@ -20,6 +17,7 @@ type MyProps = {
     changeLan: (l: Languages) => void;
     changeUser: (u: User) => void;
     logout: () => void;
+    changePage: (p: string) => void;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     translate: any;
 }
@@ -86,6 +84,7 @@ class HeaderComponent extends Component<MyProps & RouteComponentProps<any>, MySt
     }
 
     onSignin = (): void => {
+        this.props.changePage(this.props.history.location.pathname);
         if (this.props.isLoggedin)
             this.props.history.push("/profile");
         else

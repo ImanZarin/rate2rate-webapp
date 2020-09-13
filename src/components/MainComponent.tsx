@@ -11,7 +11,7 @@ import HeaderComponent from "./Header/HeaderComponent";
 import { RootState } from "../App";
 import { ThunkDispatch } from 'redux-thunk';
 import { Languages, MyStorage } from "../shared/Enums";
-import { languageChange, userChange } from "./Header/header-action";
+import { languageChange, userChange, prePageChange } from "./Header/header-action";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import UserComponent from "./User/UserComponent";
 import { tokenChange, logout } from "./Signin/signin-action";
@@ -22,6 +22,7 @@ import ProfileComponent from "./Profile/ProfileComponent";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import HomeComponent from "./Home/HomeComponent";
 import { User } from "../shared/dto.models";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import SearchComponent from "./Search/SearchComponent";
 
 //interface StateProps extends RootState, ReactCookieProps {
@@ -40,6 +41,7 @@ interface DispatchProps {
     changeUser: (u: User) => void;
     changeToken: (t: string) => void;
     logout: () => void;
+    changePage: (p: string) => void;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -47,7 +49,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, any, MyActions>):
     changeLanguage: (l: Languages): MyActions => dispatch(languageChange(l)),
     changeUser: (u: User): MyActions => dispatch(userChange(u)),
     changeToken: (t: string): MyActions => dispatch(tokenChange(t)),
-    logout: (): MyActions => dispatch(logout())
+    logout: (): MyActions => dispatch(logout()),
+    changePage: (p: string) => dispatch(prePageChange(p))
 });
 
 
@@ -84,7 +87,8 @@ class MainComponent extends Component<MyProps> {
                     changeLan={this.props.changeLanguage}
                     translate={this.props.translate}
                     isLoggedin={this.props.signin.isSignedin}
-                    logout={this.props.logout} />
+                    logout={this.props.logout} 
+                    changePage={this.props.changePage}/>
                 <Switch>
                     <Route exact path="/" render={() => {
                         return (<Redirect to="/home" />);
@@ -94,7 +98,8 @@ class MainComponent extends Component<MyProps> {
                             translate={this.props.translate}
                             changeUser={this.props.changeUser}
                             changeToken={this.props.changeToken}
-                            isLoggedin={this.props.signin.isSignedin} />} />
+                            isLoggedin={this.props.signin.isSignedin} 
+                            prePage={this.props.header.prePage}/>} />
                     <Route path="/home" component={(): JSX.Element =>
                         <HomeComponent
                             user={this.props.header.user}
