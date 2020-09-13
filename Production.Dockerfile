@@ -6,10 +6,11 @@ RUN npm install
 
 FROM npm-packages as build
 COPY . .
+COPY ./.production.ignore.env ./.env
 RUN npm run build
+RUN npm install -g serve
 
 # production environment
-FROM nginx:stable-alpine
-COPY --from=build /app/build /usr/share/nginx/html
+FROM build
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["serve","-s","build","-l","80"]

@@ -3,4 +3,9 @@ WORKDIR '/app'
 COPY package.json .
 COPY package-lock.json .
 RUN npm install
-CMD ["npm","start"]
+
+FROM npm-packages as final
+COPY . .
+RUN npm run build
+EXPOSE 3005
+CMD ["npm","run","start:prod"]

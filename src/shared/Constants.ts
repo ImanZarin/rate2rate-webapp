@@ -4,7 +4,7 @@ export class Constants {
     static waitLong: number = 8000;
     static waitForNextFetch = 10000;
 
-    static get apiBaseUrl(): string {
+    static get apiBaseUrl(): string | undefined {
         return process.env.REACT_APP_BASE_URL;
     }
 }    
