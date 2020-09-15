@@ -152,13 +152,14 @@ class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MySt
                                         break;
                                     case LoginUserResponseResult.success:
                                         localStorage.setItem(MyStorage.token, r.accessToken);
-                                        localStorage.setItem(MyStorage.user, r.user.username);
+                                        localStorage.setItem(MyStorage.user, JSON.stringify(r.user));
                                         this.props.changeUser(r.user);
                                         this.props.changeToken(r.accessToken);
+                                        window.location.reload();
                                         if (this.props.prePage != "")
                                             this.props.history.push(this.props.prePage);
                                         else
-                                            this.props.history.push("/home")
+                                            this.props.history.push("/home");
                                         break;
                                     default:
                                         break;
@@ -203,7 +204,11 @@ class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MySt
                                         localStorage.setItem(MyStorage.user, JSON.stringify(r.user));
                                         this.props.changeUser(r.user);
                                         this.props.changeToken(r.accessToken);
-                                        this.props.history.goBack();
+                                        if (this.props.prePage != "")
+                                            this.props.history.push(this.props.prePage);
+                                        else
+                                            this.props.history.push("/home");
+                                        window.location.reload();
                                         break;
                                     default:
                                         break;

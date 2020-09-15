@@ -1,6 +1,7 @@
 import { MyActions, ActionTypes, ChangeLanguageAction, ChangeUserAction, ChangePageAction } from "../../shared/ActionTypes";
-import { Languages } from '../../shared/Enums';
+import { Languages, MyStorage } from '../../shared/Enums';
 import { HeaderReducerState } from "../../shared/StateTypes";
+import { Constants } from "../../shared/Constants";
 
 const initialState: HeaderReducerState = {
     lan: Languages.en,
@@ -33,6 +34,18 @@ export const HEADER_REDUCER = (state = initialState, action: MyActions): HeaderR
             return {
                 ...state, prePage: a.payload
             }
+        }
+        case ActionTypes.logout: {
+            localStorage.removeItem(MyStorage.token);
+            localStorage.removeItem(MyStorage.user);
+            return {
+                ...state, user: {
+                    id: "",
+                    username: "",
+                    email: "",
+                    buddies: []
+                }
+            };
         }
         default:
             return state;

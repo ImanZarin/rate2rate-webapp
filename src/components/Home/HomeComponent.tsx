@@ -47,7 +47,7 @@ class HomeComponent extends Component<MyProps & RouteComponentProps<any>, MyStat
         window.scrollTo(0, 0);
         this._isMounted = true;
         this.setState({
-            isLoading: true
+            isLoading: true,
         });
         this.myfetchObjet.getHomeMovies()
             .then(resp => {

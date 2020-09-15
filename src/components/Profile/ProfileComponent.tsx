@@ -267,7 +267,7 @@ class ProfileComponent extends Component<MyProps & RouteComponentProps<any>, MyS
                             <Col xs={6} md={3}>{this.state.profile.email}</Col>
                         </Row>
                         <Button className="my-btn"
-                            onClick={() => { this.props.logout(); this.props.history.push("/home"); }}>
+                            onClick={() => { this.props.logout(); this.props.history.push("/home"); window.location.reload(); }}>
                             {this.props.tr("profile-logout-button")}
                         </Button>
                     </TabPane>

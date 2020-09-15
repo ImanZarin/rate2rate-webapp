@@ -195,8 +195,8 @@ class SearchComponent extends Component<RouteComponentProps<any> & MyProps, MySt
                                     <tr key={u.id} style={{ cursor: "pointer" }}
                                         onClick={() => this.onSelectUser(u.id)}>
                                         <th scope="row"><span className="fa fa-user" /></th>
-                                        <td>{u.username}</td>
-                                        <td>{u.email}</td>
+                                        <td style={{overflow: "hidden"}}>{u.username}</td>
+                                        <td style={{overflow: "hidden"}}>{u.email}</td>
                                     </tr>
                                 );
                             })}
