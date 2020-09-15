@@ -98,6 +98,8 @@ class HeaderComponent extends Component<MyProps & RouteComponentProps<any>, MySt
     }
 
     onSearchSubmit = (): void => {
+        if (this.state.searchText.length < 1)
+            return;
         this.setState({
             isLoading: true
         });
