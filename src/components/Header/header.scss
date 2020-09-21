@@ -14,14 +14,17 @@ $my-heigth: 50px;
 .my-navbar-toggler {
     background-color: $teritary !important;
     font-size: 0.85rem !important;
+    margin-left: 1rem !important;
+    height: 42px;
 }
 
 .btn-right {
     background-color: $teritary !important;
     border: 0rem;
-    font-size: 2rem;
+    padding: 0rem;
     color: $textS;
     border-radius: 0.25rem;
+    height: -webkit-fill-available;
     &:hover {
         opacity: 0.5;
     }
@@ -61,4 +64,30 @@ $my-heigth: 50px;
     margin-top: 0rem !important;
     color: $textS !important;
     border-color: $textS !important;
+}
+
+.logo {
+    width: 42px;
+    height: 42px;
+    margin-left: 1rem;
+}
+
+.icon-text {
+    vertical-align: super;
+    display: none;
+    font-size: 1.5rem;
+    @include phone {
+        display: block;
+    }
+}
+
+.icon-row {
+    display: block;
+    @include phone {
+        display: flex;
+    }
+}
+
+.icon-photo {
+    margin-right: 0.5rem;
 }
