@@ -12,6 +12,8 @@ import { MyStorage } from "../../shared/Enums";
 import { MovieRate, User, UserRate } from "../../shared/dto.models";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { MY_CARD } from "../Card/CardComponent";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { LOADING } from "../LoadingComponent";
 
 type MyState = {
     activeTab: number;
@@ -273,7 +275,11 @@ class ProfileComponent extends Component<MyProps & RouteComponentProps<any>, MyS
                     </TabPane>
                 </TabContent>
                 <Alert isOpen={this.state.alertIsOpen} toggle={this.closeAlert}
-                    color="danger" className="myAlert">{this.state.error?.message}</Alert>
+                    color="danger" className="myAlert">{this.state.error?.message}
+                </Alert>
+                <div style={{ visibility: this.state.isLoading ? 'visible' : 'hidden' }}>
+                    <LOADING tr={this.props.tr} />
+                </div>
             </div>
         );
     }

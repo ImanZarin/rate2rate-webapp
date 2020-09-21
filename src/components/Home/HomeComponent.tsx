@@ -11,6 +11,8 @@ import { GetRecentRatesResponse, GetRecentRatesForSignedResponse } from '../../s
 import { GetRecentRatesResponseResult, GetRecentRatesForSignedResponseResult } from '../../shared/result.enums';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { MY_CARD } from '../Card/CardComponent';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { LOADING } from '../LoadingComponent';
 
 type MyProps = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -41,6 +43,8 @@ class HomeComponent extends Component<MyProps & RouteComponentProps<any>, MyStat
             error: new Error,
             alertIsOpen: false
         };
+        this.showAndHideAlert = this.showAndHideAlert.bind(this);
+        this.closeAlert = this.closeAlert.bind(this);
     }
 
     componentDidMount() {
@@ -162,7 +166,7 @@ class HomeComponent extends Component<MyProps & RouteComponentProps<any>, MyStat
                     }
                 })
                 .catch(err => {
-                    console.log(err);
+                    this.showAndHideAlert(err, Constants.waitNormal);
                 })
         }
             , Constants.waitForNextFetch);
@@ -205,7 +209,7 @@ class HomeComponent extends Component<MyProps & RouteComponentProps<any>, MyStat
                 <div className="first_section"
                     style={{ display: this.state.suggestedMovies?.length > 0 ? "block" : "none" }}>
                     <h3>
-                        {this.props.tr("home-suggests-title")} {this.props.user.username}:
+                        {this.props.tr("home-suggests-title")} :
                     </h3>
                     <Row className="row_card">
                         {this.state.suggestedMovies?.map((sug) => {
@@ -246,7 +250,11 @@ class HomeComponent extends Component<MyProps & RouteComponentProps<any>, MyStat
                     <p>{this.props.tr("home-about-text")}</p>
                 </div>
                 <Alert isOpen={this.state.alertIsOpen} toggle={this.closeAlert}
-                    color="danger" className="myAlert">{this.state.error?.message}</Alert>
+                    color="danger" className="myAlert">{this.state.error?.message}
+                </Alert>
+                <div style={{ visibility: this.state.isLoading ? 'visible' : 'hidden' }}>
+                    <LOADING tr={this.props.tr} />
+                </div>
             </div>
         );
     }

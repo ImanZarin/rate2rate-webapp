@@ -26,7 +26,6 @@ type MyState = {
     isNavOpen: boolean;
     isDropdownOpen: boolean;
     searchText: string;
-    isLoading: boolean;
     searchResult: IMDBsearch[];
     alertIsOpen: boolean;
     error: Error;
@@ -43,7 +42,6 @@ class HeaderComponent extends Component<MyProps & RouteComponentProps<any>, MySt
             isNavOpen: false,
             isDropdownOpen: false,
             searchText: "",
-            isLoading: false,
             searchResult: [],
             error: new Error,
             alertIsOpen: false
@@ -97,13 +95,12 @@ class HeaderComponent extends Component<MyProps & RouteComponentProps<any>, MySt
         })
     }
 
-    onSearchSubmit = (): void => {
+    onSearchSubmit = (e: (React.KeyboardEvent<HTMLInputElement> | null)): void => {
         if (this.state.searchText.length < 1)
             return;
-        this.setState({
-            isLoading: true
-        });
-        this.props.history.push("/search/" + this.state.searchText);
+        if (e)
+            e.currentTarget.blur()
+        this.props.history.push("/search/" + this.state.searchText.trim());
     }
 
 
@@ -114,7 +111,7 @@ class HeaderComponent extends Component<MyProps & RouteComponentProps<any>, MySt
                     <div className="container">
                         <NavbarToggler onClick={this.toggleNav} className="my-navbar-toggler" />
                         <NavbarBrand className="mr-auto " href="/">
-                            <img src='/assets/images/logo.png' alt="logo" height="42" width="42"
+                            <img src='/assets/images/logo.png' alt="logo" className="logo"
                                 onClick={() => this.props.history.push("/home")} />
                         </NavbarBrand>
                         <Collapse isOpen={this.state.isNavOpen} navbar>
@@ -140,7 +137,7 @@ class HeaderComponent extends Component<MyProps & RouteComponentProps<any>, MySt
                                     <InputGroup style={{ marginTop: "0.5rem" }}>
                                         <InputGroupAddon addonType="prepend">
                                             <button className="fa fa-search btn btn-search"
-                                                onClick={this.onSearchSubmit}>
+                                                onClick={() => this.onSearchSubmit(null)}>
                                             </button>
                                         </InputGroupAddon>
                                         <Input
@@ -148,7 +145,7 @@ class HeaderComponent extends Component<MyProps & RouteComponentProps<any>, MySt
                                             placeholder={this.props.translate("header-search-placeholder")}
                                             onKeyPress={(event) => {
                                                 if (event.key === "Enter") {
-                                                    this.onSearchSubmit();
+                                                    this.onSearchSubmit(event);
                                                 }
                                             }} />
                                     </InputGroup>
@@ -156,9 +153,9 @@ class HeaderComponent extends Component<MyProps & RouteComponentProps<any>, MySt
                                 <NavItem className="my-nav-item">
                                     <Dropdown isOpen={this.state.isDropdownOpen} toggle={this.toggleDrop}>
                                         <DropdownToggle className="dropdown">
-                                            <div className="dropdown-container">
-                                                <span className="fa fa-globe fa-2x" />
-                                                <span style={{ verticalAlign: "super" }}>  Language</span>
+                                            <div className="dropdown-container icon-row">
+                                                <span className="fa fa-language fa-2x icon-photo" />
+                                                <span className="icon-text">  Language</span>
                                             </div>
                                         </DropdownToggle>
                                         <DropdownMenu>
@@ -170,8 +167,10 @@ class HeaderComponent extends Component<MyProps & RouteComponentProps<any>, MySt
                                     </Dropdown>
                                 </NavItem>
                                 <NavItem className="my-nav-item">
-                                    <button className="btn-right" onClick={() => this.onSignin()}>
-                                        {this.props.isLoggedin ? this.props.user.username : this.props.translate("header-signin-button")}
+                                    <button className="btn-right icon-row" onClick={() => this.onSignin()}>
+                                        <span className="fa fa-user fa-2x icon-photo" />
+                                        <span style={{fontSize: "1.5rem"}}>{this.props.isLoggedin ? this.props.user.username : ""}</span>
+                                        <span className="icon-text">{this.props.isLoggedin ? "" : this.props.translate("header-signin-button")}</span>
                                     </button>
                                 </NavItem>
                             </Nav>

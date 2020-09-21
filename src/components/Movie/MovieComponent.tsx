@@ -292,7 +292,8 @@ class MovieComponent extends Component<RouteComponentProps<any> & MyProps, MySta
                                 </div>
                             </div>
                         </Row>
-                        <p>{this.state.movie?.genre?.join(" ,")}</p>
+                        <p>{this.state.movie?.genre?.join(" ,")}  -&nbsp; 
+                        {Math.floor(this.state.movie?.duratin / 60)}h {this.state.movie?.duratin % 60}min</p>
                         <p>{this.state.movie?.plot}</p>
                         <h6>{this.props.tr("movie-director-title")}: </h6>
                         <p>{this.state.movie?.director?.join(" ,")}</p>

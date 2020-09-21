@@ -41,6 +41,7 @@ class SearchComponent extends Component<RouteComponentProps<any> & MyProps, MySt
             alertIsOpen: false
         };
         this.showAndHideAlert = this.showAndHideAlert.bind(this);
+        this.closeAlert = this.closeAlert.bind(this);
     }
 
     componentDidMount() {
@@ -195,8 +196,8 @@ class SearchComponent extends Component<RouteComponentProps<any> & MyProps, MySt
                                     <tr key={u.id} style={{ cursor: "pointer" }}
                                         onClick={() => this.onSelectUser(u.id)}>
                                         <th scope="row"><span className="fa fa-user" /></th>
-                                        <td style={{overflow: "hidden"}}>{u.username}</td>
-                                        <td style={{overflow: "hidden"}}>{u.email}</td>
+                                        <td style={{ overflow: "hidden" }}>{u.username}</td>
+                                        <td style={{ overflow: "hidden" }}>{u.email}</td>
                                     </tr>
                                 );
                             })}
@@ -204,7 +205,8 @@ class SearchComponent extends Component<RouteComponentProps<any> & MyProps, MySt
                     </Table>
                 </div>
                 <Alert isOpen={this.state.alertIsOpen} toggle={this.closeAlert}
-                    color="warning" className="myAlert">{this.state.error?.message}</Alert>
+                    color="warning" className="myAlert">{this.state.error?.message}
+                </Alert>
             </div>
         );
 
