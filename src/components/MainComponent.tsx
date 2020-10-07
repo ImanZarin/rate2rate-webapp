@@ -10,7 +10,7 @@ import { MyActions } from "../shared/ActionTypes";
 import HeaderComponent from "./Header/HeaderComponent";
 import { RootState } from "../App";
 import { ThunkDispatch } from 'redux-thunk';
-import { Languages, MyStorage } from "../shared/Enums";
+import { Languages, MyStorage, SigninPage } from "../shared/Enums";
 import { languageChange, userChange, prePageChange } from "./Header/header-action";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import UserComponent from "./User/UserComponent";
@@ -87,19 +87,36 @@ class MainComponent extends Component<MyProps> {
                     changeLan={this.props.changeLanguage}
                     translate={this.props.translate}
                     isLoggedin={this.props.signin.isSignedin}
-                    logout={this.props.logout} 
-                    changePage={this.props.changePage}/>
+                    logout={this.props.logout}
+                    changePage={this.props.changePage} />
                 <Switch>
                     <Route exact path="/" render={() => {
                         return (<Redirect to="/home" />);
                     }} />
+                    <Route path="/signin/signup" component={(): JSX.Element =>
+                        <SigninComponent
+                            translate={this.props.translate}
+                            changeUser={this.props.changeUser}
+                            changeToken={this.props.changeToken}
+                            isLoggedin={this.props.signin.isSignedin}
+                            prePage={this.props.header.prePage}
+                            page={SigninPage.signup} />} />
+                    <Route path="/signin/login" component={(): JSX.Element =>
+                        <SigninComponent
+                            translate={this.props.translate}
+                            changeUser={this.props.changeUser}
+                            changeToken={this.props.changeToken}
+                            isLoggedin={this.props.signin.isSignedin}
+                            prePage={this.props.header.prePage}
+                            page={SigninPage.signin} />} />
                     <Route path="/signin" component={(): JSX.Element =>
                         <SigninComponent
                             translate={this.props.translate}
                             changeUser={this.props.changeUser}
                             changeToken={this.props.changeToken}
-                            isLoggedin={this.props.signin.isSignedin} 
-                            prePage={this.props.header.prePage}/>} />
+                            isLoggedin={this.props.signin.isSignedin}
+                            prePage={this.props.header.prePage}
+                            page={SigninPage.all} />} />
                     <Route path="/home" component={(): JSX.Element =>
                         <HomeComponent
                             user={this.props.header.user}
