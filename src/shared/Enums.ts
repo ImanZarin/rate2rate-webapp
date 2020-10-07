@@ -17,3 +17,9 @@ export enum MyStorage {
     time = "time-zone",
     user = "user"
 }
+
+export enum SigninPage {
+    all,
+    signin,
+    signup
+}

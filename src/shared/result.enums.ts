@@ -12,6 +12,7 @@ export enum GetUserInfoForSignedResponseResult {
 }
 
 export enum LoginUserResponseResult {
+    fail = "FAIL",
     success = "SUCCESS",
     userNotFound = "USER_NOT_FOUND",
     repetedEmail = "EMAIL_ALREADY_EXIST"

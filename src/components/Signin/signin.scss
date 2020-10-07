@@ -42,6 +42,17 @@
     margin-right: 0rem;
 }
 
+.signin-btn {
+    width: 100%;
+    margin-bottom: 1rem;
+    margin-top: 0rem !important;
+    background-color: $secondary !important;
+    border-color: $teritary !important;
+    color: $textS !important;
+    margin-left: auto;
+    margin-right: 0rem;
+}
+
 .signin-bg {
     min-height: 100vh;
     background-color: $primary;
@@ -50,6 +61,19 @@
     @include phone {
         padding-left: 1.5rem;
         padding-right: 1.5rem;
+    }
+}
+
+.all-signin-bg {
+    min-height: 100vh;
+    background-color: $primary;
+    padding-left: 25%;
+    padding-right: 25%;
+    padding-top: 2rem;
+    @include phone {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+        padding-top: 1rem;
     }
 }
 

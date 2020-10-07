@@ -20,15 +20,14 @@ export class MyFetch {
         const reqObj: RequestInit = {
             method: type,
             headers: {
-                // eslint-disable-next-line @typescript-eslint/naming-convention
+                //eslint-disable-next-line @typescript-eslint/naming-convention
                 "Content-Type": reqContent,
-                // eslint-disable-next-line @typescript-eslint/naming-convention
-                'Authorization': 'Bearer ' + reqToken
+                //eslint-disable-next-line @typescript-eslint/naming-convention
+                'Authorization': 'Bearer ' + reqToken,
             },
             credentials: "omit",
-            signal: this.abortController.signal
+            signal: this.abortController.signal,
         };
-
         if (mBody) {
             reqObj.body = JSON.stringify(mBody);
         }
@@ -46,6 +45,16 @@ export class MyFetch {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public async signup(values: SignupForm): Promise<any> {
         return this.myFetch(ReqTypes.post, process.env.REACT_APP_ENDPOINTS_USER_SIGNUP || "", values);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
+    public async signinFB(profile: any, token: string): Promise<any> {
+        return this.myFetch(ReqTypes.post, process.env.REACT_APP_ENDPOINTS_USER_SIGNIN_FB || "", { profile: profile, token: token });
+    }
+
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
+    public async signinGoogle(profile: any, token: string): Promise<any> {
+        return this.myFetch(ReqTypes.post, process.env.REACT_APP_ENDPOINTS_USER_SIGNIN_GOOGLE || "", { profile: profile, token: token });
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

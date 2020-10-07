@@ -79,6 +79,7 @@ class ProfileComponent extends Component<MyProps & RouteComponentProps<any>, MyS
         this.onTabChange = this.onTabChange.bind(this);
         this.closeAlert = this.closeAlert.bind(this);
         this.showAndHideAlert = this.showAndHideAlert.bind(this);
+        this.fetchInfo = this.fetchInfo.bind(this);
     }
     myFetch = new MyFetch();
 
@@ -97,6 +98,9 @@ class ProfileComponent extends Component<MyProps & RouteComponentProps<any>, MyS
     }
 
     fetchInfo(): void {
+        this.setState({
+            isLoading: true
+        });
         this.myFetch.getProfileInfo()
             .then(resp => {
                 if (!this._isMounted)
@@ -107,6 +111,11 @@ class ProfileComponent extends Component<MyProps & RouteComponentProps<any>, MyS
                             switch (r.result) {
                                 case GetProfileInfoResponseResult.noMovienoBuddy:
                                     {
+                                        this.setState({
+                                            profile: r.me,
+                                            myMovies: [],
+                                            myBuddies: []
+                                        });
                                         const error: Error = new Error(this.props.tr("profile-fetch-err-emptylists"));
                                         this.showAndHideAlert(error, Constants.waitLong);
                                     }

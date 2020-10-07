@@ -12,11 +12,15 @@ import { LOADING } from '../LoadingComponent';
 import { Constants } from '../../shared/Constants';
 import 'bootstrap/dist/css/bootstrap.css';
 import { LoginUserResponse } from "../../shared/ApiTypes";
-import { MyStorage } from "../../shared/Enums";
+import { MyStorage, SigninPage } from "../../shared/Enums";
 import { MyFetch } from "../../shared/my-fetch";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { LoginUserResponseResult } from "../../shared/result.enums";
 import { User } from "../../shared/dto.models";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import GoogleLogin from "react-google-login";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import FacebookSignin from "react-facebook-login";
 
 interface MyProps {
     changeUser: (u: User) => void;
@@ -25,6 +29,7 @@ interface MyProps {
     prePage: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     translate: any;
+    page: SigninPage;
 }
 
 type MyState = {
@@ -32,7 +37,6 @@ type MyState = {
     isLoading: boolean;
     error: Error;
     alertIsOpen: boolean;
-    isSignUp: boolean;
 }
 
 
@@ -55,12 +59,13 @@ class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MySt
             isLoading: false,
             error: new Error,
             alertIsOpen: false,
-            isSignUp: false
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleFormChange = this.handleFormChange.bind(this);
         this.closeAlert = this.closeAlert.bind(this);
         this.showAndHideAlert = this.showAndHideAlert.bind(this);
+        this.googleSignin = this.googleSignin.bind(this);
+        this.facebookSignin = this.facebookSignin.bind(this);
     }
 
     mySchema = yup.object().shape({
@@ -131,7 +136,7 @@ class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MySt
         this.setState({
             isLoading: true
         });
-        if (this.state.isSignUp) {
+        if (this.props.page == SigninPage.signup) {
             this.mF.signup(values as SignupForm)
                 .then(response => {
                     if (!this._isMounted)
@@ -235,65 +240,239 @@ class SigninComponent extends Component<MyProps & RouteComponentProps<any>, MySt
 
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    googleSignin(resp: any): void {
+        if (!(resp && resp.tokenId)) {
+            const error: Error = new Error(this.props.translate("signin-google-err"));
+            this.showAndHideAlert(error);
+            return;
+        }
+         this.setState({
+            isLoading: true
+        });
+        this.mF.signinGoogle(resp.profileObj, resp.tokenId)
+            .then(response => {
+                if (!this._isMounted)
+                    return;
+                if (response.ok) {
+                    response.json()
+                        .then((r: LoginUserResponse) => {
+                            switch (r.result) {
+                                case LoginUserResponseResult.userNotFound: {
+                                    const error: Error = new Error(this.props.translate("sigin-login-err-nouser"));
+                                    this.showAndHideAlert(error);
+                                }
+                                    break;
+                                case LoginUserResponseResult.repetedEmail: {
+                                    const error: Error = new Error(this.props.translate("sigin-signup-err-repetedemail"));
+                                    this.showAndHideAlert(error);
+                                }
+                                    break;
+                                case LoginUserResponseResult.fail: {
+                                    const error: Error = new Error(this.props.translate("sigin-signup-err-fail"));
+                                    this.showAndHideAlert(error);
+                                }
+                                    break;
+                                case LoginUserResponseResult.success:
+                                    localStorage.setItem(MyStorage.token, r.accessToken);
+                                    localStorage.setItem(MyStorage.user, JSON.stringify(r.user));
+                                    this.props.changeUser(r.user);
+                                    this.props.changeToken(r.accessToken);
+                                    if (this.props.prePage != "")
+                                        this.props.history.push(this.props.prePage);
+                                    else
+                                        this.props.history.push("/home");
+                                    window.location.reload();
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        )
+                } else {
+                    response.json()
+                        .then((response: { statusCode: number; message: string }) => {
+                            const error: Error = new Error('Error ' + response.statusCode + ": " + response.message);
+                            this.showAndHideAlert(error);
+                        })
+                }
+            },
+                error => {
+                    if (!this._isMounted)
+                        return;
+                    this.showAndHideAlert(error);
+                })
+            .catch(error => {
+                if (!this._isMounted)
+                    return;
+                this.showAndHideAlert(error);
+            });
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    facebookSignin(resp: any) {
+        if (!(resp && resp.accessToken)) {
+            const error: Error = new Error(this.props.translate("signin-facebook-err"));
+            this.showAndHideAlert(error);
+            return;
+        }
+        this.setState({
+            isLoading: true
+        });
+        this.mF.signinFB({ email: resp.email, name: resp.name, id: resp.id }, resp.accessToken)
+            .then(response => {
+                if (!this._isMounted)
+                    return;
+                if (response.ok) {
+                    response.json()
+                        .then((r: LoginUserResponse) => {
+                            switch (r.result) {
+                                case LoginUserResponseResult.userNotFound: {
+                                    const error: Error = new Error(this.props.translate("sigin-login-err-nouser"));
+                                    this.showAndHideAlert(error);
+                                }
+                                    break;
+                                case LoginUserResponseResult.repetedEmail: {
+                                    const error: Error = new Error(this.props.translate("sigin-signup-err-repetedemail"));
+                                    this.showAndHideAlert(error);
+                                }
+                                    break;
+                                case LoginUserResponseResult.fail: {
+                                    const error: Error = new Error(this.props.translate("sigin-signup-err-fail"));
+                                    this.showAndHideAlert(error);
+                                }
+                                    break;
+                                case LoginUserResponseResult.success:
+                                    localStorage.setItem(MyStorage.token, r.accessToken);
+                                    localStorage.setItem(MyStorage.user, JSON.stringify(r.user));
+                                    this.props.changeUser(r.user);
+                                    this.props.changeToken(r.accessToken);
+                                    if (this.props.prePage != "")
+                                        this.props.history.push(this.props.prePage);
+                                    else
+                                        this.props.history.push("/home");
+                                    window.location.reload();
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        )
+                } else {
+                    response.json()
+                        .then((response: { statusCode: number; message: string }) => {
+                            const error: Error = new Error('Error ' + response.statusCode + ": " + response.message);
+                            this.showAndHideAlert(error);
+                        })
+                }
+            },
+                error => {
+                    if (!this._isMounted)
+                        return;
+                    this.showAndHideAlert(error);
+                })
+            .catch(error => {
+                if (!this._isMounted)
+                    return;
+                this.showAndHideAlert(error);
+            });
+    }
+
     render(): JSX.Element {
-        return (
-            <div className="signin-bg">
-                <h1 className="title">{this.state.isSignUp ? this.props.translate("signup-title") : this.props.translate("signin-title")}</h1>
-                <div>
-                    <Formik initialValues={this.state.form} onSubmit={(values): void => {
-                        this.handleSubmit(values);
-                    }} validationSchema={this.mySchema}>
-                        {({ handleSubmit, errors, touched }): JSX.Element => (
-                            <Form onSubmit={handleSubmit}>
-                                <div className="form-group my-form-row"
-                                    style={{ display: this.state.isSignUp ? "block" : "none" }}>
-                                    <Label htmlFor="usertag">{this.props.translate("signin-username-title")}</Label>
-                                    <Field type="text" className="form-control"
-                                        placeholder={this.props.translate("signin-username-placeholder")}
-                                        id="usertag"
-                                        name="usertag" />
-                                    <div style={{ visibility: errors.usertag && touched.usertag ? 'visible' : 'hidden' }}
-                                        className="error-msg"> {errors.usertag}
-                                    </div>
-                                </div>
-                                <div className="form-group my-form-row" >
-                                    <Label htmlFor="username">{this.props.translate("signin-email-title")}</Label>
-                                    <Field type="text" className="form-control"
-                                        placeholder={this.props.translate("signin-email-placeholder")}
-                                        name="username" id="username" />
-                                    <div style={{ visibility: errors.username && touched.username ? 'visible' : 'hidden' }}
-                                        className="error-msg"> {errors.username}
-                                    </div>
-                                </div>
-                                <div className="form-group my-form-row">
-                                    <Label htmlFor="password">{this.props.translate("signin-password-title")}</Label>
-                                    <Field type="password" className="form-control" name="password"
-                                        placeholder={this.props.translate("signin-password-placeholder")} id="password" />
-                                    <div style={{ visibility: errors.password && touched.password ? 'visible' : 'hidden' }}
-                                        className="error-msg"> {errors.password}
-                                    </div>
-                                </div>
-                                <div className="my-last-row">
-                                    <div style={{ marginTop: "0.5rem" }}>
-                                        {this.state.isSignUp ? this.props.translate("signin-linkto-login") : this.props.translate("signin-linkto-signup")}
-                                    </div>
-                                    <Label className="link" onClick={() => { this.setState({ isSignUp: !this.state.isSignUp }) }}>
-                                        {this.state.isSignUp ? this.props.translate("signin-title") : this.props.translate("signup-title")}
-                                    </Label>
-                                    <button type="submit" className="btn form-btn">{this.props.translate("siginin-form-submit")}</button>
-                                </div>
-                            </Form>
-                        )}
-                    </Formik>
+        if (this.props.page === SigninPage.all)
+            return (
+                <div className="all-signin-bg">
+                    <button className="btn signin-btn"
+                        onClick={() => this.props.history.push("/signin/login")}>
+                        {this.props.translate("signin-r2r-login")}
+                    </button>
+                    <GoogleLogin
+                        clientId="471239615382-dj5657vnilup1p3haidh6a0i9bj7bj9o.apps.googleusercontent.com"
+                        onSuccess={this.googleSignin}
+                        onFailure={() => {
+                            const error: Error = new Error(this.props.translate("sigin-google-fail"));
+                            this.showAndHideAlert(error);
+                        }}
+                        render={renderProps => (
+                            <button onClick={renderProps.onClick}
+                                disabled={renderProps.disabled}
+                                className="btn signin-btn">
+                                {this.props.translate("signin-google-login")}
+                            </button>
+                        )} />
+                    <FacebookSignin
+                        appId="670032643719407"
+                        autoLoad={true}
+                        fields="name,email"
+                        cssClass="btn signin-btn"
+                        callback={this.facebookSignin} />
+                    <button className="btn signin-btn"
+                        onClick={() => this.props.history.push("/signin/signup")}>
+                        {this.props.translate("signin-r2r-signup")}
+                    </button>
+
+                    <div style={{ visibility: this.state.isLoading ? 'visible' : 'hidden' }}>
+                        <LOADING tr={this.props.translate} />
+                    </div>
+                    <Alert isOpen={this.state.alertIsOpen} toggle={this.closeAlert}
+                        color="danger" className="myAlert">{this.state.error?.message}
+                    </Alert>
                 </div>
-                <div style={{ visibility: this.state.isLoading ? 'visible' : 'hidden' }}>
-                    <LOADING tr={this.props.translate} />
+            );
+        else
+            return (
+                <div className="signin-bg">
+                    <h1 className="title">{this.props.page === SigninPage.signup ? this.props.translate("signup-title") : this.props.translate("signin-title")}</h1>
+                    <div>
+                        <Formik initialValues={this.state.form} onSubmit={(values): void => {
+                            this.handleSubmit(values);
+                        }} validationSchema={this.mySchema}>
+                            {({ handleSubmit, errors, touched }): JSX.Element => (
+                                <Form onSubmit={handleSubmit}>
+                                    <div className="form-group my-form-row"
+                                        style={{ display: this.props.page === SigninPage.signup ? "block" : "none" }}>
+                                        <Label htmlFor="usertag">{this.props.translate("signin-username-title")}</Label>
+                                        <Field type="text" className="form-control"
+                                            placeholder={this.props.translate("signin-username-placeholder")}
+                                            id="usertag"
+                                            name="usertag" />
+                                        <div style={{ visibility: errors.usertag && touched.usertag ? 'visible' : 'hidden' }}
+                                            className="error-msg"> {errors.usertag}
+                                        </div>
+                                    </div>
+                                    <div className="form-group my-form-row" >
+                                        <Label htmlFor="username">{this.props.translate("signin-email-title")}</Label>
+                                        <Field type="text" className="form-control"
+                                            placeholder={this.props.translate("signin-email-placeholder")}
+                                            name="username" id="username" />
+                                        <div style={{ visibility: errors.username && touched.username ? 'visible' : 'hidden' }}
+                                            className="error-msg"> {errors.username}
+                                        </div>
+                                    </div>
+                                    <div className="form-group my-form-row">
+                                        <Label htmlFor="password">{this.props.translate("signin-password-title")}</Label>
+                                        <Field type="password" className="form-control" name="password"
+                                            placeholder={this.props.translate("signin-password-placeholder")} id="password" />
+                                        <div style={{ visibility: errors.password && touched.password ? 'visible' : 'hidden' }}
+                                            className="error-msg"> {errors.password}
+                                        </div>
+                                    </div>
+                                    <div className="my-last-row">
+                                        <button type="submit" className="btn form-btn">{this.props.translate("siginin-form-submit")}</button>
+                                    </div>
+                                </Form>
+                            )}
+                        </Formik>
+                    </div>
+
+                    <div style={{ visibility: this.state.isLoading ? 'visible' : 'hidden' }}>
+                        <LOADING tr={this.props.translate} />
+                    </div>
+                    <Alert isOpen={this.state.alertIsOpen} toggle={this.closeAlert}
+                        color="danger" className="myAlert">{this.state.error?.message}
+                    </Alert>
                 </div>
-                <Alert isOpen={this.state.alertIsOpen} toggle={this.closeAlert}
-                    color="danger" className="myAlert">{this.state.error?.message}
-                </Alert>
-            </div>
-        );
+            );
     }
 
 }
