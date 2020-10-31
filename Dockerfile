@@ -1,6 +1,11 @@
-FROM node:12-alpine
+FROM node:12-alpine as npm-packages
 WORKDIR '/app'
 COPY package.json .
+COPY package-lock.json .
 RUN npm install
+
+FROM npm-packages as final
 COPY . .
-CMD ["npm","start"]
+RUN npm run build
+EXPOSE 3005
+CMD ["npm","run","start:prod"]
